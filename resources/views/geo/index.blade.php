@@ -7,44 +7,10 @@
     </div></div></div>
     <!--  END LOADER --> --}}
     <div class="pull-right widget-content widget-content-area br-6 ">
+
         <div class="row">
-                    <div class="col-md-6">
-                        <a class="btn btn-outline-primary btn-rounded mb-2" href="{{ route('hotellist.create') }}"> New Hotel</a>
-                     </div>
-                     <div class="col-md-6">
-                        <form method="post" action="{{ route('import') }}" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="file">Fichier d'import</label>
-                                <input type="file" name="csv_file" id="csv_file" class="form-control-file btn btn-outline-primary btn-rounded mb-2">
-                                <button type="submit" class="btn btn-success">Importer CSV</button>
-                            </div>
-                            
-                        </form>
-                         <a href="{{ route('export') }}" class="btn btn-primary">Exporter CSV</a>
-                    </div>
-        </div>
-        <div class="row">
-            <div class="col-md-7">
-                <div class="row">
-                    <div class="col-md-4">
-                    <button id="fetchDataButton" class="btn btn-success" >Récupérer les données GIATA</button>
-                    </div>
-                    {{-- <div class="col-md-3">
-                        <select name="provider" id="provider" class="form-control" required>
-                        <option value="">select provider</option>
-                        <option value="didatravel">Dida Travel</option>
-                        <option value="roibos">Roibos</option>
-                        <option value="logitravel_dr">Smyrooms</option>
-                        <option value="iol_iwtx">Illusions</option>
-                        <option value="Bedsconnect">Bedsconnect</option>
-                        </select>
-                    </div> --}}
-              </div>
-            </div>
-             <div class="col-md-5">
-           
-        </div>
+            <button id="fetchDataButton_geo" class="btn btn-success" disabled >Récupérer les données Géo</button>
+
             {{-- <div id="dataContainer" style="margin-top: 20px;">
                 <!-- Les données API seront affichées ici -->
             </div> --}}
@@ -82,18 +48,6 @@
                             <input type="date" class="form-control" id="start_date" name="start_date" />
                             @error('start_date') <p class="text-danger">{{ $message }}</p> @enderror
                         </div> --}}
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group" >
-                        <label  for="county" class="control-label col-sm-auto" >country:</label>
-                        <select class="selectpicker" multiple>
-                            <option>Mustard</option>
-                            <option>Ketchup</option>
-                            <option>Relish</option>
-                        </select>
-                    @error('Type_code') <p class="text-danger">{{ $message }}</p> @enderror
-                 
                     </div>
                 </div>
             </div>
@@ -153,7 +107,7 @@
 
                 <div class="page-header">
                     <div class="page-title">
-                        <h3>HOTEL LIST</h3>
+                        <h3>Country LIST</h3>
                     </div>
                 </div>
                 @if (session()->has('success'))
@@ -174,19 +128,13 @@
                                 <thead>
                                     <tr>
                                       
-                                        <th>hotel_name</th>
-                                        <th>hotel_code</th>
-                                        <th>giataId</th>
-                                        <th>city</th>
-                                        <th>country</th>
-                                        <th>addresses</th>
-                                        <th>phones</th>
-                                        <th>fax</th>
-                                        <th>latitude</th>
-                                        <th>longitude</th>
-                                        <th>chainId</th>
-                                        <th>chainName</th>
-                                        <th class=" dt-no-sorting">Action</th>
+                                        <th>Country Code</th>
+                                        <th>Country Name</th>
+                                        <th>Destination Id</th>
+                                        <th>Destination Name</th>
+                                        <th>City Id</th>
+                                        <th>City Name</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -195,38 +143,19 @@
                                     @foreach($hotels as $value)
                                     <tr>
                                        
-                                        <td>{{ $value->hotel_name }}</td>
-                                        <td>{{ $value->hotel_code }}</td>
+                                        <td>{{ $value->countryCode }}</td>
+                                        <td>{{ $value->countryName }}</td>
                                                                                 
-                                        <td>{{ $value->giataId }}</td>   
-                                        <td>{{ $value->city }}</td>                                                                   
-                                        <td>{{ $value->country }}</td>
-                                        
-                                        <td>{{ $value->addresses }}</td>
-                                        <td>{{ $value->phones_voice }}</td>
-                                        <td>{{ $value->phones_fax }}</td>
-                                        <td>{{ $value->latitude }}</td>
-                                        <td>{{ $value->longitude }}</td>
-                                        <td>{{ $value->chainId }}</td>
-                                        <td>{{ $value->chainName }}</td>
+                                        <td>{{ $value->destinationId }}</td>   
+                                        <td>{{ $value->destinationName }}</td>   
+
+                                        <td>{{ $value->cityId }}</td>                                     
+                                        <td>{{ $value->cityName }}</td>
+        
                                         
                                       
                             
-                                        <td>
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-dark btn-sm">Open</button>
-                                                    <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                                    </button>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item" href="#">Separated link</a>
-                                                    </div>
-                                                    </div>
-                                        </td>
+                                     
                                      
                                          
                                     </tr>

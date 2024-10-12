@@ -1,5 +1,20 @@
     <script src="{{asset('assets/js/loader.js')}}"></script>
     
+ <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+
+ 
+
+
+ <script src="{{asset('plugins/highlight/highlight.pack.js')}}"></script>
+
+ <!-- END GLOBAL MANDATORY SCRIPTS -->
+        <!--  BEGIN CUSTOM SCRIPTS FILE  -->
+        <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
+        <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
+        <script src="{{asset('plugins/select2/custom-select2.js')}}"></script>
+        <!--  BEGIN CUSTOM SCRIPTS FILE  -->
+
+
     <script src="{{asset('assets/js/libs/jquery-3.1.1.min.js')}}"></script>
     <script src="{{asset('bootstrap/js/popper.min.js')}}"></script>
     <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
@@ -76,13 +91,21 @@
                 <script>
                     $(document).ready(function() {
                         $('#fetchDataButton').on('click', function() {
-                            console.log('1');
+                   
+                            var provider = $('#provider').val();
                             $.ajax({
                                 url: "{{ route('giata.property') }}",
                                 type: 'GET',
+                                data: {
+                                    _token: '{{ csrf_token() }}',  // Include the CSRF token
+                                     // Include the CSRF token
+                                },
                                 success: function(response) {
+
                                     // $('#dataContainer').html('<pre>' + JSON.stringify(response.data, null, 4) + '</pre>');
                                     var countMessage = '  Nombre d\'hôtels trouvés : ' + response.count;
+                                    // var countMessage = '  Nombre d\'hôtels trouvés : ' + response;
+                                    // alert(response.count);
                                     $('#message').text(countMessage);
                                 },
                                 error: function(xhr, status, error) {
@@ -91,5 +114,44 @@
                             });
                         });
                     });
+
+                    $(document).ready(function() {
+                        $('#fetchDataButton_geo').on('click', function() {
+                           
+                            $.ajax({
+                                url: "{{ route('geo.property') }}",
+                                type: 'GET',
+                                success: function(response) {
+                                    console.log('2');
+                                    console.log(response);
+    
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#dataContainer').html('<p>Erreur lors de la récupération des données : ' + error + '</p>');
+                                }
+                            });
+                        });
+                    });
+                    $(document).ready(function() {
+                        $('#fetchDataButton_airport').on('click', function() {
+                            console.log('1');
+                            $.ajax({
+                                url: "{{ route('Airport.property') }}",
+                                type: 'GET',
+                                success: function(response) {
+                                    console.log('2');
+                                    console.log(response);
+    
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#dataContainer').html('<p>Erreur lors de la récupération des données : ' + error + '</p>');
+                                }
+                            });
+                        });
+                    });
+
+                    // $(".tagging").select2({
+                    //     tags: true
+                    // });
                 </script>
         <!-- END PAGE LEVEL CUSTOM SCRIPTS -->

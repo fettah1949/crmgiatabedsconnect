@@ -7,7 +7,10 @@ use App\Models\Hotel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+use NunoMaduro\Collision\Provider;
 use SimpleXMLElement;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class HoteListController extends Controller
 {
@@ -15,7 +18,7 @@ class HoteListController extends Controller
                 // $hotels = Hotellist::All();
     $hotels = Hotel::limit(10)->get();
 
-        // die($this->getProperty()) ;
+        // print_r($this->getProperty()) ;die;
         $data = [
             'category_name' => 'liste',
             'page_name' => 'liste',
@@ -69,64 +72,153 @@ class HoteListController extends Controller
     {
         //   return 'dddd';
         // Validation du fichier d'import
-    
-    
         try {
-            // Import the CSV file
+            // Validation du fichier pour accepter les fichiers CSV et XLSX
             $request->validate([
-                'csv_file' => 'required|mimes:csv,txt'
+                'csv_file' => 'required|mimes:csv,txt,xlsx'
             ]);
         
-            // Récupérer le fichier CSV à partir de la demande
+            // Récupérer le fichier à partir de la demande
             $file = $request->file('csv_file');
-            
-            // Ouvrir le fichier CSV
-            $handle = fopen($file, "r");
-        // return  fgetcsv($handle, 1000, ",");
-            // Parcourir chaque ligne du fichier CSV
-            $i=0;
-            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                // Ajouter la logique nécessaire pour importer les données à partir du fichier CSV et les enregistrer dans votre base de données
-                // Exemple:Hotelmapping
-                  
-                if($i!=0)
-                {
-                    // return $data[0];
-                 $Hote = new Hotel;
-                $Hote->hotel_name = $data[0];
-                $Hote->hotel_code = $data[1];
-                $Hote->giataId = $data[2];
-                $Hote->city = $data[3];
-                $Hote->country = $data[4];
-                $Hote->addresses = $data[5];
-                $Hote->phones_voice = $data[6];
-                $Hote->phones_fax = $data[7];
-                $Hote->email = $data[8];
-                $Hote->latitude = $data[9];
-                $Hote->longitude = $data[10];
-                $Hote->chainId = $data[11];
-                $Hote->chainName = $data[12];
-                $Hote->zip_code = $data[13];
+            $extension = $file->getClientOriginalExtension();
+        
+            if ($extension == 'csv' || $extension == 'txt') {
+                // Ouvrir le fichier CSV
+                $handle = fopen($file, "r");
+                $i = 0;
+                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                    if ($i != 0) {
 
-                
-                $Hote->save(); 
+                        $Hote = new Hotel;
+                       
+                        $Hote->hotel_code = $data[0];
+                        $Hote->bdc_id = $data[1];
+                        // $Hote->provider_id = $data[2];
+                        $Hote->hotel_name = $data[3];
+                        $Hote->latitude = $data[4];
+                        $Hote->longitude = $data[5];
+                        $Hote->addresses = $data[6];
+                        $Hote->city = $data[7];
+                        $Hote->zip_code = $data[8];
+                        $Hote->country = $data[9];
+                        $Hote->country_code = $data[10];
+                        $Hote->chainId = $data[14];
+                        $Hote->chainName = $data[15];
+                        $Hote->etat = 0;
+                        
+                        $Hote->save(); 
+                    }
+                    $i++;
                 }
+                fclose($handle);
+            } elseif ($extension == 'xlsx') {
+                // Lire le fichier XLSX
+                $spreadsheet = IOFactory::load($file->getPathname());
+                $worksheet = $spreadsheet->getActiveSheet();
+                $rows = $worksheet->toArray();
         
-                $i=$i+1;
+                foreach ($rows as $index => $row) {
+                    if ($index != 0) {
+                        // return $row[0];
+                        $Hote = new Hotel;
+                       
+                        $Hote->hotel_code = $row[0];
+                        $Hote->bdc_id = $row[1];
+                        // $Hote->provider_id = $row[2];
+                        $Hote->hotel_name = $row[3];
+                        $Hote->latitude = $row[4];
+                        $Hote->longitude = $row[5];
+                        $Hote->addresses = $row[6];
+                        $Hote->city = $row[7];
+                        $Hote->zip_code = $row[8];
+                        $Hote->country = $row[9];
+                        $Hote->country_code = $row[10];
+                        $Hote->chainId = $row[14];
+                        $Hote->chainName = $row[15];
+                        $Hote->etat = 0;
+     
+                        
+
+                       
+                        
+
+                        
+                        
+                        $Hote->save();
+                    }
+                }
             }
-        
-            // Fermer le fichier CSV
-            fclose($handle);
         
             // Rediriger l'utilisateur vers une page de confirmation
             return redirect()->back()
-            ->with('status', 'success')
-                ->withErrors('Le fichier CSV a été importé avec succès.');
+                ->with('status', 'success')
+                ->withErrors('Le fichier a été importé avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('status', 'error')
-                ->withErrors('Importation du fichier CSV échouée : '.$e->getMessage());
+                ->withErrors('Importation du fichier échouée : '.$e->getMessage());
         }
+        //...
+    
+        // try {
+        //     // Import the CSV file
+        //     $request->validate([
+        //         'csv_file' => 'required|mimes:csv,txt,xlsx'
+        //     ]);
+        
+        //     // Récupérer le fichier CSV à partir de la demande
+        //     $file = $request->file('csv_file');
+            
+            
+        //     // Ouvrir le fichier CSV
+        //     $handle = fopen($file, "r");
+        // // return  fgetcsv($handle, 1000, ",");
+        //     // Parcourir chaque ligne du fichier CSV
+        //     $i=0;
+        //     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        //         // Ajouter la logique nécessaire pour importer les données à partir du fichier CSV et les enregistrer dans votre base de données
+        //         // Exemple:Hotelmapping
+                  
+        //         if($i!=0)
+        //         {
+        //             return $data[0];
+        //          $Hote = new Hotel;
+        //         $Hote->hotel_name = $data[0];
+        //         $Hote->hotel_code = $data[1];
+        //         $Hote->giataId = $data[2];
+        //         $Hote->city = $data[3];
+        //         $Hote->country = $data[4];
+        //         $Hote->addresses = $data[5];
+        //         $Hote->phones_voice = $data[6];
+        //         $Hote->phones_fax = $data[7];
+        //         $Hote->email = $data[8];
+        //         $Hote->latitude = $data[9];
+        //         $Hote->longitude = $data[10];
+        //         $Hote->chainId = $data[11];
+        //         $Hote->chainName = $data[12];
+        //         $Hote->zip_code = $data[13];
+
+                
+        //         $Hote->save(); 
+
+              
+        //         }
+        
+        //         $i=$i+1;
+        //     }
+        
+        //     // Fermer le fichier CSV
+        //     fclose($handle);
+        
+        //     // Rediriger l'utilisateur vers une page de confirmation
+        //     return redirect()->back()
+        //     ->with('status', 'success')
+        //         ->withErrors('Le fichier CSV a été importé avec succès.');
+        // } catch (\Exception $e) {
+        //     return redirect()->back()
+        //         ->with('status', 'error')
+        //         ->withErrors('Importation du fichier CSV échouée : '.$e->getMessage());
+        // }
         //...
     }
     
@@ -207,33 +299,105 @@ class HoteListController extends Controller
     }
 
 
-    public function getProperty()
+    public function getProperty(Request $request)
     {
-        $url = 'https://multicodes.giatamedia.com/webservice/rest/1.0/properties/3';
+        $Provider = $request['provider'];
+        $return = 0 ;
+        $hotels = Hotel::where('etat',0);
+        
+       $hotels_count = $hotels->count();
 
-        // Fetching credentials from .env file or hardcoding as necessary
-        $username = 'giata|bedsconnect.com';
-        $password = 'keghak-qaXbed-rosne7';
+       $hotels =  $hotels->get();
+       foreach ($hotels as $hotel) {
 
-        // Making the GET request to the GIATA API with Basic Authentication
-        $response = Http::withBasicAuth($username, $password)
-                        ->get($url);
+             if($hotel->provider_id = "bedsconnect")
+             $url = 'https://multicodes.giatamedia.com/webservice/rest/1.0/properties/crs/'.$hotel->provider_id.'/'.$hotel->bdc_id;
 
-        // Check if the request was successful
-        if ($response->successful()) {
-            // Parsing the XML response
-            $xmlData = new SimpleXMLElement($response->body());
+             else
+             $url = 'https://multicodes.giatamedia.com/webservice/rest/1.0/properties/crs/'.$hotel->provider_id.'/'.$hotel->hotel_code;
 
-            // Convert to JSON if needed
-            $jsonData = json_encode($xmlData);
-            $propertyCount = count($xmlData->property);
+        //   return  $url;
 
-            // Handle the data (e.g., return it as a view, JSON, etc.)
-            // return response()->json(json_decode($jsonData));
-            return response()->json(['count' => $propertyCount, 'data' => json_decode($jsonData)]);
-        } else {
-            // Handle the error
-            return response()->json(['error' => 'Unable to fetch data from GIATA API'], 500);
-        }
+                // Fetching credentials from .env file or hardcoding as necessary
+                $username = 'giata|bedsconnect.com';
+                $password = 'keghak-qaXbed-rosne7';
+
+                // Making the GET request to the GIATA API with Basic Authentication
+                $response = Http::withBasicAuth($username, $password)
+                                ->get($url);
+
+                // Check if the request was successful
+                if ($response->successful()) {
+                
+                    // Parsing the XML response
+                    $xmlData = new SimpleXMLElement($response->body());
+
+                    // Convert to JSON if needed
+                    $jsonData = json_encode($xmlData);
+                    //  return $jsonData;
+                    $data = json_decode($jsonData, true)['property'];
+                    //  return $data['@attributes'];
+                    // Extracting the data
+                    $giataId = $data['@attributes']['giataId'];
+                    $hotelName = $data['name'];
+                    $city = $data['city'];
+                    $country = $data['country'];
+                    $addresses = implode(', ', $data['addresses']['address']['addressLine']);
+                    // $postalCode = $data['addresses']['address']['postalCode'];
+                    $postalCode = isset($data['addresses']['address']['postalCode']) ? $data['addresses']['address']['postalCode'] : $hotel->zip_code;
+
+                    // $phonesVoice = implode(', ', $data['phones']['phone']);
+
+                    // $phonesVoice = is_array($data['phones']['phone']) ? implode(', ', $data['phones']['phone']) : $data['phones']['phone'];
+                    $phonesVoice = isset($data['phones']['phone']) ? $data['phones']['phone'] : $hotel->phones_voice;
+
+                    // $email = $data['emails']['email'];
+                    $email = isset($data['emails']['email']) ? $data['emails']['email'] : $hotel->email;
+                    // $latitude = $data['geoCodes']['geoCode']['latitude'];
+                    $latitude = isset($data['geoCodes']['geoCode']['latitude']) ? $data['geoCodes']['geoCode']['latitude'] : $hotel->email;
+                    // $longitude = $data['geoCodes']['geoCode']['longitude'];
+                    $longitude = isset($data['geoCodes']['geoCode']['longitude']) ? $data['geoCodes']['geoCode']['longitude'] : $hotel->email;
+                    // $chainId = $data['chains']['chain']['@attributes']['chainId'];
+                    $chainId = isset($data['chains']['chain']['@attributes']['chainId']) ? $data['chains']['chain']['@attributes']['chainId'] : $hotel->chainId;
+                    // $chainName = $data['chains']['chain']['@attributes']['chainName'];
+                    $chainName = isset($data['chains']['chain']['@attributes']['chainName']) ? $data['chains']['chain']['@attributes']['chainName'] : $hotel->chainName;
+                    // return  $jsonData .' ----------------- '.implode(', ', $data['phones']['phone']);
+                    // Update or insert the data into your database
+                    DB::table('hotels')
+                    ->where('hotel_code', $hotel->hotel_code)
+                    ->update([
+                                'hotel_name' => $hotelName,
+                                'giataId' => $giataId,
+                                'city' => $city,
+                                'country' => $country,
+                                'addresses' => $addresses,
+                                'phones_voice' => $phonesVoice,
+                                'email' => $email,
+                                'latitude' => $latitude,
+                                'longitude' => $longitude,
+                                'chainId' => $chainId,
+                                'chainName' => $chainName,
+                                'zip_code' => $postalCode,
+                                'updated_at' => now(),
+                                'etat' => 1,
+                            ]
+                        );
+
+                
+                    // count for hotels
+                    $propertyCount = count($xmlData->property);
+
+                    // Handle the data (e.g., return it as a view, JSON, etc.)
+                    // return response()->json(json_decode($jsonData));
+                  $return =    response()->json(['count' => $hotels_count, 'data' => json_decode($jsonData)]);
+                } else {
+                    // Handle the error
+                    $return =   response()->json(['error' => 'Unable to fetch data from GIATA API'], 500);
+                }
+            }
+            return  $return ;
+
+
+        
     }
 }
