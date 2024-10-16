@@ -95,9 +95,9 @@ class HoteListController extends Controller
                         if($data[1] != ""){
                             $Hote->bdc_id = $data[1];
                         }else{
-                            $chiffre = 'BDCC' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                            $chiffre = 'BDCX' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
                                 while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
-                                    $chiffre = 'BDCC' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                                    $chiffre = 'BDCX' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
                                 }
                             $Hote->bdc_id = $chiffre;
                         }
@@ -135,22 +135,33 @@ class HoteListController extends Controller
                         // return $row[0];
                         $Hote = new Hotel;
                        
-                        $Hote->hotel_code = $row[0];
-                        $Hote->bdc_id = $row[1];
-                        // $Hote->provider_id = $row[2];
-                        $Hote->hotel_name = $row[3];
-                        $Hote->latitude = $row[4];
-                        $Hote->longitude = $row[5];
-                        $Hote->addresses = $row[6];
-                        $Hote->city = $row[7];
-                        $Hote->zip_code = $row[8];
-                        $Hote->country = $row[9];
-                        $Hote->country_code = $row[10];
-                        $Hote->chainId = $row[14];
-                        $Hote->chainName = $row[15];
+                          $Hote->hotel_code = $row[0];
+                        if($row[1] != ""){
+                            $Hote->bdc_id = $row[1];
+                        }else{
+                            $chiffre = 'BDCX' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                                while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
+                                    $chiffre = 'BDCX' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                                }
+                            $Hote->bdc_id = $chiffre;
+                        }
+
+                        $Hote->provider = $row[2];
+                        $Hote->provider_id = $row[3];
+                        $Hote->hotel_name = $row[4];
+                        $Hote->latitude = $row[5];
+                        $Hote->longitude = $row[6];
+                        $Hote->addresses = $row[7];
+                        $Hote->city = $row[8];
+                        $Hote->zip_code = $row[9];
+                        $Hote->country = $row[10];
+                        $Hote->country_code = $row[11];
+                        $Hote->CategoryCode = $row[12];
+                        $Hote->CategoryName = $row[13];
+                        $Hote->CityCode = $row[14];
+                        $Hote->chainId = $row[15];
+                        $Hote->chainName = $row[16];
                         $Hote->etat = 0;
-     
-                        
 
                        
                         
