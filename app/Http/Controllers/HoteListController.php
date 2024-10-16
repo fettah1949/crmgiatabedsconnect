@@ -92,18 +92,31 @@ class HoteListController extends Controller
                         $Hote = new Hotel;
                        
                         $Hote->hotel_code = $data[0];
-                        $Hote->bdc_id = $data[1];
-                        // $Hote->provider_id = $data[2];
-                        $Hote->hotel_name = $data[3];
-                        $Hote->latitude = $data[4];
-                        $Hote->longitude = $data[5];
-                        $Hote->addresses = $data[6];
-                        $Hote->city = $data[7];
-                        $Hote->zip_code = $data[8];
-                        $Hote->country = $data[9];
-                        $Hote->country_code = $data[10];
-                        $Hote->chainId = $data[14];
-                        $Hote->chainName = $data[15];
+                        if($data[1] != ""){
+                            $Hote->bdc_id = $data[1];
+                        }else{
+                            $chiffre = 'BDCC' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                                while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
+                                    $chiffre = 'BDCC' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                                }
+                            $Hote->bdc_id = $chiffre;
+                        }
+
+                        $Hote->provider = $data[2];
+                        $Hote->provider_id = $data[3];
+                        $Hote->hotel_name = $data[4];
+                        $Hote->latitude = $data[5];
+                        $Hote->longitude = $data[6];
+                        $Hote->addresses = $data[7];
+                        $Hote->city = $data[8];
+                        $Hote->zip_code = $data[9];
+                        $Hote->country = $data[10];
+                        $Hote->country_code = $data[11];
+                        $Hote->CategoryCode = $data[12];
+                        $Hote->CategoryName = $data[13];
+                        $Hote->CityCode = $data[14];
+                        $Hote->chainId = $data[15];
+                        $Hote->chainName = $data[16];
                         $Hote->etat = 0;
                         
                         $Hote->save(); 
