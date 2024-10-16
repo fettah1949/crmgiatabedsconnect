@@ -333,14 +333,17 @@ class HoteListController extends Controller
 
        $hotels =  $hotels->get();
        foreach ($hotels as $hotel) {
+        
+             if($hotel->provider_id == "bedsconnect"){
+               
+                $url = 'https://multicodes.giatamedia.com/webservice/rest/1.0/properties/crs/'.$hotel->provider_id.'/'.$hotel->bdc_id;
+             }else{
+                $url = 'https://multicodes.giatamedia.com/webservice/rest/1.0/properties/crs/'.$hotel->provider_id.'/'.$hotel->hotel_code;
+                // return  $url;
+             }
+             
 
-             if($hotel->provider_id = "bedsconnect")
-             $url = 'https://multicodes.giatamedia.com/webservice/rest/1.0/properties/crs/'.$hotel->provider_id.'/'.$hotel->bdc_id;
-
-             else
-             $url = 'https://multicodes.giatamedia.com/webservice/rest/1.0/properties/crs/'.$hotel->provider_id.'/'.$hotel->hotel_code;
-
-        //   return  $url;
+          
 
                 // Fetching credentials from .env file or hardcoding as necessary
                 $username = 'giata|bedsconnect.com';
@@ -355,65 +358,74 @@ class HoteListController extends Controller
                 
                     // Parsing the XML response
                     $xmlData = new SimpleXMLElement($response->body());
-
+                    
+                  
                     // Convert to JSON if needed
                     $jsonData = json_encode($xmlData);
-                    //  return $jsonData;
-                    $data = json_decode($jsonData, true)['property'];
-                    //  return $data['@attributes'];
-                    // Extracting the data
-                    $giataId = $data['@attributes']['giataId'];
-                    $hotelName = $data['name'];
-                    $city = $data['city'];
-                    $country = $data['country'];
-                    $addresses = implode(', ', $data['addresses']['address']['addressLine']);
-                    // $postalCode = $data['addresses']['address']['postalCode'];
-                    $postalCode = isset($data['addresses']['address']['postalCode']) ? $data['addresses']['address']['postalCode'] : $hotel->zip_code;
 
-                    // $phonesVoice = implode(', ', $data['phones']['phone']);
+                            // Decode JSON into an associative array
+                        $data = json_decode($jsonData, true);
 
-                    // $phonesVoice = is_array($data['phones']['phone']) ? implode(', ', $data['phones']['phone']) : $data['phones']['phone'];
-                    $phonesVoice = isset($data['phones']['phone']) ? $data['phones']['phone'] : $hotel->phones_voice;
+                        // Check if the JSON is not null and 'property' exists
+                        if ($data !== null && isset($data['property'])) {
+                            $data = $data['property'];
+                            //  return $data['@attributes'];
+                            // Extracting the data
+                            $giataId = $data['@attributes']['giataId'];
+                            $hotelName = $data['name'];
+                            $city = $data['city'];
+                            $country = $data['country'];
+                            $addresses = implode(', ', $data['addresses']['address']['addressLine']);
+                            // $postalCode = $data['addresses']['address']['postalCode'];
+                            $postalCode = isset($data['addresses']['address']['postalCode']) ? $data['addresses']['address']['postalCode'] : $hotel->zip_code;
 
-                    // $email = $data['emails']['email'];
-                    $email = isset($data['emails']['email']) ? $data['emails']['email'] : $hotel->email;
-                    // $latitude = $data['geoCodes']['geoCode']['latitude'];
-                    $latitude = isset($data['geoCodes']['geoCode']['latitude']) ? $data['geoCodes']['geoCode']['latitude'] : $hotel->email;
-                    // $longitude = $data['geoCodes']['geoCode']['longitude'];
-                    $longitude = isset($data['geoCodes']['geoCode']['longitude']) ? $data['geoCodes']['geoCode']['longitude'] : $hotel->email;
-                    // $chainId = $data['chains']['chain']['@attributes']['chainId'];
-                    $chainId = isset($data['chains']['chain']['@attributes']['chainId']) ? $data['chains']['chain']['@attributes']['chainId'] : $hotel->chainId;
-                    // $chainName = $data['chains']['chain']['@attributes']['chainName'];
-                    $chainName = isset($data['chains']['chain']['@attributes']['chainName']) ? $data['chains']['chain']['@attributes']['chainName'] : $hotel->chainName;
-                    // return  $jsonData .' ----------------- '.implode(', ', $data['phones']['phone']);
-                    // Update or insert the data into your database
-                    DB::table('hotels')
-                    ->where('hotel_code', $hotel->hotel_code)
-                    ->update([
-                                'hotel_name' => $hotelName,
-                                'giataId' => $giataId,
-                                'city' => $city,
-                                'country' => $country,
-                                'addresses' => $addresses,
-                                'phones_voice' => $phonesVoice,
-                                'email' => $email,
-                                'latitude' => $latitude,
-                                'longitude' => $longitude,
-                                'chainId' => $chainId,
-                                'chainName' => $chainName,
-                                'zip_code' => $postalCode,
-                                'updated_at' => now(),
-                                'etat' => 1,
-                            ]
-                        );
+                            // $phonesVoice = implode(', ', $data['phones']['phone']);
 
-                
-                    // count for hotels
-                    $propertyCount = count($xmlData->property);
+                            // $phonesVoice = is_array($data['phones']['phone']) ? implode(', ', $data['phones']['phone']) : $data['phones']['phone'];
+                            $phonesVoice = isset($data['phones']['phone']) ? $data['phones']['phone'] : $hotel->phones_voice;
 
-                    // Handle the data (e.g., return it as a view, JSON, etc.)
-                    // return response()->json(json_decode($jsonData));
-                  $return =    response()->json(['count' => $hotels_count, 'data' => json_decode($jsonData)]);
+                            // $email = $data['emails']['email'];
+                            $email = isset($data['emails']['email']) ? $data['emails']['email'] : $hotel->email;
+                            // $latitude = $data['geoCodes']['geoCode']['latitude'];
+                            $latitude = isset($data['geoCodes']['geoCode']['latitude']) ? $data['geoCodes']['geoCode']['latitude'] : $hotel->email;
+                            // $longitude = $data['geoCodes']['geoCode']['longitude'];
+                            $longitude = isset($data['geoCodes']['geoCode']['longitude']) ? $data['geoCodes']['geoCode']['longitude'] : $hotel->email;
+                            // $chainId = $data['chains']['chain']['@attributes']['chainId'];
+                            $chainId = isset($data['chains']['chain']['@attributes']['chainId']) ? $data['chains']['chain']['@attributes']['chainId'] : $hotel->chainId;
+                            // $chainName = $data['chains']['chain']['@attributes']['chainName'];
+                            $chainName = isset($data['chains']['chain']['@attributes']['chainName']) ? $data['chains']['chain']['@attributes']['chainName'] : $hotel->chainName;
+                            // return  $jsonData .' ----------------- '.implode(', ', $data['phones']['phone']);
+                            // Update or insert the data into your database
+                            DB::table('hotels')
+                            ->where('hotel_code', $hotel->hotel_code)
+                            ->update([
+                                        'hotel_name' => $hotelName,
+                                        'giataId' => $giataId,
+                                        'city' => $city,
+                                        'country' => $country,
+                                        'addresses' => $addresses,
+                                        'phones_voice' => $phonesVoice,
+                                        'email' => $email,
+                                        'latitude' => $latitude,
+                                        'longitude' => $longitude,
+                                        'chainId' => $chainId,
+                                        'chainName' => $chainName,
+                                        'zip_code' => $postalCode,
+                                        'updated_at' => now(),
+                                        'etat' => 1,
+                                    ]
+                                );
+
+                        
+                            // count for hotels
+                            $propertyCount = count($xmlData->property);
+
+                        // Handle the data (e.g., return it as a view, JSON, etc.)
+                       // return response()->json(json_decode($jsonData));
+                 
+                    }
+                    $return =    response()->json(['count' => $hotels_count, 'data' => json_decode($jsonData)]);
+
                 } else {
                     // Handle the error
                     $return =   response()->json(['error' => 'Unable to fetch data from GIATA API'], 500);
