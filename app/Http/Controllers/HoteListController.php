@@ -16,7 +16,7 @@ class HoteListController extends Controller
 {
     public function index(){
                 // $hotels = Hotellist::All();
-    $hotels = Hotel::limit(10)->get();
+    $hotels = Hotel::limit(100)->get();
 
         // print_r($this->getProperty()) ;die;
         $data = [
