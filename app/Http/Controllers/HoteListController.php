@@ -368,7 +368,7 @@ class HoteListController extends Controller
 
                         // Check if the JSON is not null and 'property' exists
                         if ($data !== null && isset($data['property'])) {
-                            // return $hotel->hotel_code ;
+                             
                             $data = $data['property'];
                             //  return $data['@attributes'];
                             // Extracting the data
@@ -376,12 +376,24 @@ class HoteListController extends Controller
                             $hotelName = $data['name'];
                             $city = $data['city'];
                             $country = $data['country'];
-                            if(isset($data['addresses'])){
-                                $addresses = implode(', ', $data['addresses']['address']['addressLine']);
-                                $postalCode = isset($data['addresses']['address']['postalCode']) ? $data['addresses']['address']['postalCode'] : $hotel->zip_code;
-                            }
-                           
-                            else {
+                            // if (isset($data['addresses'])) {
+                            //     $addresses = implode(', ', $data['addresses']['address']['addressLine'] ?? []);
+                            //     $postalCode = $data['addresses']['address']['postalCode'] ?? $hotel->zip_code;
+                            // } else {
+                            //     $addresses = " ";
+                            //     $postalCode = " ";
+                            // }
+
+                            if (isset($data['addresses']['address']['addressLine'])) {
+                                // Vérifier si c'est un tableau ou une chaîne
+                                if (is_array($data['addresses']['address']['addressLine'])) {
+                                    $addresses = implode(', ', $data['addresses']['address']['addressLine']);
+                                } else {
+                                    // Si ce n'est pas un tableau, utilisez directement la valeur
+                                    $addresses = $data['addresses']['address']['addressLine'];
+                                }
+                                $postalCode = $data['addresses']['address']['postalCode'] ?? $hotel->zip_code;
+                            } else {
                                 $addresses = " ";
                                 $postalCode = " ";
                             }
