@@ -87,10 +87,8 @@
                 <div class="col-md-6">
                     <div class="form-group" >
                         <label  for="county" class="control-label col-sm-auto" >country:</label>
-                        <select class="selectpicker" multiple>
-                            <option>Mustard</option>
-                            <option>Ketchup</option>
-                            <option>Relish</option>
+                        <select class="form-control tagging" multiple="multiple">
+
                         </select>
                     @error('Type_code') <p class="text-danger">{{ $message }}</p> @enderror
                  
@@ -103,17 +101,25 @@
 
                 
                 <div class="form-group">
-                    <label for="service_category" class="control-label col-sm-auto">Code: <span style="color: red" id="code_message"></span></label>
+                    <label for="service_category" class="control-label col-sm-auto">Provider Name: </label>
                         <div class="col-sm-auto">
-                            <input onchange="check_code();" class="form-control basic" 
-                            value=""  id="Code" name="Code"  />
+                            <select  class="form-control basic" id="provider_name" name="provider_name"  >
+                                <option  value="">Select Provider Name</option>
                                 
+                                <option   value="Dida Travel">Dida Travel </option>       
+                                <option    value="Smyrooms">Smyrooms</option>
+                                <option   value="HotelRunner CM"> HotelRunner CM</option>
+                                <option   value="Bedsconnect-Direct"> Bedsconnect-Direct</option>
+                                <option   value="Spring Travel Services"> Spring Travel Services</option>
+                                <option   value="My Morocco"> My Morocco</option>
+                                <option   value="Roibos"> Roibos</option>
                                 
                             </select>
                         @error('Code') <p class="text-danger">{{ $message }}</p> @enderror
 
-                    </div>
-                    </div>
+                         </div>
+                        </div>
+                  
                 </div>
             
 
@@ -121,16 +127,18 @@
                 <div class="col-md-6">
                 {{-- {{ $filter['hotel']}} --}}
                 <div class="form-group">
-                    <label for="service_category" class="control-label col-sm-auto">Type Code: <span style="color: red" id="Type_message"></span></label>
+                    <label for="service_category" class="control-label col-sm-auto">Provider ID</label>
                         <div class="col-sm-auto">
-                            <select onchange="check_code();" class="form-control basic" id="Type_code" name="Type_code"  >
-                                <option  value="">Select Type</option>
+                            <select  class="form-control basic" id="provider_id" name="provider_id"  >
+                                <option  value="">Select Provider ID</option>
                                 
-                    <option   value="tgx">BOOKING_ID</option>
-                    
-                    <option    value="provider">BDC_ID</option>
-                
-                    <option   value="client"> Agency_ID</option>
+                                <option   value="roibos">roibos </option>       
+                                <option    value="Illusion_iol">Illusion_iol</option>
+                                <option   value="didatravel"> didatravel</option>
+                                <option   value="logitravel_dr"> logitravel_dr</option>
+                                <option   value="bedsconnect"> bedsconnect</option>
+                               
+                                
                                 
                             </select>
                         @error('Type_code') <p class="text-danger">{{ $message }}</p> @enderror
@@ -143,6 +151,7 @@
 
             <button type="submit"  class="btn btn-outline-success mb-2">Apply</button>
             <button type="button" onclick="vide();" class="btn btn-outline-secondary mb-2">Clear</button>
+            <a href="{{ route('export') }}" class="btn btn-outline-success mb-2">Exporter CSV</a>
         </div>
     </div>
    

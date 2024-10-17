@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Geography;
 use App\Models\Hotel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use SimpleXMLElement;
 
@@ -25,6 +26,21 @@ class GeographyController extends Controller
 
         ];
         return view('geo.index')->with($data);
+    }
+    public function getCountries(Request $request)
+    {
+        // die("fettah ");
+        $search = $request->input('q'); // Récupérer le paramètre de recherche envoyé par AJAX
+        
+        // Requête pour trouver les pays correspondant à la recherche
+        $countries = DB::table('geographies')
+                        ->distinct()
+                        ->select('countryName') // Assurez-vous que ces champs existent dans votre table
+                        ->where('countryName', 'like', '%' . $search . '%')
+                        ->get();
+
+        // Retourner les pays sous forme de JSON pour Select2
+        return response()->json($countries);
     }
     public function create()
     {

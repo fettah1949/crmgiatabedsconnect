@@ -7,12 +7,7 @@
 
  <script src="{{asset('plugins/highlight/highlight.pack.js')}}"></script>
 
- <!-- END GLOBAL MANDATORY SCRIPTS -->
-        <!--  BEGIN CUSTOM SCRIPTS FILE  -->
-        <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
-        <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
-        <script src="{{asset('plugins/select2/custom-select2.js')}}"></script>
-        <!--  BEGIN CUSTOM SCRIPTS FILE  -->
+ <!-- END GLOBAL MANDATORY SCRIPTS -->   
 
 
     <script src="{{asset('assets/js/libs/jquery-3.1.1.min.js')}}"></script>
@@ -20,7 +15,11 @@
     <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
     <script src="{{asset('assets/js/app.js')}}"></script>
-    
+    <!--  BEGIN CUSTOM SCRIPTS FILE  -->
+    <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
+    <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
+    <script src="{{asset('plugins/select2/custom-select2.js')}}"></script>
+    <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <script>
         $(document).ready(function() {
             App.init();
@@ -122,8 +121,8 @@
                                 url: "{{ route('geo.property') }}",
                                 type: 'GET',
                                 success: function(response) {
-                                    console.log('2');
-                                    console.log(response);
+                                    // console.log('2');
+                                    // console.log(response);
     
                                 },
                                 error: function(xhr, status, error) {
@@ -139,8 +138,8 @@
                                 url: "{{ route('Airport.property') }}",
                                 type: 'GET',
                                 success: function(response) {
-                                    console.log('2');
-                                    console.log(response);
+                                    // console.log('2');
+                                    // console.log(response);
     
                                 },
                                 error: function(xhr, status, error) {
@@ -153,5 +152,46 @@
                     // $(".tagging").select2({
                     //     tags: true
                     // });
+
+
+                  
+                    // $(document).ready(function() {
+                        
+                    //         $('.tagging').select2({
+                    //             tags: true
+                    //         });
+                        
+                    // });
+
+                    
+                    $(document).ready(function() {
+                        $('.tagging').select2({
+                            tags: true,
+                            ajax: {
+                                url: "{{ route('api.countries') }}", // Appelle l'URL Laravel
+                                dataType: 'json',
+                                delay: 250, // Délai avant de déclencher la requête pour éviter trop de requêtes
+                                data: function(params) {
+                                    return {
+                                        q: params.term // Le terme tapé par l'utilisateur
+                                    };
+                                },
+                                processResults: function(data) {
+                                    return {
+                                        results: $.map(data, function(item) {
+                                            return {
+                                                id: item.countryName, // ID du pays
+                                                text: item.countryName // Nom du pays
+                                            };
+                                        })
+                                    };
+                                },
+                                cache: true
+                            },
+                            minimumInputLength: 1 // La requête AJAX démarre après avoir tapé au moins 1 lettre
+                        });
+                    });
+
+
                 </script>
         <!-- END PAGE LEVEL CUSTOM SCRIPTS -->
