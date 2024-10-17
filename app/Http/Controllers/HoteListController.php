@@ -368,6 +368,7 @@ class HoteListController extends Controller
 
                         // Check if the JSON is not null and 'property' exists
                         if ($data !== null && isset($data['property'])) {
+                            // return $hotel->hotel_code ;
                             $data = $data['property'];
                             //  return $data['@attributes'];
                             // Extracting the data
@@ -375,10 +376,19 @@ class HoteListController extends Controller
                             $hotelName = $data['name'];
                             $city = $data['city'];
                             $country = $data['country'];
-                            $addresses = implode(', ', $data['addresses']['address']['addressLine']);
+                            if(isset($data['addresses'])){
+                                $addresses = implode(', ', $data['addresses']['address']['addressLine']);
+                                $postalCode = isset($data['addresses']['address']['postalCode']) ? $data['addresses']['address']['postalCode'] : $hotel->zip_code;
+                            }
+                           
+                            else {
+                                $addresses = " ";
+                                $postalCode = " ";
+                            }
+                            
                             // $postalCode = $data['addresses']['address']['postalCode'];
-                            $postalCode = isset($data['addresses']['address']['postalCode']) ? $data['addresses']['address']['postalCode'] : $hotel->zip_code;
-
+                           
+                            
                             // $phonesVoice = implode(', ', $data['phones']['phone']);
 
                             // $phonesVoice = is_array($data['phones']['phone']) ? implode(', ', $data['phones']['phone']) : $data['phones']['phone'];
