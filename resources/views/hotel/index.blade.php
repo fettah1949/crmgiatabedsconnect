@@ -183,18 +183,20 @@
                                 <thead>
                                     <tr>
                                       
-                                        <th>hotel_name</th>
-                                        <th>hotel_code</th>
-                                        <th>giataId</th>
-                                        <th>city</th>
-                                        <th>country</th>
-                                        <th>addresses</th>
-                                        <th>phones</th>
-                                        <th>fax</th>
-                                        <th>latitude</th>
-                                        <th>longitude</th>
-                                        <th>chainId</th>
-                                        <th>chainName</th>
+                                        <th>Hotel name</th>
+                                        <th>Hotel code</th>
+                                        <th>BDC ID </th>
+                                        <th>GiataId</th>
+                                        <th>Provider</th>
+                                        <th>City</th>
+                                        <th>Country</th>
+                                        <th>Addresses</th>
+                                        <th>Phones</th>
+                                      
+                                        <th>Latitude</th>
+                                        <th>Longitude</th>
+                                    
+                                        <th>ChainName</th>
                                         <th class=" dt-no-sorting">Action</th>
                                     </tr>
                                 </thead>
@@ -206,17 +208,19 @@
                                        
                                         <td>{{ $value->hotel_name }}</td>
                                         <td>{{ $value->hotel_code }}</td>
+                                        <td>{{ $value->bdc_id }}</td>
                                                                                 
                                         <td>{{ $value->giataId }}</td>   
+                                        <td>{{ $value->provider }}</td>   
                                         <td>{{ $value->city }}</td>                                                                   
                                         <td>{{ $value->country }}</td>
                                         
                                         <td>{{ $value->addresses }}</td>
                                         <td>{{ $value->phones_voice }}</td>
-                                        <td>{{ $value->phones_fax }}</td>
+                                        
                                         <td>{{ $value->latitude }}</td>
                                         <td>{{ $value->longitude }}</td>
-                                        <td>{{ $value->chainId }}</td>
+                                       
                                         <td>{{ $value->chainName }}</td>
                                         
                                       
