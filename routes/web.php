@@ -31,6 +31,7 @@ Route::get('panel/dashbord',[DashbordController::class,'index']);
 // Route::get('/dashbordanalyse', 'DashbordController@index');
 Route::get('dashbordanalyse',[DashbordController::class,'index']);
 Route::get('hotelListe',[HoteListController::class,'index']);
+Route::get('hotelListe/search',[HoteListController::class,'search'])->name('hotelListe.search');
 Route::get('CountryListe',[GeographyController::class,'index']);
 Route::get('AirportListe',[AirportController::class,'index']);
 
@@ -45,4 +46,6 @@ Route::get('/api/countries', [GeographyController::class, 'getCountries'])->name
 
 Route::get('/airport/property', [AirportController::class, 'getProperty'])->name('Airport.property');
 
+
+// Route::resource('HoteList', HoteListController::class);
 // Route::resource('hotelListe', HoteListController::class);

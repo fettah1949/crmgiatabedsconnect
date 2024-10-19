@@ -84,7 +84,7 @@
                 },
                 "stripeClasses": [],
                 "lengthMenu": [7, 10, 20, 50],
-                "pageLength": 7 
+                "pageLength": 50
             } );
         </script>
                 <script>
@@ -165,6 +165,10 @@
 
                     
                     $(document).ready(function() {
+
+                        var selectedCountries = @json($filter['country'] ?? []);
+
+                        
                         $('.tagging').select2({
                             tags: true,
                             ajax: {
@@ -180,8 +184,8 @@
                                     return {
                                         results: $.map(data, function(item) {
                                             return {
-                                                id: item.countryName, // ID du pays
-                                                text: item.countryName // Nom du pays
+                                                id: item.countryCode, // ID du pays
+                                                text: item.countryCode // Nom du pays
                                             };
                                         })
                                     };
@@ -190,6 +194,35 @@
                             },
                             minimumInputLength: 1 // La requête AJAX démarre après avoir tapé au moins 1 lettre
                         });
+
+
+                            // Pré-remplir les pays sélectionnés lors du chargement
+                            if (selectedCountries.length > 0) {
+                                var select2Data = [];
+                                
+                                selectedCountries.forEach(function(country) {
+                                    select2Data.push({
+                                        id: country,  // Code du pays (ou ID)
+                                        text: country // Nom du pays affiché dans le select
+                                    });
+                                });
+
+                                // Ajouter les valeurs sélectionnées dans Select2
+                                var $countrySelect = $('#country');
+                                select2Data.forEach(function(country) {
+                                    // Créer une option pour chaque pays sélectionné
+                                    var option = new Option(country.text, country.id, true, true);
+                                    $countrySelect.append(option).trigger('change');
+                                });
+
+                                // Activer le composant Select2 après avoir ajouté les options
+                                $countrySelect.trigger({
+                                    type: 'select2:select',
+                                    params: {
+                                        data: select2Data
+                                    }
+                                });
+                            }
                     });
 
 

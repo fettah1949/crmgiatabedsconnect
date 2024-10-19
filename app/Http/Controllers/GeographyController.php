@@ -35,8 +35,8 @@ class GeographyController extends Controller
         // Requête pour trouver les pays correspondant à la recherche
         $countries = DB::table('geographies')
                         ->distinct()
-                        ->select('countryName') // Assurez-vous que ces champs existent dans votre table
-                        ->where('countryName', 'like', '%' . $search . '%')
+                        ->select('countryCode') // Assurez-vous que ces champs existent dans votre table
+                        ->where('countryCode', 'like', '%' . $search . '%')
                         ->get();
 
         // Retourner les pays sous forme de JSON pour Select2

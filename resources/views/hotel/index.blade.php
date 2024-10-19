@@ -70,88 +70,87 @@
     <hr>
     <div class="widget-content widget-content-area br-6 text-center">
         <div class="panel-body"     display:inline-block > 
-            <div class="row">
 
-                            
-                <div class="col-md-6">
-                    <div class="form-group" >
-                        <label  for="start_date" class="control-label col-sm-auto" >Start Date:</label>
-                        <input id="rangeCalendarFlatpickr"  name="rangeCalendarFlatpickr" @if(isset($filter['rangeCalendarFlatpickr '] )) value="{{ $filter['rangeCalendarFlatpickr '] }}" @endif class="form-control flatpickr flatpickr-input" type="text" placeholder="Select Date..">
-                        {{-- <label  for="start_date" class="control-label col-sm-auto" >Start Date: </label>
-                        <div class="col-sm-auto" >
-                            <input type="date" class="form-control" id="start_date" name="start_date" />
-                            @error('start_date') <p class="text-danger">{{ $message }}</p> @enderror
-                        </div> --}}
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group" >
-                        <label  for="county" class="control-label col-sm-auto" >country:</label>
-                        <select class="form-control tagging" multiple="multiple">
+                <form  id="fs" action="{{ route('hotelListe.search') }}" method="PUT">
+                    <div class="row">
 
-                        </select>
-                    @error('Type_code') <p class="text-danger">{{ $message }}</p> @enderror
-                 
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                {{-- {{ $filter['hotel']}} --}}
+                                    
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <label  for="start_date" class="control-label col-sm-auto" >Code Hotel</label>
+                                <input id="code_hotel"  name="code_hotel" @if(isset($filter['code_hotel']) ) value="{{ $filter['code_hotel'] }}" @endif class="form-control" type="text" placeholder="Code Hotel">
 
-                
-                <div class="form-group">
-                    <label for="service_category" class="control-label col-sm-auto">Provider Name: </label>
-                        <div class="col-sm-auto">
-                            <select  class="form-control basic" id="provider_name" name="provider_name"  >
-                                <option  value="">Select Provider Name</option>
-                                
-                                <option   value="Dida Travel">Dida Travel </option>       
-                                <option    value="Smyrooms">Smyrooms</option>
-                                <option   value="HotelRunner CM"> HotelRunner CM</option>
-                                <option   value="Bedsconnect-Direct"> Bedsconnect-Direct</option>
-                                <option   value="Spring Travel Services"> Spring Travel Services</option>
-                                <option   value="My Morocco"> My Morocco</option>
-                                <option   value="Roibos"> Roibos</option>
-                                
-                            </select>
-                        @error('Code') <p class="text-danger">{{ $message }}</p> @enderror
-
-                         </div>
+                            </div>
                         </div>
-                  
-                </div>
-            
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <label  for="county" class="control-label col-sm-auto" >country:</label>
+                                <select class="form-control tagging" id="country"  name="country[]"   multiple="multiple">
 
-            
-                <div class="col-md-6">
-                {{-- {{ $filter['hotel']}} --}}
-                <div class="form-group">
-                    <label for="service_category" class="control-label col-sm-auto">Provider ID</label>
-                        <div class="col-sm-auto">
-                            <select  class="form-control basic" id="provider_id" name="provider_id"  >
-                                <option  value="">Select Provider ID</option>
-                                
-                                <option   value="roibos">roibos </option>       
-                                <option    value="Illusion_iol">Illusion_iol</option>
-                                <option   value="didatravel"> didatravel</option>
-                                <option   value="logitravel_dr"> logitravel_dr</option>
-                                <option   value="bedsconnect"> bedsconnect</option>
-                               
-                                
-                                
-                            </select>
-                        @error('Type_code') <p class="text-danger">{{ $message }}</p> @enderror
-
+                                </select>
+                            @error('Type_code') <p class="text-danger">{{ $message }}</p> @enderror
+                        
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
-            
-            </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                        {{-- {{ $filter['hotel']}} --}}
 
-            <button type="submit"  class="btn btn-outline-success mb-2">Apply</button>
-            <button type="button" onclick="vide();" class="btn btn-outline-secondary mb-2">Clear</button>
-            <a href="{{ route('export') }}" class="btn btn-outline-success mb-2">Exporter CSV</a>
+                        
+                        <div class="form-group">
+                            <label for="service_category" class="control-label col-sm-auto">Provider Name: </label>
+                                <div class="col-sm-auto">
+                                    <select  class="form-control basic" id="provider_name" name="provider_name"  >
+                                        <option  value="">Select Provider Name</option>
+                                        
+                                        <option  @if($filter['provider_name']=="Dida Travel") selected @endif  value="Dida Travel">Dida Travel </option>       
+                                        <option  @if($filter['provider_name']=="Smyrooms") selected @endif  value="Smyrooms">Smyrooms</option>
+                                        <option  @if($filter['provider_name']=="HotelRunner CM") selected @endif value="HotelRunner CM"> HotelRunner CM</option>
+                                        <option  @if($filter['provider_name']=="Bedsconnect-Direct") selected @endif value="Bedsconnect-Direct"> Bedsconnect-Direct</option>
+                                        <option  @if($filter['provider_name']=="Spring Travel Services") selected @endif value="Spring Travel Services"> Spring Travel Services</option>
+                                        <option  @if($filter['provider_name']=="My Morocco") selected @endif value="My Morocco"> My Morocco</option>
+                                        <option  @if($filter['provider_name']=="Roibos") selected @endif value="Roibos"> Roibos</option>
+                                        
+                                    </select>
+                                @error('Code') <p class="text-danger">{{ $message }}</p> @enderror
+
+                                </div>
+                                </div>
+                        
+                        </div>
+                    
+
+                    
+                        <div class="col-md-6">
+                        {{-- {{ $filter['hotel']}} --}}
+                        <div class="form-group">
+                            <label for="service_category" class="control-label col-sm-auto">Provider ID</label>
+                                <div class="col-sm-auto">
+                                    <select  class="form-control basic" id="provider_id" name="provider_id"  >
+                                        <option  value="">Select Provider ID</option>
+                                        
+                                        <option  @if($filter['provider_id']=="roibos") selected @endif value="roibos">roibos </option>       
+                                        <option  @if($filter['provider_id']=="Illusion_iol") selected @endif value="Illusion_iol">Illusion_iol</option>
+                                        <option  @if($filter['provider_id']=="didatravel") selected @endif value="didatravel"> didatravel</option>
+                                        <option  @if($filter['provider_id']=="logitravel_dr") selected @endif value="logitravel_dr"> logitravel_dr</option>
+                                        <option  @if($filter['provider_id']=="bedsconnect") selected @endif value="bedsconnect"> bedsconnect</option>
+                                    
+                                        
+                                        
+                                    </select>
+                                @error('Type_code') <p class="text-danger">{{ $message }}</p> @enderror
+
+                            </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+
+                    <button type="submit"  class="btn btn-outline-success mb-2">Apply</button>
+                    <button type="button" onclick="vide();" class="btn btn-outline-secondary mb-2">Clear</button>
+                    <a href="{{ route('export') }}" class="btn btn-outline-success mb-2">Exporter CSV</a>
+                </form>
         </div>
     </div>
    

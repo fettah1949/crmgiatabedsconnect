@@ -18,13 +18,30 @@ class HoteListController extends Controller
                 // $hotels = Hotellist::All();
     $hotels = Hotel::limit(100)->get();
 
+    $code_hotel = "";
+    $country = "";
+    $provider_name = "";
+    $provider_id = "";
+
+
+    
+    $filter = [
+        'code_hotel' => $code_hotel,
+        'country' => $country,
+        'provider_name' => $provider_name,
+        'provider_id' => $provider_id,
+
+    ];
+
+
         // print_r($this->getProperty()) ;die;
         $data = [
             'category_name' => 'liste',
             'page_name' => 'liste',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
-            'hotels'=>$hotels
+            'hotels'=>$hotels,
+            'filter' => $filter,
 
         ];
         return view('hotel.index')->with($data);
@@ -458,4 +475,59 @@ class HoteListController extends Controller
 
         
     }
+
+    public function search(Request $request)
+    {
+
+        $code_hotel = $request->input('code_hotel');
+        $countries = $request->input('country');  // Récupère les pays sous forme de tableau
+        $provider_name = $request->input('provider_name');
+        $provider_id = $request->input('provider_id');
+    
+        $query = Hotel::query();
+    
+        if($code_hotel != ""){
+            $query->where('hotel_code', $code_hotel);
+        }
+    
+        if(!empty($countries)){  // Vérifie si des pays ont été sélectionnés
+            $query->whereIn('country_code', $countries);
+        }
+    
+        if($provider_name != ""){
+            $query->where('provider', $provider_name);
+        }
+    
+        if($provider_id != ""){
+            $query->where('provider_id', $provider_id);
+        }
+    
+        // Exécuter la requête et récupérer les résultats
+        $hotels = $query->limit(100)->get();
+
+        $filter = [
+            'code_hotel' => $code_hotel,
+            'country' => $countries,
+            'provider_name' => $provider_name,
+            'provider_id' => $provider_id,
+        ];
+
+
+        $data = [
+            'category_name' => 'liste',
+            'page_name' => 'liste',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+            'hotels'=>$hotels,
+            'filter' => $filter,
+
+    
+        ];
+        
+        return view('hotel.index',$data) ;   
+        
+
+    }
+
+
 }
