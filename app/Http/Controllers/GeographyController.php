@@ -14,7 +14,7 @@ class GeographyController extends Controller
 
     public function index(){
         // $hotels = Hotellist::All();
-        $Geography = Geography::limit(10)->get();
+        $Geography = Geography::limit(100)->get();
 
         // print_r($this->getProperty()) ;die;
         $data = [

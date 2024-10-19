@@ -92,6 +92,10 @@
                         $('#fetchDataButton').on('click', function() {
                    
                             var provider = $('#provider').val();
+
+                            // Afficher le spinner avant d'envoyer la requête
+                             $('#loadingSpinner').show();
+
                             $.ajax({
                                 url: "{{ route('giata.property') }}",
                                 type: 'GET',
@@ -100,7 +104,8 @@
                                      // Include the CSRF token
                                 },
                                 success: function(response) {
-
+                                    // console.log(response);
+                                    $('#loadingSpinner').hide();
                                     // $('#dataContainer').html('<pre>' + JSON.stringify(response.data, null, 4) + '</pre>');
                                     var countMessage = '  Nombre d\'hôtels trouvés : ' + response.count;
                                     // var countMessage = '  Nombre d\'hôtels trouvés : ' + response;
@@ -108,6 +113,7 @@
                                     $('#message').text(countMessage);
                                 },
                                 error: function(xhr, status, error) {
+                                    $('#loadingSpinner').hide();
                                     $('#dataContainer').html('<p>Erreur lors de la récupération des données : ' + error + '</p>');
                                 }
                             });

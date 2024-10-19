@@ -112,9 +112,9 @@ class HoteListController extends Controller
                         if($data[1] != ""){
                             $Hote->bdc_id = $data[1];
                         }else{
-                            $chiffre = 'BDCX' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                            $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
                                 while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
-                                    $chiffre = 'BDCX' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                                    $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
                                 }
                             $Hote->bdc_id = $chiffre;
                         }
@@ -156,9 +156,9 @@ class HoteListController extends Controller
                         if($row[1] != ""){
                             $Hote->bdc_id = $row[1];
                         }else{
-                            $chiffre = 'BDCX' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                            $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
                                 while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
-                                    $chiffre = 'BDCX' . str_pad(random_int(1, 9999999), 7, '0', STR_PAD_LEFT);
+                                    $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
                                 }
                             $Hote->bdc_id = $chiffre;
                         }
@@ -387,11 +387,19 @@ class HoteListController extends Controller
                         if ($data !== null && isset($data['property'])) {
                              
                             $data = $data['property'];
-                            //  return $data['@attributes'];
                             // Extracting the data
                             $giataId = $data['@attributes']['giataId'];
                             $hotelName = $data['name'];
-                            $city = $data['city'];
+                            $city = $data['city'];         
+
+                            // Vérifie d'abord si l'attribut 'cityId' existe
+                            if (isset($xmlData->property->city['cityId'])) {
+                              
+                                $cityId = (string) $xmlData->property->city['cityId'];  // Récupère l'attribut 'cityId'
+                            } else {
+                                $cityId = ' ';  // Valeur par défaut si l'attribut n'existe pas
+                            }
+
                             $country = $data['country'];
                             // if (isset($data['addresses'])) {
                             //     $addresses = implode(', ', $data['addresses']['address']['addressLine'] ?? []);
@@ -450,6 +458,7 @@ class HoteListController extends Controller
                                         'chainId' => $chainId,
                                         'chainName' => $chainName,
                                         'zip_code' => $postalCode,
+                                        'citycode' => $cityId,
                                         'updated_at' => now(),
                                         'etat' => 1,
                                     ]

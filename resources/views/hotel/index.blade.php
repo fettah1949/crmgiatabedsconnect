@@ -21,7 +21,7 @@
                             </div>
                             
                         </form>
-                         <a href="{{ route('export') }}" class="btn btn-primary">Exporter CSV</a>
+              
                     </div>
         </div>
         <div class="row">
@@ -29,6 +29,13 @@
                 <div class="row">
                     <div class="col-md-4">
                     <button id="fetchDataButton" class="btn btn-success" >Récupérer les données GIATA</button>
+
+                    <!-- Indicateur de chargement -->
+                    <div id="loadingSpinner" style="display:none;">
+                        <img src="{{asset('assets\img\Fading balls.gif')}}" alt="Chargement..." />
+                        <p>Chargement des données...</p>
+                    </div>
+
                     </div>
                     {{-- <div class="col-md-3">
                         <select name="provider" id="provider" class="form-control" required>
@@ -149,7 +156,6 @@
 
                     <button type="submit"  class="btn btn-outline-success mb-2">Apply</button>
                     <button type="button" onclick="vide();" class="btn btn-outline-secondary mb-2">Clear</button>
-                    <a href="{{ route('export') }}" class="btn btn-outline-success mb-2">Exporter CSV</a>
                 </form>
         </div>
     </div>
