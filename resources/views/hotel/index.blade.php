@@ -218,7 +218,7 @@
                                         <td>{{ $value->giataId }}</td>   
                                         <td>{{ $value->provider }}</td>   
                                         <td>{{ $value->city }}</td>                                                                   
-                                        <td>{{ $value->country }}</td>
+                                        <td>{{ $value->country_code }}</td>
                                         
                                         <td>{{ $value->addresses }}</td>
                                         <td>{{ $value->phones_voice }}</td>
