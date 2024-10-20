@@ -28,34 +28,34 @@
             <div class="col-md-7">
                 <div class="row">
                     <div class="col-md-4">
-                    <button id="fetchDataButton" class="btn btn-success" >Récupérer les données GIATA</button>
+                        <button id="fetchDataButton" class="btn btn-success" >Récupérer les données GIATA</button>
 
-                    <!-- Indicateur de chargement -->
-                    <div id="loadingSpinner" style="display:none;">
-                        <img src="{{asset('assets\img\Fading balls.gif')}}" alt="Chargement..." />
-                        <p>Chargement des données...</p>
-                    </div>
+                        <!-- Indicateur de chargement -->
+                        <div id="loadingSpinner" style="display:none;">
+                            <img src="{{asset('assets\img\Fading balls.gif')}}" alt="Chargement..." />
+                            <p>Chargement des données...</p>
+                        </div>
 
                     </div>
-                    {{-- <div class="col-md-3">
-                        <select name="provider" id="provider" class="form-control" required>
-                        <option value="">select provider</option>
-                        <option value="didatravel">Dida Travel</option>
-                        <option value="roibos">Roibos</option>
-                        <option value="logitravel_dr">Smyrooms</option>
-                        <option value="iol_iwtx">Illusions</option>
-                        <option value="Bedsconnect">Bedsconnect</option>
-                        </select>
-                    </div> --}}
+                    <div class="col-md-3">
+                        <button id="unifierbdcDataButton" class="btn btn-success" >Unifier les codes BDC</button>
+
+                        <!-- Indicateur de chargement -->
+                        <div id="loadingSpinner_bdc" style="display:none;">
+                            <img src="{{asset('assets\img\Fading balls.gif')}}" alt="Chargement..." />
+                            <p>Chargement des données...</p>
+                        </div>
+                    </div> 
               </div>
             </div>
              <div class="col-md-5">
            
-        </div>
+             </div>
             {{-- <div id="dataContainer" style="margin-top: 20px;">
                 <!-- Les données API seront affichées ici -->
             </div> --}}
             <div id="message" style="margin-top: 20px;">
+            <div id="message_unifier" style="margin-top: 20px;">
                 <!-- Le message sera affiché ici -->
             </div>
         </div>

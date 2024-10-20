@@ -121,6 +121,38 @@
                     });
 
                     $(document).ready(function() {
+                        $('#unifierbdcDataButton').on('click', function() {
+                   
+                          
+
+                            // Afficher le spinner avant d'envoyer la requête
+                             $('#loadingSpinner_bdc').show();
+
+                            $.ajax({
+                                url: "{{ route('giata.unifier_bdc') }}",
+                                type: 'GET',
+                                data: {
+                                    _token: '{{ csrf_token() }}',  // Include the CSRF token
+                                     // Include the CSRF token
+                                },
+                                success: function(response) {
+                                    // console.log(response);
+                                    $('#loadingSpinner_bdc').hide();
+                                    // $('#dataContainer').html('<pre>' + JSON.stringify(response.data, null, 4) + '</pre>');
+                                    // var countMessage = '  Nombre d\'hôtels trouvés : ' + response.count;
+                                     var countMessage =  response;
+                                    // alert(response.count);
+                                     $('#message_unifier').text(countMessage);
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#loadingSpinner_bdc').hide();
+                                    $('#dataContainer').html('<p>Erreur lors de la récupération des données : ' + error + '</p>');
+                                }
+                            });
+                        });
+                    });
+
+                    $(document).ready(function() {
                         $('#fetchDataButton_geo').on('click', function() {
                            
                             $.ajax({

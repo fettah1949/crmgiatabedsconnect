@@ -23,7 +23,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class HoteListController extends Controller
 {
     public function index(){
-                // $hotels = Hotellist::All();
+    // $hotels = Hotellist::All();
     $hotels = Hotel::limit(100)->get();
 
     $code_hotel = "";
@@ -631,6 +631,39 @@ class HoteListController extends Controller
         
         return view('hotel.index',$data) ;   
         
+
+    }
+
+    public function unifier_bdc(Request $request)
+    {
+
+        $hotelsGroupedByGiataId = DB::table('hotels')
+        ->select('giataid')
+        ->groupBy('giataid')
+        ->havingRaw('COUNT(DISTINCT bdc_id) > 1') /// Trouver les giata_id en doublon
+        ->where('giataid','!=','')
+        ->get();
+        // return  count($hotelsGroupedByGiataId);
+        if( count($hotelsGroupedByGiataId) != 0){
+                    // Mettre à jour chaque groupe avec les bdc_id unifiés
+            foreach ($hotelsGroupedByGiataId as $group) {
+                // Générer un nouveau bdc_id unique
+                $nouveauBdcId = $this->generateUniqueBdcId();
+
+                // Mettre à jour tous les hôtels ayant le même giata_id avec le nouveau bdc_id
+                DB::table('hotels')
+                    ->where('giataid', $group->giataid)
+                    ->update(['bdc_id' => $nouveauBdcId]);
+            }
+            // return  $hotelsGroupedByGiataId;
+
+
+            return "Unification et génération de nouveaux bdc_id pour les hôtels en doublon terminée. (noumbres hotels : ".count($hotelsGroupedByGiataId)." ) ";
+
+        }else{
+            return "Aucun doublon .";
+
+        }
 
     }
 

@@ -41,6 +41,9 @@ Route::get('/export', [HoteListController::class,'export'])->name('export');
 
 
 Route::get('/giata/property', [HoteListController::class, 'getProperty'])->name('giata.property');
+Route::get('/giata/unifier_bdc', [HoteListController::class, 'unifier_bdc'])->name('giata.unifier_bdc');
+
+
 Route::get('/geo/property', [GeographyController::class, 'getProperty'])->name('geo.property');
 Route::get('/api/countries', [GeographyController::class, 'getCountries'])->name('api.countries');
 
