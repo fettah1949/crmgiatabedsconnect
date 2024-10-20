@@ -12,6 +12,14 @@ use NunoMaduro\Collision\Provider;
 use SimpleXMLElement;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Illuminate\Support\Facades\Storage;
+
+use Maatwebsite\Excel\Facades\Excel;
+
+
+
+
 class HoteListController extends Controller
 {
     public function index(){
@@ -85,184 +93,272 @@ class HoteListController extends Controller
     }
 
 
-    public function import(Request $request)
-    {
-        //   return 'dddd';
-        // Validation du fichier d'import
-        try {
-            // Validation du fichier pour accepter les fichiers CSV et XLSX
-            $request->validate([
-                'csv_file' => 'required|mimes:csv,txt,xlsx'
-            ]);
+    // public function import(Request $request)
+    // {
+    //     //   return 'dddd';
+    //     // Validation du fichier d'import
+    //     try {
+    //         // Validation du fichier pour accepter les fichiers CSV et XLSX
+    //         $request->validate([
+    //             'csv_file' => 'required|mimes:csv,txt,xlsx'
+    //         ]);
         
-            // Récupérer le fichier à partir de la demande
-            $file = $request->file('csv_file');
-            $extension = $file->getClientOriginalExtension();
+    //         // Récupérer le fichier à partir de la demande
+    //         $file = $request->file('csv_file');
+    //         $extension = $file->getClientOriginalExtension();
         
-            if ($extension == 'csv' || $extension == 'txt') {
-                // Ouvrir le fichier CSV
-                $handle = fopen($file, "r");
-                $i = 0;
-                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                    if ($i != 0) {
+    //         if ($extension == 'csv' || $extension == 'txt') {
+    //             // Ouvrir le fichier CSV
+    //             $handle = fopen($file, "r");
+    //             $i = 0;
+    //             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+    //                 if ($i != 0) {
 
-                        $Hote = new Hotel;
+    //                     $Hote = new Hotel;
                        
-                        $Hote->hotel_code = $data[0];
-                        if($data[1] != ""){
-                            $Hote->bdc_id = $data[1];
-                        }else{
-                            $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
-                                while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
-                                    $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
-                                }
-                            $Hote->bdc_id = $chiffre;
-                        }
+    //                     $Hote->hotel_code = $data[0];
+    //                     if($data[1] != ""){
+    //                         $Hote->bdc_id = $data[1];
+    //                     }else{
+    //                         $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+    //                             while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
+    //                                 $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+    //                             }
+    //                         $Hote->bdc_id = $chiffre;
+    //                     }
 
-                        $Hote->provider = $data[2];
-                        $Hote->provider_id = $data[3];
-                        $Hote->hotel_name = $data[4];
-                        $Hote->latitude = $data[5];
-                        $Hote->longitude = $data[6];
-                        $Hote->addresses = $data[7];
-                        $Hote->city = $data[8];
-                        $Hote->zip_code = $data[9];
-                        $Hote->country = $data[10];
-                        $Hote->country_code = $data[11];
-                        $Hote->CategoryCode = $data[12];
-                        $Hote->CategoryName = $data[13];
-                        $Hote->CityCode = $data[14];
-                        $Hote->chainId = $data[15];
-                        $Hote->chainName = $data[16];
-                        $Hote->etat = 0;
+    //                     $Hote->provider = $data[2];
+    //                     $Hote->provider_id = $data[3];
+    //                     $Hote->hotel_name = $data[4];
+    //                     $Hote->latitude = $data[5];
+    //                     $Hote->longitude = $data[6];
+    //                     $Hote->addresses = $data[7];
+    //                     $Hote->city = $data[8];
+    //                     $Hote->zip_code = $data[9];
+    //                     $Hote->country = $data[10];
+    //                     $Hote->country_code = $data[11];
+    //                     $Hote->CategoryCode = $data[12];
+    //                     $Hote->CategoryName = $data[13];
+    //                     $Hote->CityCode = $data[14];
+    //                     $Hote->chainId = $data[15];
+    //                     $Hote->chainName = $data[16];
+    //                     $Hote->etat = 0;
                         
-                        $Hote->save(); 
-                    }
-                    $i++;
-                }
-                fclose($handle);
-            } elseif ($extension == 'xlsx') {
-                // Lire le fichier XLSX
-                $spreadsheet = IOFactory::load($file->getPathname());
-                $worksheet = $spreadsheet->getActiveSheet();
-                $rows = $worksheet->toArray();
+    //                     $Hote->save(); 
+    //                 }
+    //                 $i++;
+    //             }
+    //             fclose($handle);
+    //         } elseif ($extension == 'xlsx') {
+    //             // Lire le fichier XLSX
+    //             $spreadsheet = IOFactory::load($file->getPathname());
+    //             $worksheet = $spreadsheet->getActiveSheet();
+    //             $rows = $worksheet->toArray();
         
-                foreach ($rows as $index => $row) {
-                    if ($index != 0) {
-                        // return $row[0];
-                        $Hote = new Hotel;
+    //             foreach ($rows as $index => $row) {
+    //                 if ($index != 0) {
+    //                     // return $row[0];
+    //                     $Hote = new Hotel;
                        
-                          $Hote->hotel_code = $row[0];
-                        if($row[1] != ""){
-                            $Hote->bdc_id = $row[1];
-                        }else{
-                            $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
-                                while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
-                                    $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
-                                }
-                            $Hote->bdc_id = $chiffre;
-                        }
+    //                       $Hote->hotel_code = $row[0];
+    //                     if($row[1] != ""){
+    //                         $Hote->bdc_id = $row[1];
+    //                     }else{
+    //                         $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+    //                             while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
+    //                                 $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+    //                             }
+    //                         $Hote->bdc_id = $chiffre;
+    //                     }
 
-                        $Hote->provider = $row[2];
-                        $Hote->provider_id = $row[3];
-                        $Hote->hotel_name = $row[4];
-                        $Hote->latitude = $row[5];
-                        $Hote->longitude = $row[6];
-                        $Hote->addresses = $row[7];
-                        $Hote->city = $row[8];
-                        $Hote->zip_code = $row[9];
-                        $Hote->country = $row[10];
-                        $Hote->country_code = $row[11];
-                        $Hote->CategoryCode = $row[12];
-                        $Hote->CategoryName = $row[13];
-                        $Hote->CityCode = $row[14];
-                        $Hote->chainId = $row[15];
-                        $Hote->chainName = $row[16];
-                        $Hote->etat = 0;
+    //                     $Hote->provider = $row[2];
+    //                     $Hote->provider_id = $row[3];
+    //                     $Hote->hotel_name = $row[4];
+    //                     $Hote->latitude = $row[5];
+    //                     $Hote->longitude = $row[6];
+    //                     $Hote->addresses = $row[7];
+    //                     $Hote->city = $row[8];
+    //                     $Hote->zip_code = $row[9];
+    //                     $Hote->country = $row[10];
+    //                     $Hote->country_code = $row[11];
+    //                     $Hote->CategoryCode = $row[12];
+    //                     $Hote->CategoryName = $row[13];
+    //                     $Hote->CityCode = $row[14];
+    //                     $Hote->chainId = $row[15];
+    //                     $Hote->chainName = $row[16];
+    //                     $Hote->etat = 0;
 
                        
                         
 
                         
                         
-                        $Hote->save();
-                    }
-                }
-            }
+    //                     $Hote->save();
+    //                 }
+    //             }
+    //         }
         
-            // Rediriger l'utilisateur vers une page de confirmation
-            return redirect()->back()
-                ->with('status', 'success')
-                ->withErrors('Le fichier a été importé avec succès.');
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('status', 'error')
-                ->withErrors('Importation du fichier échouée : '.$e->getMessage());
-        }
-        //...
+    //         // Rediriger l'utilisateur vers une page de confirmation
+    //         return redirect()->back()
+    //             ->with('status', 'success')
+    //             ->withErrors('Le fichier a été importé avec succès.');
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()
+    //             ->with('status', 'error')
+    //             ->withErrors('Importation du fichier échouée : '.$e->getMessage());
+    //     }
+    //     //...
     
-        // try {
-        //     // Import the CSV file
-        //     $request->validate([
-        //         'csv_file' => 'required|mimes:csv,txt,xlsx'
-        //     ]);
+    //     // try {
+    //     //     // Import the CSV file
+    //     //     $request->validate([
+    //     //         'csv_file' => 'required|mimes:csv,txt,xlsx'
+    //     //     ]);
         
-        //     // Récupérer le fichier CSV à partir de la demande
-        //     $file = $request->file('csv_file');
+    //     //     // Récupérer le fichier CSV à partir de la demande
+    //     //     $file = $request->file('csv_file');
             
             
-        //     // Ouvrir le fichier CSV
-        //     $handle = fopen($file, "r");
-        // // return  fgetcsv($handle, 1000, ",");
-        //     // Parcourir chaque ligne du fichier CSV
-        //     $i=0;
-        //     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        //         // Ajouter la logique nécessaire pour importer les données à partir du fichier CSV et les enregistrer dans votre base de données
-        //         // Exemple:Hotelmapping
+    //     //     // Ouvrir le fichier CSV
+    //     //     $handle = fopen($file, "r");
+    //     // // return  fgetcsv($handle, 1000, ",");
+    //     //     // Parcourir chaque ligne du fichier CSV
+    //     //     $i=0;
+    //     //     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+    //     //         // Ajouter la logique nécessaire pour importer les données à partir du fichier CSV et les enregistrer dans votre base de données
+    //     //         // Exemple:Hotelmapping
                   
-        //         if($i!=0)
-        //         {
-        //             return $data[0];
-        //          $Hote = new Hotel;
-        //         $Hote->hotel_name = $data[0];
-        //         $Hote->hotel_code = $data[1];
-        //         $Hote->giataId = $data[2];
-        //         $Hote->city = $data[3];
-        //         $Hote->country = $data[4];
-        //         $Hote->addresses = $data[5];
-        //         $Hote->phones_voice = $data[6];
-        //         $Hote->phones_fax = $data[7];
-        //         $Hote->email = $data[8];
-        //         $Hote->latitude = $data[9];
-        //         $Hote->longitude = $data[10];
-        //         $Hote->chainId = $data[11];
-        //         $Hote->chainName = $data[12];
-        //         $Hote->zip_code = $data[13];
+    //     //         if($i!=0)
+    //     //         {
+    //     //             return $data[0];
+    //     //          $Hote = new Hotel;
+    //     //         $Hote->hotel_name = $data[0];
+    //     //         $Hote->hotel_code = $data[1];
+    //     //         $Hote->giataId = $data[2];
+    //     //         $Hote->city = $data[3];
+    //     //         $Hote->country = $data[4];
+    //     //         $Hote->addresses = $data[5];
+    //     //         $Hote->phones_voice = $data[6];
+    //     //         $Hote->phones_fax = $data[7];
+    //     //         $Hote->email = $data[8];
+    //     //         $Hote->latitude = $data[9];
+    //     //         $Hote->longitude = $data[10];
+    //     //         $Hote->chainId = $data[11];
+    //     //         $Hote->chainName = $data[12];
+    //     //         $Hote->zip_code = $data[13];
 
                 
-        //         $Hote->save(); 
+    //     //         $Hote->save(); 
 
               
-        //         }
+    //     //         }
         
-        //         $i=$i+1;
-        //     }
+    //     //         $i=$i+1;
+    //     //     }
         
-        //     // Fermer le fichier CSV
-        //     fclose($handle);
+    //     //     // Fermer le fichier CSV
+    //     //     fclose($handle);
         
-        //     // Rediriger l'utilisateur vers une page de confirmation
-        //     return redirect()->back()
-        //     ->with('status', 'success')
-        //         ->withErrors('Le fichier CSV a été importé avec succès.');
-        // } catch (\Exception $e) {
-        //     return redirect()->back()
-        //         ->with('status', 'error')
-        //         ->withErrors('Importation du fichier CSV échouée : '.$e->getMessage());
-        // }
-        //...
-    }
-    
+    //     //     // Rediriger l'utilisateur vers une page de confirmation
+    //     //     return redirect()->back()
+    //     //     ->with('status', 'success')
+    //     //         ->withErrors('Le fichier CSV a été importé avec succès.');
+    //     // } catch (\Exception $e) {
+    //     //     return redirect()->back()
+    //     //         ->with('status', 'error')
+    //     //         ->withErrors('Importation du fichier CSV échouée : '.$e->getMessage());
+    //     // }
+    //     //...
+    // }
+
+        public function import(Request $request)
+        {
+          
+            // Validation du fichier d'import
+            try {
+                // $request->validate([
+                //     'csv_file' => 'required|mimes:csv,txt,xlsx'
+                // ]);
+                // die($request->file('csv_file'));
+                // Récupérer le fichier à partir de la demande
+                $file = $request->file('csv_file');
+                $extension = $file->getClientOriginalExtension();
+                
+                if ($extension == 'csv' || $extension == 'txt') {
+                    // Ouvrir le fichier CSV
+                    $handle = fopen($file, "r");
+                    $i = 0;
+
+                    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                        if ($i != 0) {
+                            $this->saveHotelData($data);
+                        }
+                        $i++;
+                    }
+
+                    fclose($handle);
+                } elseif ($extension == 'xlsx') {
+                    // Lire le fichier XLSX
+                    $spreadsheet = IOFactory::load($file->getPathname());
+                    $worksheet = $spreadsheet->getActiveSheet();
+                    $rows = $worksheet->toArray();
+
+                    foreach ($rows as $index => $row) {
+                        if ($index != 0) {
+                            $this->saveHotelData($row);
+                        }
+                    }
+                }
+
+                // Rediriger l'utilisateur vers une page de confirmation
+                return redirect()->back()
+                    ->with('status', 'success')
+                    ->withErrors('Le fichier a été importé avec succès.');
+
+            } catch (\Exception $e) {
+                return redirect()->back()
+                    ->with('status', 'error')
+                    ->withErrors('Importation du fichier échouée : ' . $e->getMessage());
+            }
+        }
+
+        // Fonction pour sauvegarder les données de l'hôtel
+        private function saveHotelData(array $data)
+        {
+            $Hote = new Hotel;
+
+            $Hote->hotel_code = $data[0];
+            $Hote->bdc_id = $data[1] ?: $this->generateUniqueBdcId();
+            $Hote->provider = $data[2];
+            $Hote->provider_id = $data[3];
+            $Hote->hotel_name = $data[4];
+            $Hote->latitude = $data[5];
+            $Hote->longitude = $data[6];
+            $Hote->addresses = $data[7];
+            $Hote->city = $data[8];
+            $Hote->zip_code = $data[9];
+            $Hote->country = $data[10];
+            $Hote->country_code = $data[11];
+            $Hote->CategoryCode = $data[12];
+            $Hote->CategoryName = $data[13];
+            $Hote->CityCode = $data[14];
+            $Hote->chainId = $data[15];
+            $Hote->chainName = $data[16];
+            $Hote->etat = 0;
+
+            $Hote->save();
+        }
+
+        // Fonction pour générer un ID BDC unique
+        private function generateUniqueBdcId()
+        {
+            $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+            while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
+                $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+            }
+            return $chiffre;
+        }
+
     public function export()
     {
         // Récupérez les données que vous souhaitez exporter depuis votre modèle ou votre source de données
