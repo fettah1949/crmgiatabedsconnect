@@ -546,6 +546,7 @@ class HoteListController extends Controller
                                         'giataId' => $giataId,
                                         'city' => $city,
                                         'country' => $country,
+                                        'country_code' => $country,
                                         'addresses' => $addresses,
                                         'phones_voice' => $phonesVoice,
                                         'email' => $email,
