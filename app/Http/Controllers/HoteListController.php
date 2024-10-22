@@ -273,7 +273,7 @@ class HoteListController extends Controller
 
         public function import(Request $request)
         {
-          
+            set_time_limit(0);
             // Validation du fichier d'import
             try {
                 // $request->validate([
