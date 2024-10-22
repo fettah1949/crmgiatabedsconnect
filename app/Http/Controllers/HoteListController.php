@@ -540,7 +540,7 @@ class HoteListController extends Controller
                             // return  $jsonData .' ----------------- '.implode(', ', $data['phones']['phone']);
                             // Update or insert the data into your database
                             DB::table('hotels')
-                            ->where('hotel_code', $hotel->hotel_code)
+                            ->where('id', $hotel->id)
                             ->update([
                                         'hotel_name' => $hotelName,
                                         'giataId' => $giataId,
