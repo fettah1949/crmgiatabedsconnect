@@ -31,5 +31,24 @@
     <link href="{{asset('assets/css/dashboard/dash_2.css')}}" rel="stylesheet" type="text/css" />
 
 
-    <
+    
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/select2/select2.min.css')}}">
+    <style>
+        /* Ajoutez ceci dans votre fichier CSS */
+        @keyframes loading {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .loading-animation {
+            animation: loading 1s infinite; /* Changez la durée selon votre besoin */
+        }
+
+    </style>

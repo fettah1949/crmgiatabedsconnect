@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Hotel;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Http;
@@ -17,8 +18,9 @@ use Illuminate\Support\Facades\Storage;
 
 use Maatwebsite\Excel\Facades\Excel;
 
-
-
+use App\Jobs\ImportHotelDataJob;
+use App\Models\ImportStatus;
+use Illuminate\Support\Facades\Log;
 
 class HoteListController extends Controller
 {
@@ -271,93 +273,189 @@ class HoteListController extends Controller
     //     //...
     // }
 
+        // public function import(Request $request)
+        // {
+        //     set_time_limit(0);
+        //     // Validation du fichier d'import
+        //     try {
+        //         // $request->validate([
+        //         //     'csv_file' => 'required|mimes:csv,txt,xlsx'
+        //         // ]);
+        //         // die($request->file('csv_file'));
+        //         // Récupérer le fichier à partir de la demande
+        //         $file = $request->file('csv_file');
+        //         $extension = $file->getClientOriginalExtension();
+                
+        //         if ($extension == 'csv' || $extension == 'txt') {
+        //             // Ouvrir le fichier CSV
+        //             $handle = fopen($file, "r");
+        //             $i = 0;
+
+        //             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        //                 if ($i != 0) {
+        //                     $this->saveHotelData($data);
+        //                 }
+        //                 $i++;
+        //             }
+
+        //             fclose($handle);
+        //         } elseif ($extension == 'xlsx') {
+        //             // Lire le fichier XLSX
+        //             $spreadsheet = IOFactory::load($file->getPathname());
+        //             $worksheet = $spreadsheet->getActiveSheet();
+        //             $rows = $worksheet->toArray();
+
+        //             foreach ($rows as $index => $row) {
+        //                 if ($index != 0) {
+        //                     $this->saveHotelData($row);
+        //                 }
+        //             }
+        //         }
+
+        //         // Rediriger l'utilisateur vers une page de confirmation
+        //         return redirect()->back()
+        //             ->with('status', 'success')
+        //             ->withErrors('Le fichier a été importé avec succès.');
+
+        //     } catch (\Exception $e) {
+        //         return redirect()->back()
+        //             ->with('status', 'error')
+        //             ->withErrors('Importation du fichier échouée : ' . $e->getMessage());
+        //     }
+        // }
+
+        // Fonction pour sauvegarder les données de l'hôtel
+        // private function saveHotelData(array $data)
+        // {
+        //     $Hote = new Hotel;
+
+        //     $Hote->hotel_code = $data[0];
+        //     $Hote->bdc_id = $data[1] ?: $this->generateUniqueBdcId();
+        //     $Hote->provider = $data[2];
+        //     $Hote->provider_id = $data[3];
+        //     $Hote->hotel_name = $data[4];
+        //     $Hote->latitude = $data[5];
+        //     $Hote->longitude = $data[6];
+        //     $Hote->addresses = $data[7];
+        //     $Hote->city = $data[8];
+        //     $Hote->zip_code = $data[9];
+        //     $Hote->country = $data[10];
+        //     $Hote->country_code = $data[11];
+        //     $Hote->CategoryCode = $data[12];
+        //     $Hote->CategoryName = $data[13];
+        //     $Hote->CityCode = $data[14];
+        //     $Hote->chainId = $data[15];
+        //     $Hote->chainName = $data[16];
+        //     $Hote->etat = 0;
+
+        //     $Hote->save();
+        // }
+
+        // Fonction pour générer un ID BDC unique
+        // private function generateUniqueBdcId()
+        // {
+        //     $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+        //     while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
+        //         $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+        //     }
+        //     return $chiffre;
+        // }
+
+
+        // public function import(Request $request)
+        // {
+            
+        //     // Validation du fichier
+        //     $request->validate([
+        //         'csv_file' => 'required|mimes:csv,txt,xlsx',
+        //     ]);
+    
+        //     // Récupérer le fichier et le stocker
+        //     $file = $request->file('csv_file');
+        //     $filePath = $file->storeAs('imports', $file->getClientOriginalName());
+    
+        //     // Récupérer l'extension
+        //     $extension = $file->getClientOriginalExtension();
+    
+        //     // Ajouter le traitement dans la file d'attente
+        //     ImportHotelDataJob::dispatch($filePath, $extension);
+        //     // ->with('status', 'success')
+        //     //             ->withErrors('Le fichier a été importé avec succès.');
+        //     return redirect()->back()->with('status', 'Fichier ajouté en attente d\'importation. Le traitement est en cours.')->withErrors('Le fichier a été importé avec succès.');
+        // }.
+
         public function import(Request $request)
         {
+            ini_set('memory_limit', '512M'); // Augmenter la limite de mémoire
             set_time_limit(0);
             // Validation du fichier d'import
             try {
-                // $request->validate([
-                //     'csv_file' => 'required|mimes:csv,txt,xlsx'
-                // ]);
-                // die($request->file('csv_file'));
+                $request->validate([
+                    'csv_file' => 'required|mimes:csv,txt,xlsx'
+                ]);
+        
                 // Récupérer le fichier à partir de la demande
                 $file = $request->file('csv_file');
                 $extension = $file->getClientOriginalExtension();
+                $fileName = $file->getClientOriginalName();
                 
-                if ($extension == 'csv' || $extension == 'txt') {
-                    // Ouvrir le fichier CSV
-                    $handle = fopen($file, "r");
-                    $i = 0;
-
-                    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                        if ($i != 0) {
-                            $this->saveHotelData($data);
-                        }
-                        $i++;
-                    }
-
-                    fclose($handle);
-                } elseif ($extension == 'xlsx') {
-                    // Lire le fichier XLSX
-                    $spreadsheet = IOFactory::load($file->getPathname());
-                    $worksheet = $spreadsheet->getActiveSheet();
-                    $rows = $worksheet->toArray();
-
-                    foreach ($rows as $index => $row) {
-                        if ($index != 0) {
-                            $this->saveHotelData($row);
-                        }
-                    }
+                // Enregistrer le fichier sur le disque temporairement
+                 $filePath = $file->store('uploads');
+                 
+                //  die($filePath_1);
+                $filePath = storage_path('app/uploads/' . basename($filePath));
+                if (!file_exists($filePath)) {
+                    Log::error("Le fichier n'existe pas : " . $filePath);
+                    return; // Gérer l'erreur comme souhaité
                 }
 
+                       // Créer un statut d'importation
+                        $importStatus = ImportStatus::create([
+                            'file_name' => $fileName,
+                            'status' => 'pending',
+                        ]);
+        
+                // Dispatchez le job
+                ImportHotelDataJob::dispatch($filePath, $extension, $importStatus->id);
+        
                 // Rediriger l'utilisateur vers une page de confirmation
-                return redirect()->back()
-                    ->with('status', 'success')
-                    ->withErrors('Le fichier a été importé avec succès.');
-
+                // return redirect()->back()
+                //     ->with('status', 'success')
+                //     ->withErrors('Le fichier est en cours d\'importation.');
+                        // Rediriger l'utilisateur avec une réponse JSON
+                    return response()->json([
+                        'status' => 'success',
+                        'file_name' => $importStatus->id,
+                        'message' => 'Le fichier est en cours d\'importation.'
+                    ]);
+        
             } catch (\Exception $e) {
                 return redirect()->back()
                     ->with('status', 'error')
                     ->withErrors('Importation du fichier échouée : ' . $e->getMessage());
             }
         }
-
-        // Fonction pour sauvegarder les données de l'hôtel
-        private function saveHotelData(array $data)
+        public function checkImportStatus(Request $request)
         {
-            $Hote = new Hotel;
-
-            $Hote->hotel_code = $data[0];
-            $Hote->bdc_id = $data[1] ?: $this->generateUniqueBdcId();
-            $Hote->provider = $data[2];
-            $Hote->provider_id = $data[3];
-            $Hote->hotel_name = $data[4];
-            $Hote->latitude = $data[5];
-            $Hote->longitude = $data[6];
-            $Hote->addresses = $data[7];
-            $Hote->city = $data[8];
-            $Hote->zip_code = $data[9];
-            $Hote->country = $data[10];
-            $Hote->country_code = $data[11];
-            $Hote->CategoryCode = $data[12];
-            $Hote->CategoryName = $data[13];
-            $Hote->CityCode = $data[14];
-            $Hote->chainId = $data[15];
-            $Hote->chainName = $data[16];
-            $Hote->etat = 0;
-
-            $Hote->save();
-        }
-
-        // Fonction pour générer un ID BDC unique
-        private function generateUniqueBdcId()
-        {
-            $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
-            while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
-                $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+            $fileName = $request->query('fileName'); // Récupère le nom de fichier depuis la requête
+         
+            $importStatus = ImportStatus::where('id', $fileName)->first();
+        
+            if (!$importStatus) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Statut non disponible pour ce fichier.'
+                ]);
             }
-            return $chiffre;
+        
+            return response()->json([
+                'file_name' => $importStatus->file_name,
+                'status' => $importStatus->status
+            ]);
         }
+        
+        
+        
 
     public function export()
     {

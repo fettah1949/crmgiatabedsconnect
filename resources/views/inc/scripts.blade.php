@@ -264,5 +264,75 @@
                     });
 
 
+                   
+                        // document.addEventListener('DOMContentLoaded', function() {
+                        //     @if(session('status'))
+                        //         $('#statusModal').modal('show');
+                        //     @endif
+                        // });
+          
+                        
+                        $(document).ready(function() {
+                            $('#importForm').on('submit', function(e) {
+                                e.preventDefault(); // Prevent the page from refreshing
+                                $('#statusModal').modal('show'); // Show the status modal
+
+                                // Prepare form data
+                                var formData = new FormData(this);
+
+                                $.ajax({
+                                    url: $(this).attr('action'),
+                                    type: 'POST',
+                                    data: formData,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function(response) {
+                                        $('#statusMessage').text('Importation en cours...');
+                                        checkImportStatus(response.file_name);
+                                        $('#csv_file').val('');
+                                    },
+                                    error: function(xhr) {
+                                        $('#statusMessage').text('Échec de l\'importation : ' + xhr.responseJSON.message);
+                                    }
+                                });
+
+                                return false; // Ensure form submission is fully blocked
+                            });
+                        });
+
+                    function checkImportStatus(fileName) {
+                    console.log("Nom du fichier:", fileName);
+                    const intervalId = setInterval(() => {
+                        $.ajax({
+                            url: "{{ route('importstatus') }}", 
+                            data : {fileName : fileName  },
+                            dataType: 'json', 
+                            type: 'GET',
+                            success: function(response) {
+                                console.log(response);
+                                $('#statusMessage').text(`Le statut d'importation pour le fichier ${response.file_name} est : ${response.status}`);
+
+                                // Ajoutez l'animation si le statut est "pending"
+                                if (response.status === 'pending') {
+                                    $('#statusMessage').addClass('loading-animation'); // Ajoute l'animation
+                                } else {
+                                    $('#statusMessage').removeClass('loading-animation'); // Enlève l'animation
+                                }
+
+                                // Vérifiez si l'importation est terminée
+                                if (response.status === 'completed' || response.status === 'failed') {
+                                    clearInterval(intervalId); // Arrêter l'interrogation
+                                    $('#statusMessage').removeClass('loading-animation'); // Assurez-vous de retirer l'animation
+                                }
+                            },
+                            error: function(xhr) {
+                                $('#statusMessage').text('Erreur lors de la récupération du statut.');
+                                clearInterval(intervalId);
+                            }
+                        });
+                    }, 5000);
+                }
+
+
                 </script>
         <!-- END PAGE LEVEL CUSTOM SCRIPTS -->

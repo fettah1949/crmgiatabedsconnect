@@ -49,6 +49,9 @@ Route::get('/api/countries', [GeographyController::class, 'getCountries'])->name
 
 Route::get('/airport/property', [AirportController::class, 'getProperty'])->name('Airport.property');
 
+Route::get('/importstatus', [HoteListController::class, 'checkImportStatus'])->name('importstatus');
+
+
 
 // Route::resource('HoteList', HoteListController::class);
 // Route::resource('hotelListe', HoteListController::class);

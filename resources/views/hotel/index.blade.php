@@ -8,22 +8,44 @@
     <!--  END LOADER --> --}}
     <div class="pull-right widget-content widget-content-area br-6 ">
         <div class="row">
-                    <div class="col-md-6">
-                        <a class="btn btn-outline-primary btn-rounded mb-2" href="{{ route('hotellist.create') }}"> New Hotel</a>
-                     </div>
-                     <div class="col-md-6">
-                        <form method="post" action="{{ route('import') }}" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="file">Fichier d'import</label>
-                                <input type="file" name="csv_file" id="csv_file" class="form-control-file btn btn-outline-primary btn-rounded mb-2">
-                                <button type="submit" class="btn btn-success">Importer CSV</button>
-                            </div>
-                            
-                        </form>
-              
+            <div class="col-md-6">
+                <a class="btn btn-outline-primary btn-rounded mb-2" href="{{ route('hotellist.create') }}">New Hotel</a>
+            </div>
+            <div class="col-md-6">
+                <form method="post" action="{{ route('import') }}" enctype="multipart/form-data" id="importForm">
+                    @csrf
+                    <div class="form-group">
+                        <label for="file">Fichier d'import</label>
+                        <input type="file" name="csv_file" id="csv_file" class="form-control-file btn btn-outline-primary btn-rounded mb-2" required>
+                        <button type="submit" class="btn btn-success">Importer CSV</button>
                     </div>
+                </form>
+            
+                <!-- Status Modal -->
+                <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="statusModalLabel">Statut de l'importation</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="statusMessage">En attente de l'importation...</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            
         </div>
+        
         <div class="row">
             <div class="col-md-7">
                 <div class="row">
