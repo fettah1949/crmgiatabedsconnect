@@ -333,6 +333,54 @@
                     }, 5000);
                 }
 
+                function exportHotels() {
+                      // Afficher l'animation de chargement
+                    document.getElementById('loader').style.display = 'block';
+                    // Récupérer les valeurs des champs
+                    const codeHotel = document.getElementById('code_hotel').value || '';
+                    const country = document.getElementById('country').value || '';
+                    const providerName = document.getElementById('provider_name').value || '';
+                    const providerID = document.getElementById('provider_id').value || '';
+                    const bdc_id = document.getElementById('bdc_id').value || '';
+                    const Name_hotel = document.getElementById('Name_hotel').value || '';
+                    
+                    // Construire l'URL avec les paramètres de recherche
+                    const url = `{{ route('hotels.export') }}?codeHotel=${encodeURIComponent(codeHotel)}&country=${encodeURIComponent(country)}&providerName=${encodeURIComponent(providerName)}&providerID=${encodeURIComponent(providerID)}&bdc_id=${encodeURIComponent(bdc_id)}&Name_hotel=${encodeURIComponent(Name_hotel)}`;
+
+                    // Effectuer la requête AJAX avec fetch
+                    fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.blob(); // Récupérer la réponse en tant que Blob
+                        } else {
+                            throw new Error('Erreur lors de l\'exportation.');
+                        }
+                    })
+                    .then(blob => {
+                        // Créer un lien de téléchargement pour le fichier
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'hotels_export.xlsx'; // Nom par défaut du fichier
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert("Erreur lors de l'exportation des données.");
+                    })
+                    .finally(() => {
+                    // Masquer l'animation de chargement
+                    document.getElementById('loader').style.display = 'none';
+                    });
+                }
 
                 </script>
         <!-- END PAGE LEVEL CUSTOM SCRIPTS -->

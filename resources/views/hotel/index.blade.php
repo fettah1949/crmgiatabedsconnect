@@ -101,6 +101,7 @@
         <div class="panel-body"     display:inline-block > 
 
                 <form  id="fs" action="{{ route('hotelListe.search') }}" method="PUT">
+                    
                     <div class="row">
 
                                     
@@ -175,9 +176,42 @@
                         </div>
                     
                     </div>
+                    <div class="row">
+                       
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <label  for="start_date" class="control-label col-sm-auto" >Bdc id</label>
+                                <input id="bdc_id"  name="bdc_id" @if(isset($filter['bdc_id']) ) value="{{ $filter['bdc_id'] }}" @endif class="form-control" type="text" placeholder="bdc id">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <label  for="start_date" class="control-label col-sm-auto" >Code Hotel</label>
+                                <input id="Name_hotel"  name="Name_hotel" @if(isset($filter['Name_hotel']) ) value="{{ $filter['Name_hotel'] }}" @endif class="form-control" type="text" placeholder="Name Hotel">
+
+                            </div>
+                        </div>
+
+                    
+                        
+                    
+                    </div>
+                    
 
                     <button type="submit"  class="btn btn-outline-success mb-2">Apply</button>
                     <button type="button" onclick="vide();" class="btn btn-outline-secondary mb-2">Clear</button>
+                    <button type="button" class="btn btn-outline-secondary mb-2" onclick="exportHotels()">Export
+
+                        <div id="loader" style="display: none;">
+                            <p>Exportation en cours...</p>
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+
+
+                    
                 </form>
         </div>
     </div>

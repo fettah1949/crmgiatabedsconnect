@@ -51,6 +51,8 @@ Route::get('/airport/property', [AirportController::class, 'getProperty'])->name
 
 Route::get('/importstatus', [HoteListController::class, 'checkImportStatus'])->name('importstatus');
 
+// Route::post('/export-data', [HoteListController::class, 'exportData'])->name('exportData');
+Route::get('/export-hotels', [HoteListController::class, 'exportHotels'])->name('hotels.export');
 
 
 // Route::resource('HoteList', HoteListController::class);

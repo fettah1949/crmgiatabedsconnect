@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\HotelsExport;
 use App\Models\Hotel;
 
 
@@ -32,6 +33,8 @@ class HoteListController extends Controller
     $country = "";
     $provider_name = "";
     $provider_id = "";
+    $bdc_id = "";
+    $Name_hotel = "";
 
 
     
@@ -40,6 +43,8 @@ class HoteListController extends Controller
         'country' => $country,
         'provider_name' => $provider_name,
         'provider_id' => $provider_id,
+        'bdc_id' => $bdc_id,
+        'Name_hotel' => $Name_hotel,
 
     ];
 
@@ -454,7 +459,17 @@ class HoteListController extends Controller
             ]);
         }
         
-        
+        public function exportHotels(Request $request)
+        {
+            $codeHotel = $request->input('codeHotel');
+            $country = $request->input('country');
+            $providerName = $request->input('providerName');
+            $providerID = $request->input('providerID');
+            $bdc_id = $request->input('bdc_id');
+            $Name_hotel = $request->input('Name_hotel');
+            return Excel::download(new HotelsExport($codeHotel, $country, $providerName, $providerID ,$bdc_id ,$Name_hotel), 'hotels_export.xlsx');
+
+        }
         
 
     public function export()
@@ -687,7 +702,11 @@ class HoteListController extends Controller
         $countries = $request->input('country');  // Récupère les pays sous forme de tableau
         $provider_name = $request->input('provider_name');
         $provider_id = $request->input('provider_id');
+        $bdc_id = $request->input('bdc_id');
+        $Name_hotel = $request->input('Name_hotel');
     
+
+
         $query = Hotel::query();
     
         if($code_hotel != ""){
@@ -705,6 +724,12 @@ class HoteListController extends Controller
         if($provider_id != ""){
             $query->where('provider_id', $provider_id);
         }
+        if($bdc_id != ""){
+            $query->where('bdc_id', $bdc_id );
+        }
+        if($Name_hotel != ""){
+            $query->where('hotel_name', 'like', '%' . $Name_hotel. '%');
+        }
     
         // Exécuter la requête et récupérer les résultats
         $hotels = $query->limit(100)->get();
@@ -714,6 +739,8 @@ class HoteListController extends Controller
             'country' => $countries,
             'provider_name' => $provider_name,
             'provider_id' => $provider_id,
+            'bdc_id' => $bdc_id,
+            'Name_hotel' => $Name_hotel,
         ];
 
 
