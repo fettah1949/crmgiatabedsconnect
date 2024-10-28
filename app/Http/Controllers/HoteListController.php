@@ -461,6 +461,7 @@ class HoteListController extends Controller
         
         public function exportHotels(Request $request)
         {
+            ini_set('memory_limit', '1024M');
             $codeHotel = $request->input('codeHotel');
             $country = $request->input('country');
             $providerName = $request->input('providerName');
