@@ -3,15 +3,19 @@
 namespace App\Exports;
 
 use App\Models\Hotel;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\Exportable;
 
-class HotelsExport implements FromCollection, WithHeadings
+class HotelsExport implements FromCollection, WithHeadings, WithChunkReading
 {
     /**
     * @return \Illuminate\Support\Collection
     */
 
+    use Exportable;
 
     protected $codeHotel;
     protected $country;
@@ -73,5 +77,10 @@ class HotelsExport implements FromCollection, WithHeadings
         return [
             'Hotel name', 'Code Hotel', 'BDC ID', 'GiataId', 'Provider', 'Provider_id', 'City', 'City_ID', 'Country_code', 'Addresses', 'Zip_code', 'Phones', 'Latitude', 'Longitude', 'ChainName', 'Statut'
         ];
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000; // Vous pouvez ajuster cette taille en fonction de la mémoire disponible
     }
 }
