@@ -733,7 +733,7 @@ class HoteListController extends Controller
         }
     
         // Exécuter la requête et récupérer les résultats
-        $hotels = $query->limit(100)->get();
+        $hotels = $query->get();
 
         $filter = [
             'code_hotel' => $code_hotel,
