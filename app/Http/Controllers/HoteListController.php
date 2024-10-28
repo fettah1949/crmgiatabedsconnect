@@ -731,9 +731,11 @@ class HoteListController extends Controller
         if($Name_hotel != ""){
             $query->where('hotel_name', 'like', '%' . $Name_hotel. '%');
         }
-    
+        Log::info('Mémoire utilisée avant récupération des données : ' . memory_get_usage());
         // Exécuter la requête et récupérer les résultats
         $hotels = $query->paginate(100);
+        Log::info('Mémoire utilisée après récupération des données : ' . memory_get_usage());
+
 
         $filter = [
             'code_hotel' => $code_hotel,
