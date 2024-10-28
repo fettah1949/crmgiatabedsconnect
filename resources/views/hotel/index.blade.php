@@ -18,7 +18,6 @@
                         <label for="file">Fichier d'import</label>
                         <input type="file" name="csv_file" id="csv_file" class="form-control-file btn btn-outline-primary btn-rounded mb-2" required>
                         <button type="submit" class="btn btn-success">Importer CSV</button>
-                        <a href="{{ route('export') }}" class="btn btn-primary">Exporter CSV</a>
                     </div>
                 </form>
             
