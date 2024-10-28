@@ -42,6 +42,8 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
 
     public function query()
     {
+        ini_set('memory_limit', '4096M'); // 4 Go
+
         // $query = Hotel::query();
         $query = Hotel::select( 'hotel_name', 'hotel_code', 'bdc_id', 'giataid', 'provider', 'provider_id', 
                       'city', 'CityCode', 'country_code', 'addresses', 'zip_code', 'phones_voice', 
