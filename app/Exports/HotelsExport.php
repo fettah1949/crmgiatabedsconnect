@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\Exportable;
 
-class HotelsExport implements FromCollection, WithHeadings, WithChunkReading
+class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -33,10 +33,10 @@ class HotelsExport implements FromCollection, WithHeadings, WithChunkReading
         $this->bdc_id = $bdc_id;
         $this->Name_hotel = $Name_hotel;
     }
-    public function collection()
-    {
-        return $this->query();
-    }
+    // public function collection()
+    // {
+    //     return $this->query();
+    // }
     
 
 
@@ -69,7 +69,7 @@ class HotelsExport implements FromCollection, WithHeadings, WithChunkReading
         }
         
 
-        return $query->get();
+        return $query;
     }
 
     public function headings(): array       
