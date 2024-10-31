@@ -83,6 +83,6 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
 
     public function chunkSize(): int
     {
-        return 1000; // Vous pouvez ajuster cette taille en fonction de la mémoire disponible
+        return 500; // Vous pouvez ajuster cette taille en fonction de la mémoire disponible
     }
 }

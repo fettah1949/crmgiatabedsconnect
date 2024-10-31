@@ -391,7 +391,7 @@ class HoteListController extends Controller
 
         public function import(Request $request)
         {
-            ini_set('memory_limit', '512M'); // Augmenter la limite de mémoire
+            ini_set('memory_limit', '4096M'); // 4 Go
             set_time_limit(0);
             // Validation du fichier d'import
             try {
@@ -461,7 +461,8 @@ class HoteListController extends Controller
         
         public function exportHotels(Request $request)
         {
-            ini_set('memory_limit', '2048M');
+            ini_set('memory_limit', '4096M'); // 4 Go
+
             $codeHotel = $request->input('codeHotel');
             $country = $request->input('country');
             $providerName = $request->input('providerName');
