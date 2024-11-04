@@ -51,6 +51,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <button id="fetchDataButton" class="btn btn-success" >Récupérer les données GIATA</button>
+                        <button id="fetchDataButton_check" class="btn btn-success" >check les données GIATA</button>
 
                         <!-- Indicateur de chargement -->
                         <div id="loadingSpinner" style="display:none;">
@@ -59,6 +60,26 @@
                         </div>
 
                     </div>
+
+                    <div class="modal fade" id="updateStatusModal" tabindex="-1" role="dialog" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateStatusModalLabel">Statut de Mise à Jour des Hôtels</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p id="statusMessage_giata">Mise à jour des données en cours...</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="col-md-3">
                         <button id="unifierbdcDataButton" class="btn btn-success" >Unifier les codes BDC</button>
 

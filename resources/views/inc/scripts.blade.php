@@ -92,6 +92,7 @@
                         $('#fetchDataButton').on('click', function() {
                    
                             var provider = $('#provider').val();
+                            $('#updateStatusModal').modal('show');// Afficher la modale de statut
 
                             // Afficher le spinner avant d'envoyer la requête
                              $('#loadingSpinner').show();
@@ -111,6 +112,9 @@
                                     // var countMessage = '  Nombre d\'hôtels trouvés : ' + response;
                                     // alert(response.count);
                                     $('#message').text(countMessage);
+                                    // Commencer la vérification du statut périodiquement
+                                    $('#statusMessage').text('Mise à jour des données en cours...');
+                                    const statusInterval = setInterval(checkUpdateStatus, 5000);
                                 },
                                 error: function(xhr, status, error) {
                                     $('#loadingSpinner').hide();
@@ -119,7 +123,78 @@
                             });
                         });
                     });
+                    $('#fetchDataButton_check').on('click', function() {
 
+                        $('#updateStatusModal').modal('show');
+                        const statusInterval = setInterval(checkUpdateStatus, 5000);
+
+                    });
+                // Fonction pour vérifier l'état du processus de mise à jour
+                // function checkUpdateStatus() {
+                //     $.ajax({
+                //         url: "{{ route('hotels.checkUpdateStatus') }}", // Assurez-vous que cette route est définie dans votre contrôleur
+                //         method: 'GET',
+                //         success: function(response) {
+                //             if (response.completed) {
+                //                     let mappedCount = response.mappedCount || 0;
+                //                     let nonMappedCount = response.nonMappedCount || 0;
+                //                     $('#statusMessage_giata').html(
+                //                         `Mise à jour terminée. <br> 
+                //                          Hôtels mappés : ${mappedCount} <br> 
+                //                          Hôtels non mappés : ${nonMappedCount}`
+                //                     );
+
+                //                     clearInterval(statusInterval); // Arrêter la vérification périodique
+                //                 } else {
+                //                     $('#statusMessage_giata').html(
+                //                         `Mise à jour en cours... <br> 
+                //                          Hôtels mappés : ${response.mappedCount} <br> 
+                //                          Hôtels non mappés : ${response.nonMappedCount}`
+                //                     );
+                //                 }
+                //         },
+                //         error: function() {
+                //             console.error("Erreur lors de la vérification de l'état du processus.");
+                //         }
+                //     });
+                // }
+                // Déclarer la variable de contrôle en dehors de la fonction pour y accéder globalement
+                let statusInterval;
+
+                function checkUpdateStatus() {
+                    $.ajax({
+                        url: "{{ route('hotels.checkUpdateStatus') }}",
+                        method: 'GET',
+                        success: function(response) {
+                            if (response.completed) {
+                               
+                                // Mise à jour terminée : afficher le message et arrêter le setInterval
+                                let mappedCount = response.mappedCount || 0;
+                                let nonMappedCount = response.nonMappedCount || 0;
+                                let nonMappedCountingiata = response.nonMappedCountingiata || 0;
+                                $('#statusMessage_giata').html(
+                                    `Mise à jour terminée. <br> 
+                                    Hôtels mappés : ${mappedCount} <br> 
+                                    Hôtels non mappés Giata : ${nonMappedCountingiata} <br> 
+                                    Hôtels non mappés : ${nonMappedCount}`
+                                );
+                                clearInterval(statusInterval); // Arrêter la vérification périodique
+                            } else {
+                                // Mise à jour en cours : afficher le statut actuel
+                                $('#statusMessage_giata').html(
+                                    `Mise à jour en cours... <br> 
+                                    Hôtels mappés : ${response.mappedCount} <br> 
+                                    Hôtels non mappés Giata : ${response.nonMappedCountingiata} <br> 
+                                    Hôtels non mappés : ${response.nonMappedCount}`
+                                );
+                            }
+                        },
+                        error: function() {
+                            console.error("Erreur lors de la vérification de l'état du processus.");
+                        }
+                    });
+                }
+        
                     $(document).ready(function() {
                         $('#unifierbdcDataButton').on('click', function() {
                    
