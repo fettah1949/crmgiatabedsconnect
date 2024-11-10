@@ -31,7 +31,7 @@ class FetchGiataDataJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $url = 'https://multicodes.giatamedia.com/webservice/rest/1.0/properties/crs/'. $this->hotel->provider_id . '/' . ($this->hotel->provider_id == "bedsconnect" ? $this->hotel->bdc_id : $this->hotel->hotel_code);
+        $url = 'https://multicodes.giatamedia.com/webservice/rest/1.latest/properties/crs/'. $this->hotel->provider_id . '/' . ($this->hotel->provider_id == "bedsconnect" ? $this->hotel->bdc_id : $this->hotel->hotel_code);
         Log::info("Données url : " . $url);
         try {
             $response = Http::withBasicAuth('giata|bedsconnect.com', 'keghak-qaXbed-rosne7')->get($url);
@@ -66,13 +66,8 @@ class FetchGiataDataJob implements ShouldQueue
                          }
 
                          $country = $data['country'];
-                         // if (isset($data['addresses'])) {
-                         //     $addresses = implode(', ', $data['addresses']['address']['addressLine'] ?? []);
-                         //     $postalCode = $data['addresses']['address']['postalCode'] ?? $this->hotel->zip_code;
-                         // } else {
-                         //     $addresses = " ";
-                         //     $postalCode = " ";
-                         // }
+                         $category = isset($data['category']) ? $data['category'] : "Non spécifié";                        
+
 
                          if (isset($data['addresses']['address']['addressLine'])) {
                              // Vérifier si c'est un tableau ou une chaîne
@@ -125,6 +120,7 @@ class FetchGiataDataJob implements ShouldQueue
                                      'chainName' => $chainName,
                                      'zip_code' => $postalCode,
                                      'citycode' => $cityId,
+                                     'CategoryCode' => $category,
                                      'updated_at' => now(),
                                      'etat' => 1,
                                  ]

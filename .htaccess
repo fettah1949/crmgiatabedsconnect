@@ -5,8 +5,11 @@
 
     RewriteEngine On
 
+    # Access to files in storage/public directory
+    RewriteRule ^storage/(.*)$ /storage/app/public/$1 [L]
+
     # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
+    RewriteCond %{HTTP:Authorization} . 
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # Redirect Trailing Slashes If Not A Folder...

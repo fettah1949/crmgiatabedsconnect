@@ -408,9 +408,21 @@
                     }, 5000);
                 }
 
-                function exportHotels() {
-                      // Afficher l'animation de chargement
-                    document.getElementById('loader').style.display = 'block';
+        function exportHotels() {
+                    // Afficher l'animation de chargement
+                    const loader = document.getElementById('loader');
+                    const loadingMessage = document.getElementById('loadingMessage');
+   
+                    const downloadButton = document.getElementById('downloadButton');
+                    
+                    loader.style.display = 'flex';  // Afficher le loader (conteneur du spinner et message)
+                    loadingMessage.style.display = 'block';  // Afficher le message
+                
+                    downloadButton.style.display = 'none';  // Cacher le bouton de téléchargement pendant l'exportation
+
+                    // Récupérer l'URL de l'application via une variable Blade
+                    const appUrl = "{{ env('APP_URL') }}";
+
                     // Récupérer les valeurs des champs
                     const codeHotel = document.getElementById('code_hotel').value || '';
                     const country = document.getElementById('country').value || '';
@@ -418,7 +430,6 @@
                     const providerID = document.getElementById('provider_id').value || '';
                     const bdc_id = document.getElementById('bdc_id').value || '';
                     const Name_hotel = document.getElementById('Name_hotel').value || '';
-                    
                     // Construire l'URL avec les paramètres de recherche
                     const url = `{{ route('hotels.export') }}?codeHotel=${encodeURIComponent(codeHotel)}&country=${encodeURIComponent(country)}&providerName=${encodeURIComponent(providerName)}&providerID=${encodeURIComponent(providerID)}&bdc_id=${encodeURIComponent(bdc_id)}&Name_hotel=${encodeURIComponent(Name_hotel)}`;
 
@@ -427,35 +438,58 @@
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                         }
                     })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.blob(); // Récupérer la réponse en tant que Blob
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            // Appel pour vérifier l'état de l'exportation
+                            const checkStatusInterval = setInterval(() => {
+                                fetch(`{{ route('hotels.checkExportStatus', '') }}/${data.file}`)
+                                    .then(response => response.json())
+                                    .then(status => {
+                                        if (status.ready) {
+                                            clearInterval(checkStatusInterval);  // Arrêter l'intervalle de vérification
+                                            loader.style.display = 'none';  // Cacher le loader
+                                            loadingMessage.style.display = 'none';  // Afficher le message
+                                         
+
+                                            // Afficher le bouton de téléchargement et ajouter l'URL de téléchargement
+                                            downloadButton.style.display = 'block';  // Afficher le bouton de téléchargement
+                                            downloadButton.onclick = function() {
+                                            window.location.href = appUrl + "/public" + status.url;
+                                            loader.style.display = 'none';  // Cacher le loader
+                                            loadingMessage.style.display = 'none';  // Afficher le message
+                                                                            // Après téléchargement, appeler la route pour supprimer le fichier
+                                            fetch(`{{ route('hotels.deleteFile', '') }}/${data.file}`)
+                                            .then(response => response.json())
+                                            .then(result => {
+                                                console.log(result.message);  // Log la réponse de la suppression
+                                            })
+                                            .catch(error => {
+                                                console.error('Erreur lors de la suppression du fichier:', error);
+                                            });
+
+                                            };
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Erreur lors de la vérification du statut:', error);
+                                        clearInterval(checkStatusInterval);
+                                        loader.style.display = 'none';  // Cacher le loader en cas d'erreur
+                                    });
+                            }, 3000);  // Vérifiez toutes les 3 secondes
                         } else {
-                            throw new Error('Erreur lors de l\'exportation.');
+                            alert("Erreur lors de l'exportation des données.");
+                            loader.style.display = 'none';  // Cacher le loader en cas d'erreur
                         }
-                    })
-                    .then(blob => {
-                        // Créer un lien de téléchargement pour le fichier
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = 'hotels_export.xlsx'; // Nom par défaut du fichier
-                        document.body.appendChild(a);
-                        a.click();
-                        a.remove();
                     })
                     .catch(error => {
-                        console.error(error);
+                        console.error("Erreur lors de l'exportation des données:", error);
                         alert("Erreur lors de l'exportation des données.");
-                    })
-                    .finally(() => {
-                    // Masquer l'animation de chargement
-                    document.getElementById('loader').style.display = 'none';
+                        loader.style.display = 'none';  // Cacher le loader en cas d'erreur
                     });
-                }
+    }   
 
                 </script>
         <!-- END PAGE LEVEL CUSTOM SCRIPTS -->

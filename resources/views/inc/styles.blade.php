@@ -65,4 +65,31 @@
             to { transform: rotate(360deg); }
         }
 
+        #downloadButton {
+        display: none;
+        font-size: 16px;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        color: white;
+        border-radius: 4px;
+        background-color: #28a745;
+        transition: background-color 0.3s ease;
+    }
+
+    #downloadButton:hover {
+        background-color: #218838;
+    }
+
+    #loader p {
+        font-size: 14px;
+        color: #555;
+        margin-right: 10px;
+    }
+
+    .spinner-border {
+        border-width: 4px;
+        border-top-color: transparent;
+    }
+
     </style>

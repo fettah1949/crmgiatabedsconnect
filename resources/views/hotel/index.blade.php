@@ -223,13 +223,24 @@
 
                     <button type="submit"  class="btn btn-outline-success mb-2">Apply</button>
                     <button type="button" onclick="vide();" class="btn btn-outline-secondary mb-2">Clear</button>
-                    <button type="button" class="btn btn-outline-secondary mb-2" onclick="exportHotels()">Export
 
-                        <div id="loader" style="display: none;">
-                            <p>Exportation en cours...</p>
-                            <div class="spinner"></div>
+
+                    <!-- Bouton d'exportation -->
+                    <button type="button" class="btn btn-outline-primary mb-2" onclick="exportHotels()">
+                        Exporter
+                    <!-- Animation de chargement (spinner) -->
+                    <div id="loader" style="display: none;" class="d-flex align-items-center">
+                        <p id="loadingMessage" class="mb-0 ms-2" style="display: none;">Exportation en cours...</p>
+                        <div id="loadingSpinner" class="spinner-border ms-2" role="status" style="width: 24px; height: 24px; display: none;">
+                            <span class="visually-hidden">Chargement...</span>
                         </div>
-                    </button>
+                    </div>
+
+                    <!-- Bouton de téléchargement (affiché après exportation) -->
+                    <a id="downloadButton" href="#" style="display: none;" class="btn btn-success mt-2">
+                        Télécharger le fichier exporté
+                    </a>
+
 
 
                     

@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashbordController;
 use App\Http\Controllers\GeographyController;
 use App\Http\Controllers\HoteListController;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,18 @@ Route::get('/export-hotels', [HoteListController::class, 'exportHotels'])->name(
 
 Route::get('/check-update-status', [HoteListController::class, 'checkUpdateStatus'])->name('hotels.checkUpdateStatus');
 
+Route::get('/check-export-status/{fileName}', function($fileName) {
+    $filePath = 'public/' . $fileName;
+    if (Storage::exists($filePath)) {
+         $url = env('APP_URL') . '/storage/' . $fileName;
+         
+        return response()->json(['ready' => true, 'url' => Storage::url($filePath)]);
+    } else {
+        return response()->json(['ready' => false]);
+    }
+})->name('hotels.checkExportStatus');
+
+Route::get('/hotels/delete-file/{filename}', [HoteListController::class, 'deleteFile'])->name('hotels.deleteFile');
 
 // Route::resource('HoteList', HoteListController::class);
 // Route::resource('hotelListe', HoteListController::class);

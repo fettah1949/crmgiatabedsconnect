@@ -25,6 +25,8 @@ class Hotel extends Model
         'phones_fax',
         'chainId',
         'chainName',
+        'status',
+        'with_giata',
       
     ];
 }

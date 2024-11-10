@@ -23,6 +23,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Jobs\ImportHotelDataJob;
 use App\Models\ImportStatus;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\ExportHotelsJob;
 
 class HoteListController extends Controller
 {
@@ -464,15 +465,42 @@ class HoteListController extends Controller
         {
             ini_set('memory_limit', '4096M'); // 4 Go
 
+            $fileName = 'hotels_export' .'.xlsx';
+
             $codeHotel = $request->input('codeHotel');
             $country = $request->input('country');
             $providerName = $request->input('providerName');
             $providerID = $request->input('providerID');
             $bdc_id = $request->input('bdc_id');
             $Name_hotel = $request->input('Name_hotel');
-            return Excel::download(new HotelsExport($codeHotel, $country, $providerName, $providerID ,$bdc_id ,$Name_hotel), 'hotels_export.xlsx');
+
+            ExportHotelsJob::dispatch($fileName, $codeHotel, $country, $providerName, $providerID, $bdc_id, $Name_hotel);
+
+            return response()->json(['message' => 'L’exportation a été lancée avec succès !', 'file' => $fileName]);
 
         }
+        public function deleteFile($filename)
+        {
+            if (Storage::disk('public')->exists($filename)) {
+                Storage::disk('public')->delete($filename);
+                return response()->json(['message' => 'Fichier supprimé avec succès.']);
+            }
+        
+            return response()->json(['message' => 'Fichier introuvable.'], 404);
+        }
+
+        public function checkExportStatus($fileName)
+        {
+            // $filePath = storage_path('storage/exports/' . $fileName);
+            $filePath = storage_path('app/exports/' . $fileName);
+
+            if (file_exists($filePath)) {
+                return response()->json(['ready' => true, 'download_url' => asset('storage/exports/' . $fileName)]);
+            }
+
+            return response()->json(['ready' => false, 'message' => 'Le fichier est en cours de création.']);
+        }
+
         
 
     public function export()
@@ -808,36 +836,49 @@ class HoteListController extends Controller
 
     public function unifier_bdc(Request $request)
     {
-
+        // Récupérer tous les giataid ayant des doublons de bdc_id
         $hotelsGroupedByGiataId = DB::table('hotels')
-        ->select('giataid')
-        ->groupBy('giataid')
-        ->havingRaw('COUNT(DISTINCT bdc_id) > 1') /// Trouver les giata_id en doublon
-        ->where('giataid','!=','')
-        ->get();
-        // return  count($hotelsGroupedByGiataId);
-        if( count($hotelsGroupedByGiataId) != 0){
-                    // Mettre à jour chaque groupe avec les bdc_id unifiés
-            foreach ($hotelsGroupedByGiataId as $group) {
-                // Générer un nouveau bdc_id unique
-                $nouveauBdcId = $this->generateUniqueBdcId();
-
-                // Mettre à jour tous les hôtels ayant le même giata_id avec le nouveau bdc_id
-                DB::table('hotels')
-                    ->where('giataid', $group->giataid)
-                    ->update(['bdc_id' => $nouveauBdcId]);
-            }
-            // return  $hotelsGroupedByGiataId;
-
-
-            return "Unification et génération de nouveaux bdc_id pour les hôtels en doublon terminée. (noumbres hotels : ".count($hotelsGroupedByGiataId)." ) ";
-
-        }else{
-            return "Aucun doublon .";
-
+            ->select('giataid')
+            ->groupBy('giataid')
+            ->havingRaw('COUNT(DISTINCT bdc_id) > 1')
+            ->where('giataid', '!=', '')
+            ->get();
+         // return  $hotelsGroupedByGiataId;
+        if ($hotelsGroupedByGiataId->isEmpty()) {
+            return "Aucun doublon trouvé.";
         }
-
+    
+        foreach ($hotelsGroupedByGiataId as $group) {
+            // Récupérer tous les bdc_id pour le giataid actuel
+            $bdcIds = DB::table('hotels')
+                ->where('giataid', $group->giataid)
+                ->pluck('bdc_id');
+    
+            // Trouver un bdc_id qui commence par "BDC"
+            $bdcIdPrincipal = null;
+            foreach ($bdcIds as $bdcId) {
+                if (str_starts_with($bdcId, 'BDCX')) {
+                   
+                }else{
+                    $bdcIdPrincipal = $bdcId;
+                    break;
+                }
+            }
+    
+            // Si aucun bdc_id commençant par "BDC" n'est trouvé, utiliser le premier ou générer un nouveau
+            if (!$bdcIdPrincipal) {
+                $bdcIdPrincipal = $bdcIds->first() ?: 'BDC' . rand(10000000, 99999999);
+            }
+    
+            // Mettre à jour tous les hôtels avec le bdc_id principal
+            DB::table('hotels')
+                ->where('giataid', $group->giataid)
+                ->update(['bdc_id' => $bdcIdPrincipal]);
+        }
+    
+        return "Unification des bdc_id pour les hôtels en doublon terminée.";
     }
+    
 
 
 }

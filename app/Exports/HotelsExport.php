@@ -46,7 +46,7 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
 
         // $query = Hotel::query();
         $query = Hotel::select( 'hotel_name', 'hotel_code', 'bdc_id', 'giataid', 'provider', 'provider_id', 
-                      'city', 'CityCode', 'country_code', 'addresses', 'zip_code', 'phones_voice', 
+                      'city', 'CityCode', 'CategoryCode' , 'country_code', 'addresses', 'zip_code', 'phones_voice', 
                       'latitude', 'longitude', 'chainName', 'status');
 
 
@@ -55,7 +55,7 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
             $query->where('hotel_code',  $this->codeHotel );
         }
         if ($this->country) {
-            $query->where('country_code', 'like', '%' . $this->country . '%');
+            $query->whereIn('country_code', 'like', '%' . $this->country . '%');
         }
         if ($this->providerName) {
             $query->where('provider', 'like', '%' . $this->providerName . '%');
@@ -77,12 +77,12 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
     public function headings(): array       
     {
         return [
-            'Hotel name', 'Code Hotel', 'BDC ID', 'GiataId', 'Provider', 'Provider_id', 'City', 'City_ID', 'Country_code', 'Addresses', 'Zip_code', 'Phones', 'Latitude', 'Longitude', 'ChainName', 'Statut'
+            'Hotel name', 'Code Hotel', 'BDC ID', 'GiataId', 'Provider', 'Provider_id', 'City', 'City_ID', 'Category' ,'Country_code', 'Addresses', 'Zip_code', 'Phones', 'Latitude', 'Longitude', 'ChainName', 'Statut'
         ];
     }
 
     public function chunkSize(): int
     {
-        return 500; // Vous pouvez ajuster cette taille en fonction de la mémoire disponible
+        return 1000; // Vous pouvez ajuster cette taille en fonction de la mémoire disponible
     }
 }
