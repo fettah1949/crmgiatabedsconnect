@@ -109,10 +109,15 @@
             {{-- <div id="dataContainer" style="margin-top: 20px;">
                 <!-- Les données API seront affichées ici -->
             </div> --}}
+ 
+        </div>
+
+        <div class="row">
+
             <div id="message" style="margin-top: 20px;">
-            <div id="message_unifier" style="margin-top: 20px;">
-                <!-- Le message sera affiché ici -->
-            </div>
+                <div id="message_unifier" style="margin-top: 20px;">
+                    <!-- Le message sera affiché ici -->
+                </div>
         </div>
 
     </div>
