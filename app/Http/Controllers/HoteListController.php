@@ -24,6 +24,7 @@ use App\Jobs\ImportHotelDataJob;
 use App\Models\ImportStatus;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\ExportHotelsJob;
+use App\Jobs\FetchHotleViaGiataIdDataJob;
 
 class HoteListController extends Controller
 {
@@ -733,19 +734,42 @@ class HoteListController extends Controller
         $provider = $request->input('provider');
         
         // Récupérer les hôtels qui n'ont pas été traités
-        $hotels = Hotel::where('etat', 0)->get();
+        $hotels = Hotel::where('etat', 0)->where('with_giata', 0)->get();
         $hotels_count = $hotels->count();
 
         // Si aucun hôtel n'est trouvé, retourner une réponse
-        if ($hotels_count === 0) {
-            return Response::json(['message' => 'Aucun hôtel trouvé.'], 404);
-        }
-
-        // Lancer le job pour chaque hôtel
+        if ($hotels_count != 0) {
+            // return Response::json(['count' => $hotels_count,'message' => 'Aucun hôtel trouvé.'], 404);
+                    // Lancer le job pour chaque hôtel
         foreach ($hotels as $hotel) {
             // Log::info("Données  l'hôtel : " . $hotel->hotel_code);
             FetchGiataDataJob::dispatch($hotel);
+        
         }
+
+}
+
+        return Response::json(['count' => $hotels_count, 'message' => 'Les données GIATA sont en cours de récupération.'], 200);
+    }
+    public function getProperty_giata_id(Request $request)
+    {
+        // Récupérer le fournisseur depuis la requête
+        // $provider = $request->input('provider');
+        
+        // Récupérer les hôtels qui n'ont pas été traités
+        $hotels = Hotel::where('etat', 0)->where('with_giata', 1)->get();
+        $hotels_count = $hotels->count();
+
+        // Si aucun hôtel n'est trouvé, retourner une réponse
+        if ($hotels_count != 0) {
+           // Lancer le job pour chaque hôtel
+            foreach ($hotels as $hotel) {
+                // Log::info("Données  l'hôtel : " . $hotel->hotel_code);
+                FetchHotleViaGiataIdDataJob::dispatch($hotel);
+            }
+        }
+
+       
 
         return Response::json(['count' => $hotels_count, 'message' => 'Les données GIATA sont en cours de récupération.'], 200);
     }
@@ -753,9 +777,9 @@ class HoteListController extends Controller
     public function checkUpdateStatus()
     {
         // Comptez le nombre d'hôtels mappés et non mappés
-        $mappedCount = Hotel::where('etat', 1)->count();
-        $nonMappedCount = Hotel::where('etat', 0)->count();
-        $nonMappedCountingiata = Hotel::where('etat', -1)->count();
+        $mappedCount = Hotel::where('etat', 1)->where('with_giata', 0)->count();
+        $nonMappedCount = Hotel::where('etat', 0)->where('with_giata', 0)->count();
+        $nonMappedCountingiata = Hotel::where('etat', -1)->where('with_giata', 0)->count();
 
         // Déterminer si la mise à jour est terminée
         $completed = ($nonMappedCount === 0);
@@ -767,7 +791,23 @@ class HoteListController extends Controller
             'nonMappedCountingiata' => $nonMappedCountingiata,
         ]);
     }
-    
+    public function checkUpdateStatusviagitaid()
+    {
+        // Comptez le nombre d'hôtels mappés et non mappés
+        $mappedCount = Hotel::where('etat', 1)->where('with_giata', 1)->count();
+        $nonMappedCount = Hotel::where('etat', 0)->where('with_giata', 1)->count();
+        $nonMappedCountingiata = Hotel::where('etat', -1)->where('with_giata', 1)->count();
+
+        // Déterminer si la mise à jour est terminée
+        $completed = ($nonMappedCount === 0);
+
+        return response()->json([
+            'completed' => $completed,
+            'mappedCount' => $mappedCount,
+            'nonMappedCount' => $nonMappedCount,
+            'nonMappedCountingiata' => $nonMappedCountingiata,
+        ]);
+    }
 
     public function search(Request $request)
     {

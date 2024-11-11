@@ -122,13 +122,47 @@
                                 }
                             });
                         });
-                    });
-                    $('#fetchDataButton_check').on('click', function() {
 
-                        $('#updateStatusModal').modal('show');
-                        const statusInterval = setInterval(checkUpdateStatus, 5000);
+                        $('#giata_idDataButton').on('click', function() {
+                   
+                           
+                            $('#updateStatusModal').modal('show');// Afficher la modale de statut
 
-                    });
+                            // Afficher le spinner avant d'envoyer la requête
+                                $('#loadingSpinner').show();
+
+                                    $.ajax({
+                                        url: "{{ route('giata.getProperty_giata_id') }}",
+                                        type: 'GET',
+                                        data: {
+                                            _token: '{{ csrf_token() }}',  // Include the CSRF token
+                                                // Include the CSRF token
+                                        },
+                                        success: function(response) {
+                                            // console.log(response);
+                                            $('#loadingSpinner').hide();
+                                            // $('#dataContainer').html('<pre>' + JSON.stringify(response.data, null, 4) + '</pre>');
+                                            var countMessage = '  Nombre d\'hôtels trouvés : ' + response.count;
+                                            // var countMessage = '  Nombre d\'hôtels trouvés : ' + response;
+                                            // alert(response.count);
+                                            $('#message').text(countMessage);
+                                            // Commencer la vérification du statut périodiquement
+                                            $('#statusMessage').text('Mise à jour des données en cours...');
+                                            const statusInterval = setInterval(checkUpdateStatusviagitaid, 5000);
+                                        },
+                                        error: function(xhr, status, error) {
+                                            $('#loadingSpinner').hide();
+                                            $('#dataContainer').html('<p>Erreur lors de la récupération des données : ' + error + '</p>');
+                                        }
+                                    });
+                                });
+                                });
+                            $('#fetchDataButton_check').on('click', function() {
+
+                                $('#updateStatusModal').modal('show');
+                                const statusInterval = setInterval(checkUpdateStatus, 5000);
+
+                            });
                 // Fonction pour vérifier l'état du processus de mise à jour
                 // function checkUpdateStatus() {
                 //     $.ajax({
@@ -194,6 +228,43 @@
                         }
                     });
                 }
+
+
+                let statusIntervalviagiataid;
+
+                    function checkUpdateStatusviagitaid() {
+                        $.ajax({
+                            url: "{{ route('hotels.checkUpdateStatusviagitaid') }}",
+                            method: 'GET',
+                            success: function(response) {
+                                if (response.completed) {
+                                
+                                    // Mise à jour terminée : afficher le message et arrêter le setInterval
+                                    let mappedCount = response.mappedCount || 0;
+                                    let nonMappedCount = response.nonMappedCount || 0;
+                                    let nonMappedCountingiata = response.nonMappedCountingiata || 0;
+                                    $('#statusMessage_giata').html(
+                                        `Mise à jour terminée. <br> 
+                                        Hôtels mappés : ${mappedCount} <br> 
+                                        Hôtels non mappés Giata : ${nonMappedCountingiata} <br> 
+                                        Hôtels non mappés : ${nonMappedCount}`
+                                    );
+                                    clearInterval(statusIntervalviagiataid); // Arrêter la vérification périodique
+                                } else {
+                                    // Mise à jour en cours : afficher le statut actuel
+                                    $('#statusMessage_giata').html(
+                                        `Mise à jour en cours... <br> 
+                                        Hôtels mappés : ${response.mappedCount} <br> 
+                                        Hôtels non mappés Giata : ${response.nonMappedCountingiata} <br> 
+                                        Hôtels non mappés : ${response.nonMappedCount}`
+                                    );
+                                }
+                            },
+                            error: function() {
+                                console.error("Erreur lors de la vérification de l'état du processus.");
+                            }
+                        });
+                    }
         
                     $(document).ready(function() {
                         $('#unifierbdcDataButton').on('click', function() {

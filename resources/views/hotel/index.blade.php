@@ -47,11 +47,11 @@
         </div>
         
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-10">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <button id="fetchDataButton" class="btn btn-success" >Récupérer les données GIATA</button>
-                        <button id="fetchDataButton_check" class="btn btn-success" >check les données GIATA</button>
+        
 
                         <!-- Indicateur de chargement -->
                         <div id="loadingSpinner" style="display:none;">
@@ -60,6 +60,15 @@
                         </div>
 
                     </div>
+
+                    <div class="col-md-2">
+                        
+                        <button id="fetchDataButton_check" class="btn btn-success" >check les données GIATA</button>
+
+
+                    </div>
+
+                    
 
                     <div class="modal fade" id="updateStatusModal" tabindex="-1" role="dialog" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -80,7 +89,7 @@
                         </div>
                     </div>
                     
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <button id="unifierbdcDataButton" class="btn btn-success" >Unifier les codes BDC</button>
 
                         <!-- Indicateur de chargement -->
@@ -89,11 +98,14 @@
                             <p>Chargement des données...</p>
                         </div>
                     </div> 
+                    <div class="col-md-3">
+                        <button id="giata_idDataButton" class="btn btn-success" >Récupérer les données GIATA Via GIATA ID</button>
+
+                    </div> 
               </div>
             </div>
-             <div class="col-md-5">
-           
-             </div>
+            <div class="col-md-1">
+            </div>
             {{-- <div id="dataContainer" style="margin-top: 20px;">
                 <!-- Les données API seront affichées ici -->
             </div> --}}
