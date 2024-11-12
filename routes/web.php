@@ -58,6 +58,7 @@ Route::get('/export-hotels', [HoteListController::class, 'exportHotels'])->name(
 
 Route::get('/check-update-status', [HoteListController::class, 'checkUpdateStatus'])->name('hotels.checkUpdateStatus');
 Route::get('/checkUpdateStatusviagitaid', [HoteListController::class, 'checkUpdateStatusviagitaid'])->name('hotels.checkUpdateStatusviagitaid');
+Route::get('/checkUpdateStatusunifiercode', [HoteListController::class, 'checkUpdateStatusunifiercode'])->name('hotels.checkUpdateStatusunifiercode');
 
 Route::get('/check-export-status/{fileName}', function($fileName) {
     $filePath = 'public/' . $fileName;

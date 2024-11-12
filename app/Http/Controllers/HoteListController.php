@@ -25,6 +25,7 @@ use App\Models\ImportStatus;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\ExportHotelsJob;
 use App\Jobs\FetchHotleViaGiataIdDataJob;
+use App\Jobs\UnifyBdcJob;
 
 class HoteListController extends Controller
 {
@@ -791,6 +792,24 @@ class HoteListController extends Controller
             'nonMappedCountingiata' => $nonMappedCountingiata,
         ]);
     }
+    public function checkUpdateStatusunifiercode()
+    {
+        // Comptez le nombre d'hôtels mappés et non mappés
+        $hotelsGroupedByGiataId = DB::table('hotels')
+        ->select('giataid')
+        ->groupBy('giataid')
+        ->havingRaw('COUNT(DISTINCT bdc_id) > 1')
+        ->where('giataid', '!=', '')
+        ->count();
+
+        // Déterminer si la mise à jour est terminée
+        $completed = ($hotelsGroupedByGiataId === 0);
+
+        return response()->json([
+            'hotelsGroupedByGiataId' => $hotelsGroupedByGiataId,
+          
+        ]);
+    }
     public function checkUpdateStatusviagitaid()
     {
         // Comptez le nombre d'hôtels mappés et non mappés
@@ -876,47 +895,8 @@ class HoteListController extends Controller
 
     public function unifier_bdc(Request $request)
     {
-        // Récupérer tous les giataid ayant des doublons de bdc_id
-        $hotelsGroupedByGiataId = DB::table('hotels')
-            ->select('giataid')
-            ->groupBy('giataid')
-            ->havingRaw('COUNT(DISTINCT bdc_id) > 1')
-            ->where('giataid', '!=', '')
-            ->get();
-         // return  $hotelsGroupedByGiataId;
-        if ($hotelsGroupedByGiataId->isEmpty()) {
-            return "Aucun doublon trouvé.";
-        }
-    
-        foreach ($hotelsGroupedByGiataId as $group) {
-            // Récupérer tous les bdc_id pour le giataid actuel
-            $bdcIds = DB::table('hotels')
-                ->where('giataid', $group->giataid)
-                ->pluck('bdc_id');
-    
-            // Trouver un bdc_id qui commence par "BDC"
-            $bdcIdPrincipal = null;
-            foreach ($bdcIds as $bdcId) {
-                if (str_starts_with($bdcId, 'BDCX')) {
-                   
-                }else{
-                    $bdcIdPrincipal = $bdcId;
-                    break;
-                }
-            }
-    
-            // Si aucun bdc_id commençant par "BDC" n'est trouvé, utiliser le premier ou générer un nouveau
-            if (!$bdcIdPrincipal) {
-                $bdcIdPrincipal = $bdcIds->first() ?: 'BDC' . rand(10000000, 99999999);
-            }
-    
-            // Mettre à jour tous les hôtels avec le bdc_id principal
-            DB::table('hotels')
-                ->where('giataid', $group->giataid)
-                ->update(['bdc_id' => $bdcIdPrincipal]);
-        }
-    
-        return "Unification des bdc_id pour les hôtels en doublon terminée.";
+        UnifyBdcJob::dispatch();
+        return "Le job d'unification des bdc_id a été lancé avec succès.";
     }
     
 

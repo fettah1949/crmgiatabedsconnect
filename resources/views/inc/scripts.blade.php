@@ -156,43 +156,50 @@
                                         }
                                     });
                                 });
-                                });
-                            $('#fetchDataButton_check').on('click', function() {
+                        });
+                        $('#fetchDataButton_check').on('click', function() {
 
                                 $('#updateStatusModal').modal('show');
                                 const statusInterval = setInterval(checkUpdateStatus, 5000);
 
-                            });
-                // Fonction pour vérifier l'état du processus de mise à jour
-                // function checkUpdateStatus() {
-                //     $.ajax({
-                //         url: "{{ route('hotels.checkUpdateStatus') }}", // Assurez-vous que cette route est définie dans votre contrôleur
-                //         method: 'GET',
-                //         success: function(response) {
-                //             if (response.completed) {
-                //                     let mappedCount = response.mappedCount || 0;
-                //                     let nonMappedCount = response.nonMappedCount || 0;
-                //                     $('#statusMessage_giata').html(
-                //                         `Mise à jour terminée. <br> 
-                //                          Hôtels mappés : ${mappedCount} <br> 
-                //                          Hôtels non mappés : ${nonMappedCount}`
-                //                     );
+                        });
+              
 
-                //                     clearInterval(statusInterval); // Arrêter la vérification périodique
-                //                 } else {
-                //                     $('#statusMessage_giata').html(
-                //                         `Mise à jour en cours... <br> 
-                //                          Hôtels mappés : ${response.mappedCount} <br> 
-                //                          Hôtels non mappés : ${response.nonMappedCount}`
-                //                     );
-                //                 }
-                //         },
-                //         error: function() {
-                //             console.error("Erreur lors de la vérification de l'état du processus.");
-                //         }
-                //     });
-                // }
-                // Déclarer la variable de contrôle en dehors de la fonction pour y accéder globalement
+                let statusInterval_unifecode;
+
+                function checkUpdateStatus_unifer() {
+                    $.ajax({
+                        url: "{{ route('hotels.checkUpdateStatusunifiercode') }}",
+                        method: 'GET',
+                        success: function(response) {
+                             // Mise à jour terminée : afficher le message et arrêter le setInterval
+                             let hotelsGroupedByGiataId = response.hotelsGroupedByGiataId || 0;
+                            if (response.hotelsGroupedByGiataId == 0) {
+                               
+                               
+                                
+                                $('#statusMessage_unifier').html(
+                                    `Mise à jour terminée. <br> 
+                                    Hôtels non unifier : ${hotelsGroupedByGiataId} <br> 
+                                     
+                                `
+                                );
+                                clearInterval(statusInterval_unifecode); // Arrêter la vérification périodique
+                            } else {
+                                // Mise à jour en cours : afficher le statut actuel
+                                $('#statusMessage_unifier').html(
+                                    `Mise à jour en cours... <br> 
+                                    Hôtels non unifier : ${hotelsGroupedByGiataId} <br> 
+                                   `
+                                );
+                            }
+                        },
+                        error: function() {
+                            console.error("Erreur lors de la vérification de l'état du processus.");
+                        }
+                    });
+                }
+
                 let statusInterval;
 
                 function checkUpdateStatus() {
@@ -273,6 +280,8 @@
 
                             // Afficher le spinner avant d'envoyer la requête
                              $('#loadingSpinner_bdc').show();
+                             $('#update_Uinifer_StatusModal').modal('show');
+
 
                             $.ajax({
                                 url: "{{ route('giata.unifier_bdc') }}",
@@ -284,15 +293,20 @@
                                 success: function(response) {
                                     // console.log(response);
                                     $('#loadingSpinner_bdc').hide();
+                                    // ('#message_unifier').text(response); 
                                     // $('#dataContainer').html('<pre>' + JSON.stringify(response.data, null, 4) + '</pre>');
                                     // var countMessage = '  Nombre d\'hôtels trouvés : ' + response.count;
-                                     var countMessage =  response;
+                                    //  var countMessage =  response;
                                     // alert(response.count);
-                                     $('#message_unifier').text(countMessage);
+                                    //  $('#message_unifier').text(countMessage);
+                                     const statusInterval = setInterval(checkUpdateStatus_unifer, 5000);
                                 },
                                 error: function(xhr, status, error) {
                                     $('#loadingSpinner_bdc').hide();
                                     $('#dataContainer').html('<p>Erreur lors de la récupération des données : ' + error + '</p>');
+                                    $('#message_unifier').text('Erreur lors de l\'unification des codes BDC : ' + error);
+
+
                                 }
                             });
                         });
