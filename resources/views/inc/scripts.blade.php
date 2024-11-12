@@ -163,6 +163,12 @@
                                 const statusInterval = setInterval(checkUpdateStatus, 5000);
 
                         });
+                        $('#unifierbdcCheckDataButton').on('click', function() {
+
+                            $('#update_Uinifer_StatusModal').modal('show');
+                            const statusInterval = setInterval(checkUpdateStatus_unifer, 5000);
+
+                            });
               
 
                 let statusInterval_unifecode;
