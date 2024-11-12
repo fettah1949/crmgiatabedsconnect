@@ -166,7 +166,7 @@
                         $('#unifierbdcCheckDataButton').on('click', function() {
 
                             $('#update_Uinifer_StatusModal').modal('show');
-                            const statusInterval = setInterval(checkUpdateStatus_unifer, 5000);
+                            const statusInterval = setInterval(checkUpdateStatus_unifer, 10000);
 
                             });
               
