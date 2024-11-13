@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UnifyBdcJob implements ShouldQueue
 {
@@ -27,7 +28,7 @@ class UnifyBdcJob implements ShouldQueue
             ->havingRaw('COUNT(DISTINCT bdc_id) > 1')
             ->where('giataid', '!=', '')
             ->get();
-
+            Log::info("unifier bdc_id via giataId : ");
         if ($hotelsGroupedByGiataId->isEmpty()) {
             return "Aucun doublon trouvé.";
         }
