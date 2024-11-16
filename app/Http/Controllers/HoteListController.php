@@ -779,8 +779,8 @@ class HoteListController extends Controller
     {
         // Comptez le nombre d'hôtels mappés et non mappés
         // $mappedCount = Hotel::where('etat', 1)->where('with_giata', 0)->count();
-        $mappedCount = Hotel::whereNotNull('categoryCode')->where('with_giata', 0)->count();
-        $nonMappedCount = Hotel::whereNull('categoryCode')->where('with_giata', 0)->count();
+        $mappedCount = Hotel::whereNotNull('categoryCode')->where('with_giata', 0)->where('etat', 0)->count();
+        $nonMappedCount = Hotel::whereNull('categoryCode')->where('with_giata', 0)->where('etat', 0)->count();
         // $nonMappedCount = Hotel::where('etat', 0)->where('with_giata', 0)->count();
         $nonMappedCountingiata = Hotel::where('etat', -1)->where('with_giata', 0)->count();
 
