@@ -735,7 +735,7 @@ class HoteListController extends Controller
         $provider = $request->input('provider');
         
         // Récupérer les hôtels qui n'ont pas été traités
-        $hotels = Hotel::where('etat', 0)->where('with_giata', 0)->get();
+        $hotels = Hotel::where('etat', 1)->where('with_giata', 0)->get();
         $hotels_count = $hotels->count();
 
         // Si aucun hôtel n'est trouvé, retourner une réponse
