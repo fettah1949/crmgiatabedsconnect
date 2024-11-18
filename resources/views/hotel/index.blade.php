@@ -1,5 +1,10 @@
 @extends('layouts.app')
-
+@php
+    $category_name = 'production';
+    $page_name = 'hotel_list';
+    $has_scrollspy = 0;
+    $scrollspy_offset = '';
+@endphp 
 @section('content')
     {{-- <!-- BEGIN LOADER -->
     <div id="load_screen"> <div class="loader"> <div class="loader-content">
