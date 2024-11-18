@@ -31,8 +31,8 @@ class FetchGiataDataJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $url = 'https://multicodes.giatamedia.com/webservice/rest/1.latest/properties/crs/'. $this->hotel->provider_id . '/' . ($this->hotel->provider_id == "bedsconnect" ? $this->hotel->bdc_id : $this->hotel->hotel_code);
-        // $url = 'https://multicodes.giatamedia.com/webservice/rest/1.latest/properties/crs/bedsconnect/' . $this->hotel->bdc_id ;
+        // $url = 'https://multicodes.giatamedia.com/webservice/rest/1.latest/properties/crs/'. $this->hotel->provider_id . '/' . ($this->hotel->provider_id == "bedsconnect" ? $this->hotel->bdc_id : $this->hotel->hotel_code);
+        $url = 'https://multicodes.giatamedia.com/webservice/rest/1.latest/properties/crs/bedsconnect/' . $this->hotel->bdc_id ;
         Log::info("Données url : " . $url);
         try {
             $response = Http::withBasicAuth('giata|bedsconnect.com', 'keghak-qaXbed-rosne7')->get($url);
