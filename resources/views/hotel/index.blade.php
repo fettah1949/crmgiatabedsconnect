@@ -159,6 +159,12 @@
     </div>
 @endif
 
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
     <hr>
     <div class="widget-content widget-content-area br-6 text-center">
         <div class="panel-body"     display:inline-block > 
@@ -362,7 +368,7 @@
                             
                                         <td>
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-dark btn-sm">Update</button>
+                                                    <button type="button" data-toggle="modal" data-target="#edit_hotel-{{$value->id}}" target="_blank" class="btn btn-dark btn-sm">Update</button>
                                                     <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                                     </button>
@@ -378,6 +384,36 @@
                                      
                                          
                                     </tr>
+
+
+
+                                    @include('hotel.pop_up.pop_up_edit_hotel',[
+                                                                                        'id'=>$value->id,
+                                                                                        'hotel_name'=>$value->hotel_name,
+                                                                                        'hotel_code'=>$value->hotel_code,
+                                                                                        'bdc_id'=>$value->bdc_id,
+                                                                                        'provider_id'=>$value->provider_id,
+                                                                                        'giataId'=>$value->giataId,
+                                                                                        
+                                                                                        'provider'=>$value->provider,
+                                                                                        'city'=>$value->city,
+                                                                                        'country_code'=>$value->country_code,
+                                                                                    
+                                                                                        'addresses'=>$value->addresses,
+                                                                                        'phones_voice'=>$value->phones_voice,
+                                                                                        'latitude'=>$value->latitude,
+                                                                                        'longitude'=>$value->longitude,
+                                                                                        'chainName'=>$value->chainName,
+                                                                                        'phones_fax'=>$value->phones_fax,
+                                                                                        'email'=>$value->email,
+                                                                                        'chainId'=>$value->chainId,
+                                                                                        'zip_code'=>$value->zip_code,
+                                                                                        'CategoryCode'=>$value->CategoryCode,
+                                                                                        'CategoryName'=>$value->CategoryName,
+                                                                                        'CityCode'=>$value->CityCode,
+                                                                                        'country'=>$value->country,
+                                                                                        
+                                                                                        ])
                                     @endforeach
          
                                 </tbody>

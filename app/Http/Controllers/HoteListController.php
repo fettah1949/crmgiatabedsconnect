@@ -729,6 +729,46 @@ class HoteListController extends Controller
         
     // }
 
+    public function update(Request $request)
+    {
+        // Valider les données envoyées
+        $request->validate([
+            'id' => 'required|exists:hotels,id',
+            'hotelName' => 'nullable|string|max:255',
+            'hotel_code' => 'nullable|string|max:255',
+            'provider_id' => 'nullable|string|max:255',
+            'provider' => 'nullable|string|max:255',
+            'bdc_id' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'giataId' => 'nullable|string|max:255',
+            'country_code' => 'nullable|string|max:255',
+            'CityCode' => 'nullable|string|max:255',
+            'addresses' => 'nullable|string|max:255',
+            'phones_voice' => 'nullable|string|max:255',
+            'phones_fax' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+            'chainId' => 'nullable|string|max:255',
+            'chainName' => 'nullable|string|max:255',
+            'zip_code' => 'nullable|string|max:255',
+            'CategoryCode' => 'nullable|string|max:255',
+            'CategoryName' => 'nullable|string|max:255',
+        ]);
+    
+        // Récupérer l'hôtel et mettre à jour les champs
+        $hotel = Hotel::findOrFail($request->id);
+        // die($request->id);
+        $hotel->update($request->except(['_token', 'id']));
+    
+        // Redirection avec un message de succès
+        return redirect()->back()->with('success', 'Hôtel mis à jour avec succès !');
+    }
+     
+
+
+
     public function getProperty(Request $request)
     {
         // Récupérer le fournisseur depuis la requête

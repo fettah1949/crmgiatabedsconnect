@@ -73,5 +73,7 @@ Route::get('/check-export-status/{fileName}', function($fileName) {
 
 Route::get('/hotels/delete-file/{filename}', [HoteListController::class, 'deleteFile'])->name('hotels.deleteFile');
 
+
+Route::post('/hotel/update', [HoteListController::class, 'update'])->name('hotel.update');
 // Route::resource('HoteList', HoteListController::class);
 // Route::resource('hotelListe', HoteListController::class);
