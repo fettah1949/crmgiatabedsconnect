@@ -106,23 +106,23 @@ class FetchGiataDataJob implements ShouldQueue
                          DB::table('hotels')
                          ->where('id', $this->hotel->id)
                          ->update([
-                                    //  'hotel_name' => $hotelName,
-                                    //  'giataId' => $giataId,
-                                    //  'city' => $city,
-                                    //  'country' => $country,
-                                    //  'country_code' => $country,
-                                    //  'addresses' => $addresses,
-                                    //  'phones_voice' => $phonesVoice,
-                                    //  'email' => $email,
-                                    //  'latitude' => $latitude,
-                                    //  'longitude' => $longitude,
-                                    //  'chainId' => $chainId,
-                                    //  'chainName' => $chainName,
-                                    //  'zip_code' => $postalCode,
-                                    //  'citycode' => $cityId,
+                                     'hotel_name' => $hotelName,
+                                     'giataId' => $giataId,
+                                     'city' => $city,
+                                     'country' => $country,
+                                     'country_code' => $country,
+                                     'addresses' => $addresses,
+                                     'phones_voice' => $phonesVoice,
+                                     'email' => $email,
+                                     'latitude' => $latitude,
+                                     'longitude' => $longitude,
+                                     'chainId' => $chainId,
+                                     'chainName' => $chainName,
+                                     'zip_code' => $postalCode,
+                                     'citycode' => $cityId,
                                      'CategoryCode' => $category,
                                      'updated_at' => now(),
-                                    //  'etat' => 1,
+                                     'etat' => 1,
                                  ]
                              );
 
