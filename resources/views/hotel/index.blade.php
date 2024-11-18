@@ -334,6 +334,7 @@
                                         <th>BDC ID </th>
                                         <th>GiataId</th>
                                         <th>Provider</th>
+                                        <th>email</th>
                                         <th>City</th>
                                         <th>Country</th>
                                         <th>Addresses</th>
@@ -358,6 +359,7 @@
                                                                                 
                                         <td>{{ $value->giataId }}</td>   
                                         <td>{{ $value->provider }}</td>   
+                                        <td>{{ $value->email }}</td>   
                                         <td>{{ $value->city }}</td>                                                                   
                                         <td>{{ $value->country_code }}</td>
                                         
