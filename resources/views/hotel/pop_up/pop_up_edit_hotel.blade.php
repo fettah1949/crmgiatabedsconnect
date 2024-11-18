@@ -20,8 +20,8 @@ aria-hidden="true">
                     <div class="col-sm-6">
                         <div class="form-group col-sm-auto">
                             <label>Hotel Name</label>
-                            <input  type="text" class="form-control" name="hotelName" value="{{ $hotel_name }}" title="{{ $hotel_name }}" placeholder="hotelName">
-                            @error('hotelName') <span class="text-danger">{{ $message }}</span>@enderror
+                            <input  type="text" class="form-control" name="hotel_name" value="{{ $hotel_name }}" title="{{ $hotel_name }}" placeholder="hotelName">
+                            
                         </div>
                         
                     </div>

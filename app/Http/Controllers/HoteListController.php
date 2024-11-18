@@ -734,7 +734,7 @@ class HoteListController extends Controller
         // Valider les données envoyées
         $request->validate([
             'id' => 'required|exists:hotels,id',
-            'hotelName' => 'nullable|string|max:255',
+            'hotel_name' => 'nullable|string|max:255',
             'hotel_code' => 'nullable|string|max:255',
             'provider_id' => 'nullable|string|max:255',
             'provider' => 'nullable|string|max:255',
