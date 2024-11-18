@@ -76,32 +76,69 @@ class HoteListController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $request->validate([
 
-            'Hotel_Code' => 'required',
-            'giataId' => 'nullable',
-            'Hotel_Name' => 'required',
-            'Latitude' => 'nullable',
-            'Longitude' => 'nullable',
-            'addresses' => 'nullable',
-            'City' => 'nullable',
-            'Zip_Code' => 'nullable',
-            'Email' => 'nullable',
-            'Country' => 'nullable',
-            'phones_voice' => 'nullable',
-            'phones_fax' => 'nullable',
-            'chainId' => 'nullable',
-            'chainName' => 'nullable',
-  
-        ]);
-    
-        Hotel::create($request->all());
-     
-        return redirect()->route('hotellist.index')
-                        ->with('success','Hotel created successfully.');  
+
+    public function store(Request $request)
+{
+    // Validation des données
+    $validatedData = $request->validate([
+        'hotel_name' => 'nullable|string|max:255',
+        'hotel_code' => 'nullable|string|max:50',
+        'bdc_id' => 'nullable|string|max:50',
+        'giataId' => 'nullable|string|max:50',
+        'provider' => 'nullable|string|max:255',
+        'provider_id' => 'nullable|string|max:50',
+        'CategoryCode' => 'nullable|string|max:50',
+        'CategoryName' => 'nullable|string|max:255',
+        'Longitude' => 'nullable|numeric',
+        'Latitude' => 'nullable|numeric',
+        'City' => 'nullable|string|max:255',
+        'CityCode' => 'nullable|string|max:50',
+        'addresses' => 'nullable|string|max:255',
+        'Zip_Code' => 'nullable|string|max:20',
+        'Email' => 'nullable|email|max:255',
+        'phones_voice' => 'nullable|string|max:50',
+        'phones_fax' => 'nullable|string|max:50',
+        'chainId' => 'nullable|string|max:50',
+        'chainName' => 'nullable|string|max:255',
+        'country' => 'nullable|string|max:50', // Un seul pays
+    ]);
+    $bdc_id = $validatedData['bdc_id'];
+    while (DB::table('hotels')->where('bdc_id', $bdc_id)->exists()) {
+        $bdc_id = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
     }
+    // Création d'un nouvel hôtel
+    $hotel = new Hotel();
+    $hotel->hotel_name = $validatedData['hotel_name'];
+    $hotel->hotel_code = $validatedData['hotel_code'];
+    $hotel->bdc_id = $bdc_id;
+    $hotel->giataId = $validatedData['giataId'] ?? null;
+    $hotel->provider = $validatedData['provider'] ?? null;
+    $hotel->provider_id = $validatedData['provider_id'] ?? null;
+    $hotel->CategoryCode = $validatedData['CategoryCode'] ?? null;
+    $hotel->CategoryName = $validatedData['CategoryName'] ?? null;
+    $hotel->Longitude = $validatedData['Longitude'] ?? null;
+    $hotel->Latitude = $validatedData['Latitude'] ?? null;
+    $hotel->City = $validatedData['City'] ?? null;
+    $hotel->CityCode = $validatedData['CityCode'] ?? null;
+    $hotel->addresses = $validatedData['addresses'] ?? null;
+    $hotel->Zip_Code = $validatedData['Zip_Code'] ?? null;
+    $hotel->Email = $validatedData['Email'] ?? null;
+    $hotel->phones_voice = $validatedData['phones_voice'] ?? null;
+    $hotel->phones_fax = $validatedData['phones_fax'] ?? null;
+    $hotel->chainId = $validatedData['chainId'] ?? null;
+    $hotel->chainName = $validatedData['chainName'] ?? null;
+    $hotel->country_code = $validatedData['country'] ?? null;
+    $hotel->country = $validatedData['country'] ?? null;
+
+    // Sauvegarde dans la base de données
+    $hotel->save();
+
+    // Redirection avec message de succès
+    return redirect()->route('hotellist.index')
+        ->with('success', 'Hotel added successfully.');
+}
+
 
 
     // public function import(Request $request)

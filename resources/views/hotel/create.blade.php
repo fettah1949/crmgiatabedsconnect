@@ -1,15 +1,18 @@
 @php
-use App\Models\Country;
-$countries = Country::all();
-
-// use App\Models\Agencycontact;
-// $sellers = Agencycontact::where('Contact_Type','SELLER')->get();
-//dd($sellers);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
 
     $category_name = 'production';
     $page_name = 'hotel_list';
     $has_scrollspy = 0;
     $scrollspy_offset = '';
+ 
+            $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+            while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
+                $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
+            }
+            
+        
+
 @endphp
 @extends('layouts.app')
   
@@ -43,19 +46,49 @@ $countries = Country::all();
     <h4 class="mb-3">Hotel Details</h4>
     <div class="row mb-3">
         <div class="col-md-6">
-            <label for="hotelCode" class="form-label">Hotel Code</label>
-            <input type="text" class="form-control" id="hotelCode" placeholder="Enter Hotel Code" name="Hotel_Code">
+            <label for="hotel_name" class="form-label">Hotel Name</label>
+            <input type="text" class="form-control" id="hotel_name" placeholder="Enter Hotel Name" name="hotel_name">
+            @error('hotel_name') <span class="text-danger">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
+            <label for="hotel_code" class="form-label">Hotel Code</label>
+            <input type="text" class="form-control" id="hotel_code" placeholder="Enter Hotel Code" name="hotel_code">
             @error('Hotel_Code') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
-        {{-- <div class="col-md-6">
+        
+        <div class="col-md-6">
             <label for="bdcId" class="form-label">BDC ID</label>
-            <input type="text" class="form-control" id="bdcId" placeholder="Enter BDC ID" name="bdc_id">
+            <input type="text" disabled class="form-control" id="bdc_id" placeholder="Enter BDC ID" name="bdc_id" value="{{$chiffre}}">
+            <input type="hidden" name="bdc_id" value="{{ $chiffre }}">
             @error('bdc_id') <span class="text-danger">{{ $message }}</span>@enderror
-        </div> --}}
+        </div>
         <div class="col-md-6">
             <label for="giataId" class="form-label">Giata ID</label>
             <input type="text" class="form-control" id="giataId" placeholder="Enter Giata ID" name="giataId">
             @error('Giata_id') <span class="text-danger">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
+            <label for="provider" class="form-label">provider</label>
+            <input type="text" class="form-control" id="provider" placeholder="Enter provider" name="provider">
+            @error('provider') <span class="text-danger">{{ $message }}</span>@enderror
+        </div>
+
+        <div class="col-md-6">
+            <label for="provider_id" class="form-label">provider_id</label>
+            <input type="text" class="form-control" id="provider_id" placeholder="Enter provider_id" name="provider_id">
+            @error('provider_id') <span class="text-danger">{{ $message }}</span>@enderror
+        </div>
+
+        <div class="col-md-6">
+            <label for="CategoryCode" class="form-label">CategoryCode</label>
+            <input type="text" class="form-control" id="CategoryCode" placeholder="Enter CategoryCode" name="CategoryCode">
+            @error('CategoryCode') <span class="text-danger">{{ $message }}</span>@enderror
+        </div>
+
+        <div class="col-md-6">
+            <label for="CategoryName" class="form-label">CategoryName</label>
+            <input type="text" class="form-control" id="CategoryName" placeholder="Enter CategoryName" name="CategoryName">
+            @error('CategoryName') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
     </div>
     
@@ -65,18 +98,7 @@ $countries = Country::all();
 
     <!-- Section 2: Location Information -->
     <h4 class="mb-3">Location Information</h4>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label for="hotelName" class="form-label">Hotel Name</label>
-            <input type="text" class="form-control" id="hotelName" placeholder="Enter Hotel Name" name="Hotel_Name">
-            @error('Hotel_Name') <span class="text-danger">{{ $message }}</span>@enderror
-        </div>
-        <div class="col-md-6">
-            <label for="latitude" class="form-label">Latitude</label>
-            <input type="text" class="form-control" id="latitude" placeholder="Enter Latitude" name="Latitude">
-            @error('Latitude') <span class="text-danger">{{ $message }}</span>@enderror
-        </div>
-    </div>
+
 
     <div class="row mb-3">
         <div class="col-md-6">
@@ -89,6 +111,28 @@ $countries = Country::all();
             <input type="text" class="form-control" id="addresses" placeholder="Enter Address" name="addresses">
             @error('Address') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
+        <div class="col-md-6">
+            <label for="latitude" class="form-label">Latitude</label>
+            <input type="text" class="form-control" id="latitude" placeholder="Enter Latitude" name="Latitude">
+            @error('Latitude') <span class="text-danger">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" placeholder="Enter City" name="City">
+            @error('City') <span class="text-danger">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
+            <label for="CityCode" class="form-label">CityCode</label>
+            <input type="text" class="form-control" id="CityCode" placeholder="Enter CityCode" name="CityCode">
+            @error('CityCode') <span class="text-danger">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
+            <label  for="county_code" class="control-label col-sm-auto" >county_code:</label>
+            <select class="form-control tagging" id="country"  name="country"   >
+
+            </select>
+        @error('county_code') <p class="text-danger">{{ $message }}</p> @enderror
+        </div>
     </div>
 
     <hr class="my-4">
@@ -96,36 +140,23 @@ $countries = Country::all();
     <!-- Section 3: Contact Information -->
     <h4 class="mb-3">Contact Information</h4>
     <div class="row mb-3">
-        <div class="col-md-6">
-            <label for="city" class="form-label">City</label>
-            <input type="text" class="form-control" id="city" placeholder="Enter City" name="City">
-            @error('City') <span class="text-danger">{{ $message }}</span>@enderror
-        </div>
+
+  
         <div class="col-md-6">
             <label for="zipCode" class="form-label">Zip Code</label>
             <input type="text" class="form-control" id="zipCode" placeholder="Enter Zip Code" name="Zip_Code">
             @error('Zip_Code') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
-    </div>
-
-    <div class="row mb-3">
         <div class="col-md-6">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" placeholder="Enter Email" name="Email">
             @error('Email') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
-        <div class="col-md-6">
-            <label for="country" class="form-label">Country</label>
-            <input class="form-control" type="text" list="select-country" id="country" name="Country" placeholder="Select Country" onkeyup='setCountryCode();'>
-            <datalist id="select-country">
-                <option value="">Select Country</option>
-                @foreach ($countries as $country)
-                    <input type="hidden" id="{{ $country->nom_en_gb }}" value="{{ $country->alpha2 }}" />
-                    <option value="{{ $country->nom_en_gb }}">{{ $country->nom_en_gb }}</option>
-                @endforeach
-            </datalist>
-            @error('Country') <span class="text-danger">{{ $message }}</span>@enderror
-        </div>
+    </div>
+
+    <div class="row mb-3">
+
+
     </div>
 
     <div class="row mb-3">
@@ -167,4 +198,3 @@ $countries = Country::all();
 </script>
 @endsection
 
-{{-- mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm --}}
