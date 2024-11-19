@@ -419,6 +419,8 @@
                                                                                         'CategoryName'=>$value->CategoryName,
                                                                                         'CityCode'=>$value->CityCode,
                                                                                         'country'=>$value->country,
+                                                                                        'with_giata'=>$value->with_giata,
+                                                                                        'etat'=>$value->etat,
                                                                                         
                                                                                         ])
                                     @endforeach

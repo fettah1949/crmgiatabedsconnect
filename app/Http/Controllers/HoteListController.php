@@ -102,6 +102,8 @@ class HoteListController extends Controller
         'chainId' => 'nullable|string|max:50',
         'chainName' => 'nullable|string|max:255',
         'country' => 'nullable|string|max:50', // Un seul pays
+        'with_giata' => 'nullable|string|numeric', 
+        'etat' => 'nullable|string|numeric', 
     ]);
     $bdc_id = $validatedData['bdc_id'];
     while (DB::table('hotels')->where('bdc_id', $bdc_id)->exists()) {
@@ -130,6 +132,8 @@ class HoteListController extends Controller
     $hotel->chainName = $validatedData['chainName'] ?? null;
     $hotel->country_code = $validatedData['country'] ?? null;
     $hotel->country = $validatedData['country'] ?? null;
+    $hotel->with_giata = $validatedData['with_giata'] ?? null;
+    $hotel->etat = $validatedData['etat'] ?? null;
 
     // Sauvegarde dans la base de données
     $hotel->save();

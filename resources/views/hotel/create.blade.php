@@ -182,6 +182,30 @@
             <input type="text" class="form-control" id="chainName" placeholder="Enter Chain Name" name="chainName">
             @error('ChainName') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
+        <div class="col-md-6">
+            <label for="chainName" class="form-label">With Giata Id</label>
+            <select  class="form-control basic" id="with_giata" name="with_giata"  >
+                <option  value="">Select with Gita Id</option>
+                
+                <option    value="0">0 </option>       
+                <option    value="1">1 </option>
+
+                
+            </select>
+        </div>      
+        <div class="col-md-6">
+            <label for="chainName" class="form-label">Etat mapping</label>
+            <select  class="form-control basic" id="etat" name="etat"  >
+                <option  value="">Select Etat</option>
+                
+                <option    value="0">0 </option>       
+                <option    value="1">1 </option>
+
+                
+            </select>
+        </div>
+
+
 
     <!-- Form Buttons -->
     <div class="text-center mt-4">
