@@ -201,6 +201,7 @@ aria-hidden="true">
                 
                 <option  @if($etat==0) selected @endif  value="0">0 </option>       
                 <option  @if($etat==1) selected @endif  value="1">1</option>
+                <option  @if($etat==-1) selected @endif  value="-1">-1</option>
 
             </select>
 
