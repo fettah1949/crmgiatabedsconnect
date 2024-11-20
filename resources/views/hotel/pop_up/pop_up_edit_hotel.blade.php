@@ -183,7 +183,7 @@ aria-hidden="true">
     <div class="col-sm-6">
         <div class="form-group col-sm-auto">
             <label>With Giata ID</label>
-            <select  class="form-control basic" id="with_giata" name="with_giata"  >
+            <select  class="form-control " id="with_giata" name="with_giata"  >
                 <option  value="">Select with_giata</option>
                 
                 <option  @if($with_giata==0) selected @endif  value="0">0 </option>       
@@ -196,11 +196,11 @@ aria-hidden="true">
     <div class="col-sm-6">
         <div class="form-group col-sm-auto">
             <label>Etat</label>
-            <select  class="form-control basic" id="etat" name="etat"  >
+            <select  class="form-control " id="etat" name="etat"  >
                 <option  value="">Select Etat</option>
                 
                 <option  @if($etat==0) selected @endif  value="0">0 </option>       
-                <option  @if($etat==1) selected @endif  value="1">1</option>
+                <option  @if($etat==1) selected @endif  value="1"> 1</option>
                 <option  @if($etat==-1) selected @endif  value="-1">-1</option>
 
             </select>
