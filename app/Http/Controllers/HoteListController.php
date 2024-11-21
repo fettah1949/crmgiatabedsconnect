@@ -133,7 +133,7 @@ class HoteListController extends Controller
     $hotel->country_code = $validatedData['country'] ?? null;
     $hotel->country = $validatedData['country'] ?? null;
     $hotel->with_giata = $validatedData['with_giata'] ?? null;
-    $hotel->etat = $validatedData['etat'] ?? null;
+    $hotel->etat = $validatedData['etat'] ?? 0;
 
     // Sauvegarde dans la base de données
     $hotel->save();
