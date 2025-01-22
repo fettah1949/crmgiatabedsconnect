@@ -22,7 +22,7 @@ class UnifyBdcJob implements ShouldQueue
     public function handle()
     {
         // Récupérer tous les giataid ayant des doublons de bdc_id
-        $hotelsGroupedByGiataId = DB::table('hotels')
+        $hotelsGroupedByGiataId = DB::table('hotel_news')
             ->select('giataid')
             ->groupBy('giataid')
             ->havingRaw('COUNT(DISTINCT bdc_id) > 1')
@@ -35,7 +35,7 @@ class UnifyBdcJob implements ShouldQueue
 
         foreach ($hotelsGroupedByGiataId as $group) {
             // Récupérer tous les bdc_id pour le giataid actuel
-            $bdcIds = DB::table('hotels')
+            $bdcIds = DB::table('hotel_news')
                 ->where('giataid', $group->giataid)
                 ->pluck('bdc_id');
 
@@ -56,7 +56,7 @@ class UnifyBdcJob implements ShouldQueue
             }
 
             // Mettre à jour tous les hôtels avec le bdc_id principal
-            DB::table('hotels')
+            DB::table('hotel_news')
                 ->where('giataid', $group->giataid)
                 ->update(['bdc_id' => $bdcIdPrincipal]);
         }

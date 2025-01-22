@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Hotel;
+use App\Models\Hotel_new;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,7 +22,7 @@ class FetchHotleViaGiataIdDataJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(Hotel $hotel)
+    public function __construct(Hotel_new $hotel)
     {
         $this->hotel = $hotel;
     }
@@ -104,7 +105,7 @@ class FetchHotleViaGiataIdDataJob implements ShouldQueue
                          $chainName = isset($data['chains']['chain']['@attributes']['chainName']) ? $data['chains']['chain']['@attributes']['chainName'] : $this->hotel->chainName;
                          // return  $jsonData .' ----------------- '.implode(', ', $data['phones']['phone']);
                          // Update or insert the data into your database
-                         DB::table('hotels')
+                         DB::table('hotel_news')
                          ->where('id', $this->hotel->id)
                          ->update([
                                      'hotel_name' => $hotelName,
@@ -134,7 +135,7 @@ class FetchHotleViaGiataIdDataJob implements ShouldQueue
                          Log::info("Données GIATA mises à jour pour l'hôtel : " . $this->hotel->hotel_code);
                      }else {
                         // Marquer l'hôtel comme non mappé
-                        DB::table('hotels')
+                        DB::table('hotel_news')
                             ->where('id', $this->hotel->id)
                             ->update(['etat' => -1, 'updated_at' => now()]); // -1 pour indiquer "non mappé"
                         

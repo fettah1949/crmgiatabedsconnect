@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\Hotel;
+use App\Models\Hotel_new;
 use App\Models\ImportStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -55,7 +56,7 @@ class ImportHotelDataJob implements ShouldQueue
     
                     // Insertion par lot
                     if (count($batch) >= $batchSize) {
-                        Hotel::insert($batch); // Insérer le batch
+                        Hotel_new::insert($batch); // Insérer le batch
                         $batch = []; // Réinitialiser le batch
                     }
                     $i++;
@@ -65,7 +66,7 @@ class ImportHotelDataJob implements ShouldQueue
     
                 // Insérer les données restantes
                 if (!empty($batch)) {
-                    Hotel::insert($batch);
+                    Hotel_new::insert($batch);
                 }
             } elseif ($this->extension == 'xlsx') {
                 // Lire le fichier XLSX
@@ -81,14 +82,14 @@ class ImportHotelDataJob implements ShouldQueue
     
                     // Insertion par lot
                     if (count($batch) >= $batchSize) {
-                        Hotel::insert($batch); // Insérer le batch
+                        Hotel_new::insert($batch); // Insérer le batch
                         $batch = []; // Réinitialiser le batch
                     }
                 }
     
                 // Insérer les données restantes
                 if (!empty($batch)) {
-                    Hotel::insert($batch);
+                    Hotel_new::insert($batch);
                 }
             }
     
@@ -144,7 +145,7 @@ class ImportHotelDataJob implements ShouldQueue
         private function generateUniqueBdcId()
         {
             $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
-            while (DB::table('hotels')->where('bdc_id', $chiffre)->exists()) {
+            while (DB::table('hotel_news')->where('bdc_id', $chiffre)->exists()) {
                 $chiffre = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
             }
             return $chiffre;

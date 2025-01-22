@@ -26,12 +26,13 @@ use Illuminate\Support\Facades\Log;
 use App\Jobs\ExportHotelsJob;
 use App\Jobs\FetchHotleViaGiataIdDataJob;
 use App\Jobs\UnifyBdcJob;
+use App\Models\Hotel_new;
 
 class HoteListController extends Controller
 {
     public function index(){
     // $hotels = Hotellist::All();
-    $hotels = Hotel::limit(100)->get();
+    $hotels = Hotel_new::limit(100)->get();
 
     $code_hotel = "";
     $country = "";
@@ -106,11 +107,11 @@ class HoteListController extends Controller
         'etat' => 'nullable|string|numeric', 
     ]);
     $bdc_id = $validatedData['bdc_id'];
-    while (DB::table('hotels')->where('bdc_id', $bdc_id)->exists()) {
+    while (DB::table('hotel_news')->where('bdc_id', $bdc_id)->exists()) {
         $bdc_id = 'BDCX' . str_pad(random_int(1, 99999999999), 11, '0', STR_PAD_LEFT);
     }
     // Création d'un nouvel hôtel
-    $hotel = new Hotel();
+    $hotel = new Hotel_new();
     $hotel->hotel_name = $validatedData['hotel_name'];
     $hotel->hotel_code = $validatedData['hotel_code'];
     $hotel->bdc_id = $bdc_id;
@@ -557,7 +558,7 @@ class HoteListController extends Controller
         //  ->groupBy('bdc_id')
         // ->having('nbr_doublon', '>', 1)
         // ->get();
-        $data  =  Hotel::All();
+        $data  =  Hotel_new::All();
         //   return $data ;
         // $data = new Hotellist;
     
@@ -799,7 +800,7 @@ class HoteListController extends Controller
         ]);
     
         // Récupérer l'hôtel et mettre à jour les champs
-        $hotel = Hotel::findOrFail($request->id);
+        $hotel = Hotel_new::findOrFail($request->id);
         // die($request->id);
         $hotel->update($request->except(['_token', 'id']));
     
@@ -816,7 +817,7 @@ class HoteListController extends Controller
         $provider = $request->input('provider');
         
         // Récupérer les hôtels qui n'ont pas été traités
-        $hotels = Hotel::where('etat', 0)->where('with_giata', 0)->get();
+        $hotels = Hotel_new::where('etat', 0)->where('with_giata', 0)->get();
         $hotels_count = $hotels->count();
 
         // Si aucun hôtel n'est trouvé, retourner une réponse
@@ -839,7 +840,7 @@ class HoteListController extends Controller
         // $provider = $request->input('provider');
         
         // Récupérer les hôtels qui n'ont pas été traités
-        $hotels = Hotel::where('etat', 0)->where('with_giata', 1)->get();
+        $hotels = Hotel_new::where('etat', 0)->where('with_giata', 1)->get();
         $hotels_count = $hotels->count();
 
         // Si aucun hôtel n'est trouvé, retourner une réponse
@@ -878,7 +879,7 @@ class HoteListController extends Controller
     public function checkUpdateStatusunifiercode()
     {
         // Comptez le nombre d'hôtels mappés et non mappés
-        $hotelsGroupedByGiataId = DB::table('hotels')
+        $hotelsGroupedByGiataId = DB::table('hotel_news')
         ->select('giataid')
         ->groupBy('giataid')
         ->havingRaw('COUNT(DISTINCT bdc_id) > 1')
@@ -896,9 +897,9 @@ class HoteListController extends Controller
     public function checkUpdateStatusviagitaid()
     {
         // Comptez le nombre d'hôtels mappés et non mappés
-        $mappedCount = Hotel::where('etat', 1)->where('with_giata', 1)->count();
-        $nonMappedCount = Hotel::where('etat', 0)->where('with_giata', 1)->count();
-        $nonMappedCountingiata = Hotel::where('etat', -1)->where('with_giata', 1)->count();
+        $mappedCount = Hotel_new::where('etat', 1)->where('with_giata', 1)->count();
+        $nonMappedCount = Hotel_new::where('etat', 0)->where('with_giata', 1)->count();
+        $nonMappedCountingiata = Hotel_new::where('etat', -1)->where('with_giata', 1)->count();
 
         // Déterminer si la mise à jour est terminée
         $completed = ($nonMappedCount === 0);
@@ -923,7 +924,7 @@ class HoteListController extends Controller
     
 
 
-        $query = Hotel::query();
+        $query = Hotel_new::query();
     
         if($code_hotel != ""){
             $query->where('hotel_code', $code_hotel);
