@@ -48,6 +48,9 @@ Route::get('/giata/unifier_bdc', [HoteListController::class, 'unifier_bdc'])->na
 
 Route::get('/geo/property', [GeographyController::class, 'getProperty'])->name('geo.property');
 Route::get('/api/countries', [GeographyController::class, 'getCountries'])->name('api.countries');
+Route::get('/api/cities', [GeographyController::class, 'getCities'])->name('api.cities');
+Route::get('/api/citiesid', [GeographyController::class, 'getCitiesid'])->name('api.citiesid');
+
 
 Route::get('/airport/property', [AirportController::class, 'getProperty'])->name('Airport.property');
 

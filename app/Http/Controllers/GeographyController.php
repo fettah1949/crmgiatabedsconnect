@@ -42,6 +42,32 @@ class GeographyController extends Controller
         // Retourner les pays sous forme de JSON pour Select2
         return response()->json($countries);
     }
+    public function getCities(Request $request)
+    {
+        $countryCode = $request->input('countryCode'); // Récupérer le code du pays
+    
+        $cities = DB::table('geographies')
+                    ->select('cityId', 'cityName')
+                    ->where('countryCode', $countryCode)
+                    ->get();
+    
+        return response()->json($cities);
+    }
+    
+    public function getCitiesid(Request $request)
+    {
+        $city = $request->input('city'); // Récupérer le code du pays
+        // return $cityCode;
+    
+        $cities = DB::table('geographies')
+                    ->select('cityId', 'cityName')
+                    ->where('cityName', $city)
+                    ->get();
+    
+        return response()->json($cities);
+    }
+    
+    
     public function create()
     {
         return view('geo.create') ;  

@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Hotel;
+use App\Models\Hotel_new;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -45,7 +46,7 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
         ini_set('memory_limit', '4096M'); // 4 Go
 
         // $query = Hotel::query();
-        $query = Hotel::select( 'hotel_name', 'hotel_code', 'bdc_id', 'giataid', 'provider', 'provider_id', 
+        $query = Hotel_new::select( 'hotel_name', 'hotel_code', 'bdc_id', 'giataid', 'provider', 'provider_id', 
                       'city', 'CityCode', 'CategoryCode' , 'country_code', 'addresses', 'zip_code', 'phones_voice', 
                       'latitude', 'longitude', 'chainName', 'status');
 

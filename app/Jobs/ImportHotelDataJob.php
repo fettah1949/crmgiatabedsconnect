@@ -42,7 +42,7 @@ class ImportHotelDataJob implements ShouldQueue
         try {
             // Définir la taille du lot
             $batch = [];
-            $batchSize = 1000; // Par exemple, 1000 lignes par batch
+            $batchSize = 500; // Par exemple, 1000 lignes par batch
     
             if ($this->extension == 'csv' || $this->extension == 'txt') {
                 // Ouvrir le fichier CSV

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('hotels', function (Blueprint $table) {
-            $table->string('provider_id')->after('hotel_code');
+        Schema::table('hotel_news', function (Blueprint $table) {
+            $table->string('provider')->after('hotel_code');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('hotels', function (Blueprint $table) {
-            $table->dropColumn('provider_id');
+        Schema::table('hotel_news', function (Blueprint $table) {
+            $table->dropColumn('provider');
         });
     }
 };

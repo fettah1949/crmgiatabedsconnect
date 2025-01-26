@@ -118,12 +118,20 @@
         </div>
         <div class="col-md-6">
             <label for="city" class="form-label">City</label>
-            <input type="text" class="form-control" id="city" placeholder="Enter City" name="City">
+            {{-- <input type="text" class="form-control" id="city" placeholder="Enter City" name="City"> --}}
+            <select id="city" class="form-control">
+                <option value="">Sélectionnez une ville</option>
+            </select>
+            
             @error('City') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-6">
             <label for="CityCode" class="form-label">CityCode</label>
-            <input type="text" class="form-control" id="CityCode" placeholder="Enter CityCode" name="CityCode">
+            {{-- <input type="text" class="form-control" id="CityCode" placeholder="Enter CityCode" name="CityCode"> --}}
+            <select  id="CityCode" placeholder="Enter CityCode" name="CityCode" class="form-control">
+                <option value="">Sélectionnez une ville</option>
+            </select>
+
             @error('CityCode') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-6">
@@ -187,8 +195,8 @@
             <select  class="form-control basic" id="with_giata" name="with_giata"  >
                 <option  value="">Select with Gita Id</option>
                 
-                <option    value="0">0 </option>       
-                <option    value="1">1 </option>
+                <option    value="0">mapping with provider id </option>       
+                <option    value="1">mapping with giata id </option>
 
                 
             </select>
@@ -198,8 +206,8 @@
             <select  class="form-control basic" id="etat" name="etat"  >
                 <option  value="">Select Etat</option>
                 
-                <option    value="0">0 </option>       
-                <option    value="1">1 </option>
+                <option    value="0">not mapped </option>       
+                <option    value="1">already mapped </option>
 
                 
             </select>

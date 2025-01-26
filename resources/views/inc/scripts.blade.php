@@ -427,6 +427,50 @@
                                     }
                                 });
                             }
+
+                        
+                            // Charger les villes lors du changement de pays
+                            $('#country').on('change', function() {
+                                var countryCode = $(this).val(); // Récupérer le code du pays sélectionné
+
+                                $.ajax({
+                                    url: "{{ route('api.cities') }}", // Route pour récupérer les villes
+                                    type: "GET",
+                                    data: {
+                                        countryCode: countryCode
+                                    },
+                                    success: function(data) {
+                                        var $citySelect = $('#city'); // Sélecteur pour les villes
+                                        $citySelect.empty(); // Vider le select des villes existantes
+
+                                        $.each(data, function(index, city) {
+                                            $citySelect.append(new Option(city.cityName, city.cityName));
+                                        });
+                                    }
+                                });
+                            });
+
+                            $('#city').on('change', function() {
+                                var city = $(this).val(); // Récupérer le code du pays sélectionné
+
+                                $.ajax({
+                                    url: "{{ route('api.citiesid') }}", // Route pour récupérer les villes
+                                    type: "GET",
+                                    data: {
+                                        city: city
+                                    },
+                                    success: function(data) {
+                                        var $CityCode = $('#CityCode'); // Sélecteur pour les villes
+                                        $CityCode.empty(); // Vider le select des villes existantes
+                                        $.each(data, function(index, city) {
+                                            $CityCode.append(new Option(city.cityId, city.cityId));
+                                        });
+                                    }
+                                });
+                            });
+
+                            
+
                     });
 
 
