@@ -69,13 +69,37 @@
         </div>
         <div class="col-md-6">
             <label for="provider" class="form-label">provider</label>
-            <input type="text" class="form-control" id="provider" placeholder="Enter provider" name="provider">
+            {{-- <input type="text" class="form-control" id="provider" placeholder="Enter provider" name="provider"> --}}
+            <select  class="form-control basic" id="provider" name="provider"  >
+                <option  value="">Select Provider Name</option>
+                
+                <option   value="Dida Travel">Dida Travel </option>       
+                <option   value="Smyrooms">Smyrooms</option>
+                <option   value="HotelRunner CM"> HotelRunner CM</option>
+                <option   value="Bedsconnect-Direct"> Bedsconnect-Direct</option>
+                <option   value="Spring Travel Services"> Spring Travel Services</option>
+                <option   value="My Morocco"> My Morocco</option>
+                <option   value="Roibos"> Roibos</option>
+                
+            </select>
             @error('provider') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
 
         <div class="col-md-6">
             <label for="provider_id" class="form-label">provider_id</label>
-            <input type="text" class="form-control" id="provider_id" placeholder="Enter provider_id" name="provider_id">
+            {{-- <input type="text" class="form-control" id="provider_id" placeholder="Enter provider_id" name="provider_id"> --}}
+            <select  class="form-control basic" id="provider_id" name="provider_id"  >
+                <option  value="">Select Provider ID</option>
+                
+                <option  value="roibos">roibos </option>       
+                <option  value="Illusion_iol">Illusion_iol</option>
+                <option  value="didatravel"> didatravel</option>
+                <option  value="logitravel_dr"> logitravel_dr</option>
+                <option  value="bedsconnect"> bedsconnect</option>
+            
+                
+                
+            </select>
             @error('provider_id') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
 
@@ -117,6 +141,13 @@
             @error('Latitude') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-6">
+            <label  for="county_code" class="control-label col-sm-auto" >county_code:</label>
+            <select class="form-control tagging" id="country"  name="country"   >
+
+            </select>
+        @error('county_code') <p class="text-danger">{{ $message }}</p> @enderror
+        </div>
+        <div class="col-md-6">
             <label for="city" class="form-label">City</label>
             {{-- <input type="text" class="form-control" id="city" placeholder="Enter City" name="City"> --}}
             <select id="city" class="form-control">
@@ -134,13 +165,7 @@
 
             @error('CityCode') <span class="text-danger">{{ $message }}</span>@enderror
         </div>
-        <div class="col-md-6">
-            <label  for="county_code" class="control-label col-sm-auto" >county_code:</label>
-            <select class="form-control tagging" id="country"  name="country"   >
 
-            </select>
-        @error('county_code') <p class="text-danger">{{ $message }}</p> @enderror
-        </div>
     </div>
 
     <hr class="my-4">
