@@ -15,6 +15,7 @@
         <div class="row">
             <div class="col-md-6">
                 <a class="btn btn-outline-primary btn-rounded mb-2" href="{{ route('hotellist.create') }}">New Hotel</a>
+                <h3>Nombre Hotel : {{ $hotels_count }} </h3>
             </div>
             <div class="col-md-6">
                 <form method="post" action="{{ route('import') }}" enctype="multipart/form-data" id="importForm">

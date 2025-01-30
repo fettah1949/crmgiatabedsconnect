@@ -33,6 +33,7 @@ class HoteListController extends Controller
     public function index(){
     // $hotels = Hotellist::All();
     $hotels = Hotel_new::limit(100)->get();
+    $hotels_count = Hotel_new::count();
 
     $code_hotel = "";
     $country = "";
@@ -62,6 +63,7 @@ class HoteListController extends Controller
             'scrollspy_offset' => '',
             'hotels'=>$hotels,
             'filter' => $filter,
+            'hotels_count' => $hotels_count,
 
         ];
         return view('hotel.index')->with($data);
