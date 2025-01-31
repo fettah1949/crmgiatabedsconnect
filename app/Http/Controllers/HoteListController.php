@@ -953,7 +953,13 @@ class HoteListController extends Controller
             $query->where('hotel_name', 'like', '%' . $Name_hotel. '%');
         }
         if($giata_id != ""){
-            $query->where('with_giata',  $giata_id);
+           
+            if ($giata_id == "Yes") {
+                $query->whereNotNull('giataid'); // Afficher les valeurs non NULL
+            } else {
+                $query->where('giataid',""); // Afficher uniquement les valeurs NULL
+            }
+            
         }
          
         // Exécuter la requête et récupérer les résultats

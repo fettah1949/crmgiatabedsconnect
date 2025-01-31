@@ -282,8 +282,8 @@
                                 <select  class="form-control basic" id="giata_id" name="giata_id"  >
                                     <option  value="">All </option>
                                     
-                                    <option  @if($filter['giata_id']==1) selected @endif value="1">Yes </option>       
-                                    <option  @if($filter['giata_id']==0) selected @endif value="0">No</option>
+                                    <option  @if($filter['giata_id']=="Yes") selected @endif value="Yes">Yes </option>       
+                                    <option  @if($filter['giata_id']=="No") selected @endif value="No">No</option>
                                     
                                     
                                     
