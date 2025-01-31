@@ -239,7 +239,7 @@
                                         <option  @if($filter['provider_id']=="didatravel") selected @endif value="didatravel"> didatravel</option>
                                         <option  @if($filter['provider_id']=="logitravel_dr") selected @endif value="logitravel_dr"> logitravel_dr</option>
                                         <option  @if($filter['provider_id']=="bedsconnect") selected @endif value="bedsconnect"> bedsconnect</option>
-                                        <option  @if($filter['provider_id']=="Smyrooms_RET") selected @endif value="bedsconnect"> Smyrooms_RET</option>
+                                        <option  @if($filter['provider_id']=="Smyrooms_RET") selected @endif value="Smyrooms_RET"> Smyrooms_RET</option>
                                     
                                         
                                         
