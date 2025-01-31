@@ -215,7 +215,8 @@
                                         <option  @if($filter['provider_name']=="Spring Travel Services") selected @endif value="Spring Travel Services"> Spring Travel Services</option>
                                         <option  @if($filter['provider_name']=="My Morocco") selected @endif value="My Morocco"> My Morocco</option>
                                         <option  @if($filter['provider_name']=="Roibos") selected @endif value="Roibos"> Roibos</option>
-                                        <option  @if($filter['provider_id']=="Smyrooms_RET") selected @endif value="Smyrooms_RET"> Smyrooms_RET</option>
+                                        <option  @if($filter['provider_name']=="Smyrooms_RET") selected @endif value="Smyrooms_RET"> Smyrooms_RET</option>
+                                        <option  @if($filter['provider_name']=="CGE-Bedsconnect") selected @endif value="CGE-Bedsconnect"> CGE-Bedsconnect</option>
                                         
                                     </select>
                                 @error('Code') <p class="text-danger">{{ $message }}</p> @enderror
