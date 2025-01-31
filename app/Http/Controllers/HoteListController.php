@@ -924,7 +924,7 @@ class HoteListController extends Controller
         $bdc_id = $request->input('bdc_id');
         $Name_hotel = $request->input('Name_hotel');
     
-
+        $hotels_count = Hotel_new::count();
 
         $query = Hotel_new::query();
     
@@ -970,6 +970,7 @@ class HoteListController extends Controller
             'scrollspy_offset' => '',
             'hotels'=>$hotels,
             'filter' => $filter,
+            'hotels_count' => $hotels_count,
 
     
         ];
