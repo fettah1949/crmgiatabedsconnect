@@ -41,6 +41,7 @@ class HoteListController extends Controller
     $provider_id = "";
     $bdc_id = "";
     $Name_hotel = "";
+    $giata_id = "";
 
 
     
@@ -51,6 +52,7 @@ class HoteListController extends Controller
         'provider_id' => $provider_id,
         'bdc_id' => $bdc_id,
         'Name_hotel' => $Name_hotel,
+        'giata_id' => $giata_id,
 
     ];
 
@@ -923,6 +925,7 @@ class HoteListController extends Controller
         $provider_id = $request->input('provider_id');
         $bdc_id = $request->input('bdc_id');
         $Name_hotel = $request->input('Name_hotel');
+        $giata_id = $request->input('giata_id');
     
         $hotels_count = Hotel_new::count();
 
@@ -949,6 +952,9 @@ class HoteListController extends Controller
         if($Name_hotel != ""){
             $query->where('hotel_name', 'like', '%' . $Name_hotel. '%');
         }
+        if($giata_id != ""){
+            $query->where('with_giata',  $giata_id);
+        }
          
         // Exécuter la requête et récupérer les résultats
         $hotels = $query->limit(100)->get();
@@ -960,6 +966,7 @@ class HoteListController extends Controller
             'provider_id' => $provider_id,
             'bdc_id' => $bdc_id,
             'Name_hotel' => $Name_hotel,
+            'giata_id' => $giata_id,
         ];
 
 

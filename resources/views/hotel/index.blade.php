@@ -274,6 +274,29 @@
                         
                     
                     </div>
+                    <div class="row">
+                       
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <label  for="start_date" class="control-label col-sm-auto" >with Giata</label>
+                                <select  class="form-control basic" id="giata_id" name="giata_id"  >
+                                    <option  value="">All </option>
+                                    
+                                    <option  @if($filter['giata_id']==1) selected @endif value="1">Yes </option>       
+                                    <option  @if($filter['giata_id']==0) selected @endif value="0">No</option>
+                                    
+                                    
+                                    
+                                </select>
+                            </div>
+                        </div>
+
+                       
+
+                    
+                        
+                    
+                    </div>
                     
 
                     <button type="submit"  class="btn btn-outline-success mb-2">Apply</button>
