@@ -957,7 +957,7 @@ class HoteListController extends Controller
             if ($giata_id == "Yes") {
                 $query->whereNotNull('giataid'); // Afficher les valeurs non NULL
             } else {
-                $query->where('giataid',""); // Afficher uniquement les valeurs NULL
+                $query->whereNull('giataid'); // Afficher uniquement les valeurs NULL
             }
             
         }
