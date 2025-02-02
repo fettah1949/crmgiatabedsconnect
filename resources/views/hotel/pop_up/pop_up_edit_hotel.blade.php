@@ -37,16 +37,38 @@ aria-hidden="true">
                 <div class="col-sm-6">
                     <div class="form-group col-sm-auto">
                         <label>provider</label>
-                        <input  type="text" class="form-control" name="provider" value="{{ $provider }}" title="{{ $provider }}" placeholder="provider">
-    
+                        {{-- <input  type="text" class="form-control" name="provider" value="{{ $provider }}" title="{{ $provider }}" placeholder="provider"> --}}
+                        <select  class="form-control basic" id="provider" name="provider"  >
+                            <option  value="">Select Provider Name</option>
+                            
+                            <option  @if($provider=="Dida Travel") selected @endif  value="Dida Travel">Dida Travel </option>       
+                            <option  @if($provider=="Smyrooms") selected @endif value="Smyrooms">Smyrooms</option>
+                            <option   @if($provider=="HotelRunner CM") selected @endif value="HotelRunner CM"> HotelRunner CM</option>
+                            <option   @if($provider=="Bedsconnect-Direct") selected @endif value="Bedsconnect-Direct"> Bedsconnect-Direct</option>
+                            <option   @if($provider=="Spring Travel Services") selected @endif value="Spring Travel Services"> Spring Travel Services</option>
+                            <option  @if($provider=="My Morocco") selected @endif  value="My Morocco"> My Morocco</option>
+                            <option   @if($provider=="Roibos") selected @endif value="Roibos"> Roibos</option>
+                            
+                        </select>
                  
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group col-sm-auto">
                         <label>provider_id</label>
-                        <input  type="text" class="form-control" name="provider_id" value="{{ $provider_id }}" title="{{ $provider_id }}" placeholder="provider_id">
-    
+                        {{-- <input  type="text" class="form-control" name="provider_id" value="{{ $provider_id }}" title="{{ $provider_id }}" placeholder="provider_id"> --}}
+                        <select  class="form-control basic" id="provider_id" name="provider_id"  >
+                            <option  value="">Select Provider ID</option>
+                            
+                            <option  @if($provider_id=="roibos") selected @endif value="roibos">roibos </option>       
+                            <option  @if($provider_id=="Illusion_iol") selected @endif value="Illusion_iol">Illusion_iol</option>
+                            <option  @if($provider_id=="didatravel") selected @endif value="didatravel"> didatravel</option>
+                            <option  @if($provider_id=="logitravel_dr") selected @endif value="logitravel_dr"> logitravel_dr</option>
+                            <option  @if($provider_id=="bedsconnect") selected @endif value="bedsconnect"> bedsconnect</option>
+                        
+                            
+                            
+                        </select>
                       
                     </div>
                 </div>
@@ -186,8 +208,8 @@ aria-hidden="true">
             <select  class="form-control " id="with_giata" name="with_giata"  >
                 <option  value="">Select with_giata</option>
                 
-                <option  @if($with_giata==0) selected @endif  value="0">0 </option>       
-                <option  @if($with_giata==1) selected @endif  value="1">1</option>
+                <option  @if($with_giata==0) selected @endif  value="0">mapping with provider id</option>       
+                <option  @if($with_giata==1) selected @endif  value="1">mapping with giata id</option>
 
             </select>
         </div>
@@ -199,9 +221,9 @@ aria-hidden="true">
             <select  class="form-control " id="etat" name="etat"  >
                 <option  value="">Select Etat</option>
                 
-                <option  @if($etat==0) selected @endif  value="0">0 </option>       
-                <option  @if($etat==1) selected @endif  value="1"> 1</option>
-                <option  @if($etat==-1) selected @endif  value="-1">-1</option>
+                <option  @if($etat==0) selected @endif  value="0">not mapped </option>       
+                <option  @if($etat==1) selected @endif  value="1"> already mapped</option>
+                <option  @if($etat==-1) selected @endif  value="-1">not exsiste for mapped</option>
 
             </select>
 

@@ -34,6 +34,7 @@ class Hotel_new extends Model
         'status',
         'with_giata',
         'id_Expedia',
+        'etat',
       
     ];
 }
