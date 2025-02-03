@@ -38,7 +38,7 @@ aria-hidden="true">
                     <div class="form-group col-sm-auto">
                         <label>provider</label>
                         {{-- <input  type="text" class="form-control" name="provider" value="{{ $provider }}" title="{{ $provider }}" placeholder="provider"> --}}
-                        <select  class="form-control basic" id="provider_update" name="provider"  >
+                        <select  class="form-control " id="provider_update" name="provider"  >
                             <option  value="">Select Provider Name</option>
                             
                             <option  @if($provider=="Dida Travel") selected @endif  value="Dida Travel">Dida Travel </option>       
@@ -57,7 +57,7 @@ aria-hidden="true">
                     <div class="form-group col-sm-auto">
                         <label>provider_id</label>
                         {{-- <input  type="text" class="form-control" name="provider_id" value="{{ $provider_id }}" title="{{ $provider_id }}" placeholder="provider_id"> --}}
-                        <select  class="form-control basic" id="provider_id_update" name="provider_id"  >
+                        <select  class="form-control " id="provider_id_update" name="provider_id"  >
                             <option  value="">Select Provider ID</option>
                             
                             <option  @if($provider_id=="roibos") selected @endif value="roibos">roibos </option>       
