@@ -48,6 +48,9 @@ aria-hidden="true">
                             <option   @if($provider=="Spring Travel Services") selected @endif value="Spring Travel Services"> Spring Travel Services</option>
                             <option  @if($provider=="My Morocco") selected @endif  value="My Morocco"> My Morocco</option>
                             <option   @if($provider=="Roibos") selected @endif value="Roibos"> Roibos</option>
+                            <option  @if($provider=="Smyrooms_RET") selected @endif value="Smyrooms_RET"> Smyrooms_RET</option>
+                            <option  @if($provider=="CGE-Bedsconnect") selected @endif value="CGE-Bedsconnect"> CGE-Bedsconnect</option>
+                                        
                             
                         </select>
                  

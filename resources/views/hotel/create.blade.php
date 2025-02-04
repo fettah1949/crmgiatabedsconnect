@@ -80,6 +80,9 @@
                 <option   value="Spring Travel Services"> Spring Travel Services</option>
                 <option   value="My Morocco"> My Morocco</option>
                 <option   value="Roibos"> Roibos</option>
+                <option   value="Smyrooms_RET"> Smyrooms_RET</option>
+                <option   value="CGE-Bedsconnect"> CGE-Bedsconnect</option>
+                                        
                 
             </select>
             @error('provider') <span class="text-danger">{{ $message }}</span>@enderror
