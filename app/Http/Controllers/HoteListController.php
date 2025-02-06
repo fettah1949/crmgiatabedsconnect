@@ -513,7 +513,7 @@ class HoteListController extends Controller
         {
             ini_set('memory_limit', '4096M'); // 4 Go
 
-            $fileName = 'hotels_export' .'.xlsx';
+            $fileName = 'hotels_export_v1' .'.xlsx';
 
             $codeHotel = $request->input('codeHotel');
             $country = $request->input('country');
@@ -828,11 +828,11 @@ class HoteListController extends Controller
         if ($hotels_count != 0) {
             // return Response::json(['count' => $hotels_count,'message' => 'Aucun hôtel trouvé.'], 404);
                     // Lancer le job pour chaque hôtel
-        foreach ($hotels as $hotel) {
-            // Log::info("Données  l'hôtel : " . $hotel->hotel_code);
-            FetchGiataDataJob::dispatch($hotel);
         
-        }
+            // Log::info("Données  l'hôtel : " . $hotel->hotel_code);
+            FetchGiataDataJob::dispatch();
+        
+       
 
 }
 
@@ -850,10 +850,10 @@ class HoteListController extends Controller
         // Si aucun hôtel n'est trouvé, retourner une réponse
         if ($hotels_count != 0) {
            // Lancer le job pour chaque hôtel
-            foreach ($hotels as $hotel) {
+            // foreach ($hotels as $hotel) {
                 // Log::info("Données  l'hôtel : " . $hotel->hotel_code);
-                FetchHotleViaGiataIdDataJob::dispatch($hotel);
-            }
+                FetchHotleViaGiataIdDataJob::dispatch();
+            // }
         }
 
        
