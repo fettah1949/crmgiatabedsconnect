@@ -97,11 +97,13 @@ class FetchGiataDataJob implements ShouldQueue
                                 $phonesVoice = isset($data['phones']['phone']) ? $data['phones']['phone'] : $hotel->phones_voice;
 
                                 // $email = $data['emails']['email'];
-                                $email = isset($data['emails']['email']) ? $data['emails']['email'] : $hotel->email;
+                                // $email = isset($data['emails']['email']) ? $data['emails']['email'] : $hotel->email;
+                                $email = isset($data['emails']['email']) ? (is_array($data['emails']['email']) ? json_encode($data['emails']['email']) : json_encode([$data['emails']['email']])) : $hotel->email;
+
                                 // $latitude = $data['geoCodes']['geoCode']['latitude'];
-                                $latitude = isset($data['geoCodes']['geoCode']['latitude']) ? $data['geoCodes']['geoCode']['latitude'] : $hotel->email;
+                                $latitude = isset($data['geoCodes']['geoCode']['latitude']) ? $data['geoCodes']['geoCode']['latitude'] : $hotel->latitude;
                                 // $longitude = $data['geoCodes']['geoCode']['longitude'];
-                                $longitude = isset($data['geoCodes']['geoCode']['longitude']) ? $data['geoCodes']['geoCode']['longitude'] : $hotel->email;
+                                $longitude = isset($data['geoCodes']['geoCode']['longitude']) ? $data['geoCodes']['geoCode']['longitude'] : $hotel->longitude;
                                 // $chainId = $data['chains']['chain']['@attributes']['chainId'];
                                 $chainId = isset($data['chains']['chain']['@attributes']['chainId']) ? $data['chains']['chain']['@attributes']['chainId'] : $hotel->chainId;
                                 // $chainName = $data['chains']['chain']['@attributes']['chainName'];
