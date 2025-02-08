@@ -106,7 +106,7 @@ class FetchHotleViaGiataIdDataJob implements ShouldQueue
 
             // Log pour vérifier la réponse de l'API
             Log::info("Statut de la réponse : " . $response->status());
-            Log::info("Contenu de la réponse : " . $response->body());
+            // Log::info("Contenu de la réponse : " . $response->body());
 
             if ($response->successful()) {
                 // Parsing the XML response
@@ -183,7 +183,7 @@ class FetchHotleViaGiataIdDataJob implements ShouldQueue
                     // Libérer la mémoire après chaque hôtel
                     unset($data, $jsonData, $response, $xmlData);
                     gc_collect_cycles(); // Nettoyage forcé de la mémoire
-                    sleep(1); // Ajouter une pause pour éviter les appels trop rapides
+                    // sleep(1); // Ajouter une pause pour éviter les appels trop rapides
 
                     // Log d'information
                     Log::info("Données GIATA mises à jour pour l'hôtel : " . $hotel->hotel_code);
