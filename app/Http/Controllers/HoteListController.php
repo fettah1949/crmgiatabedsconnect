@@ -42,6 +42,7 @@ class HoteListController extends Controller
     $bdc_id = "";
     $Name_hotel = "";
     $giata_id = "";
+    $etat = "";
 
 
     
@@ -53,6 +54,7 @@ class HoteListController extends Controller
         'bdc_id' => $bdc_id,
         'Name_hotel' => $Name_hotel,
         'giata_id' => $giata_id,
+        'etat' => $etat,
 
     ];
 
@@ -926,6 +928,7 @@ class HoteListController extends Controller
         $bdc_id = $request->input('bdc_id');
         $Name_hotel = $request->input('Name_hotel');
         $giata_id = $request->input('giata_id');
+        $etat = $request->input('etat');
     
         $hotels_count = Hotel_new::count();
 
@@ -961,6 +964,10 @@ class HoteListController extends Controller
             }
             
         }
+        
+        if($etat != ""){
+            $query->where('etat',$etat);
+        }
          
         // Exécuter la requête et récupérer les résultats
         $hotels = $query->limit(100)->get();
@@ -974,6 +981,7 @@ class HoteListController extends Controller
             'bdc_id' => $bdc_id,
             'Name_hotel' => $Name_hotel,
             'giata_id' => $giata_id,
+            'etat' => $etat,
         ];
 
 

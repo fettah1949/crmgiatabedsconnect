@@ -291,6 +291,23 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <div class="form-group" >
+                                <label  for="start_date" class="control-label col-sm-auto" >Etat</label>
+                                <select  class="form-control basic" id="etat" name="etat"  >
+                                    <option  value="">All </option>
+                                    
+        
+                                    <option  @if($filter==0) selected @endif  value="0">not mapped </option>       
+                                    <option  @if($filter==1) selected @endif  value="1"> already mapped</option>
+                                    <option  @if($filter==-1) selected @endif  value="-1">not exsiste for mapped</option>
+                                    
+                                    
+                                    
+                                </select>
+                            </div>
+                        </div>
+
                        
 
                     
