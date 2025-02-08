@@ -22,63 +22,69 @@ class FetchHotleViaGiataIdDataJob implements ShouldQueue
      */
     public function handle(): void
     {
+        ini_set('memory_limit', '2G'); // Augmenter temporairement la mémoire si nécessaire
         $apiUrl = 'https://multicodes.giatamedia.com/webservice/rest/1.latest/properties/';
         $auth = ['giata|bedsconnect.com', 'keghak-qaXbed-rosne7'];
-
-        Hotel_new::where('etat', 0)->where('with_giata', 1)
-            ->chunk(100, function ($hotels) use ($apiUrl, $auth) {
-                foreach ($hotels as $hotel) {
-                    $url = $apiUrl . $hotel->giataId;
-                    Log::info("Fetching GIATA data for hotel ID: {$hotel->id}");
-
-                    try {
-                        $response = Http::withBasicAuth($auth[0], $auth[1])->retry(3, 1000)->get($url);
-
-                        if ($response->failed()) {
-                            Log::error("Failed to fetch GIATA data for hotel ID: {$hotel->id}");
-                            continue;
-                        }
-
-                        $xmlData = new SimpleXMLElement($response->body());
-                        $jsonData = json_encode($xmlData);
-                        $data = json_decode($jsonData, true);
-
-                        if (!isset($data['property'])) {
-                            $this->markAsUnmapped($hotel);
-                            continue;
-                        }
-
-                        $data = $data['property'];
-
-                        $updateData = [
-                            'hotel_name'   => $data['name'] ?? $hotel->hotel_name,
-                            'giataId'      => $data['@attributes']['giataId'] ?? $hotel->giataId,
-                            'city'         => $data['city'] ?? $hotel->city,
-                            'citycode'     => isset($xmlData->property->city['cityId']) ? (string)$xmlData->property->city['cityId'] : $hotel->citycode,
-                            'country'      => $data['country'] ?? $hotel->country,
-                            'country_code' => $data['country'] ?? $hotel->country_code,
-                            'CategoryCode' => $data['category'] ?? 'Non spécifié',
-                            'addresses'    => $this->getAddress($data),
-                            'zip_code'     => $data['addresses']['address']['postalCode'] ?? $hotel->zip_code,
-                            'phones_voice' => $this->getPhones($data, $hotel),
-                            'email'        => $this->getEmails($data, $hotel),
-                            'latitude'     => $data['geoCodes']['geoCode']['latitude'] ?? $hotel->latitude,
-                            'longitude'    => $data['geoCodes']['geoCode']['longitude'] ?? $hotel->longitude,
-                            'chainId'      => $data['chains']['chain']['@attributes']['chainId'] ?? $hotel->chainId,
-                            'chainName'    => $data['chains']['chain']['@attributes']['chainName'] ?? $hotel->chainName,
-                            'updated_at'   => now(),
-                            'etat'         => 1,
-                        ];
-
-                        DB::table('hotel_news')->where('id', $hotel->id)->update($updateData);
-                        Log::info("GIATA data updated for hotel ID: {$hotel->id}");
-
-                    } catch (\Exception $e) {
-                        Log::error("Error processing hotel ID {$hotel->id}: " . $e->getMessage());
-                    }
+    
+        $hotels = Hotel_new::where('etat', 0)->where('with_giata', 1)->cursor();
+        foreach ($hotels as $hotel) {
+            $url = $apiUrl . $hotel->giataId;
+            Log::info("Fetching GIATA data for hotel ID: {$hotel->id}");
+    
+            try {
+                $response = Http::withBasicAuth($auth[0], $auth[1])->retry(3, 1000)->get($url);
+    
+                if ($response->failed()) {
+                    Log::error("Failed to fetch GIATA data for hotel ID: {$hotel->id}");
+                    continue;
                 }
-            });
+    
+                $xmlData = new SimpleXMLElement($response->body());
+                $jsonData = json_encode($xmlData);
+                $data = json_decode($jsonData, true);
+                unset($xmlData); // Libérer la mémoire immédiatement
+                gc_collect_cycles();
+    
+                if (!isset($data['property'])) {
+                    $this->markAsUnmapped($hotel);
+                    continue;
+                }
+    
+                $data = $data['property'];
+    
+                $updateData = [
+                    'hotel_name'   => $data['name'] ?? $hotel->hotel_name,
+                    'giataId'      => $data['@attributes']['giataId'] ?? $hotel->giataId,
+                    'city'         => $data['city'] ?? $hotel->city,
+                    'citycode'     => isset($data['city']['@attributes']['cityId']) ? $data['city']['@attributes']['cityId'] : $hotel->citycode,
+                    'country'      => $data['country'] ?? $hotel->country,
+                    'country_code' => $data['country'] ?? $hotel->country_code,
+                    'CategoryCode' => $data['category'] ?? 'Non spécifié',
+                    'addresses'    => $this->getAddress($data),
+                    'zip_code'     => $data['addresses']['address']['postalCode'] ?? $hotel->zip_code,
+                    'phones_voice' => $this->getPhones($data, $hotel),
+                    'email'        => $this->getEmails($data, $hotel),
+                    'latitude'     => $data['geoCodes']['geoCode']['latitude'] ?? $hotel->latitude,
+                    'longitude'    => $data['geoCodes']['geoCode']['longitude'] ?? $hotel->longitude,
+                    'chainId'      => $data['chains']['chain']['@attributes']['chainId'] ?? $hotel->chainId,
+                    'chainName'    => $data['chains']['chain']['@attributes']['chainName'] ?? $hotel->chainName,
+                    'updated_at'   => now(),
+                    'etat'         => 1,
+                ];
+    
+                DB::table('hotel_news')->where('id', $hotel->id)->update($updateData);
+                Log::info("GIATA data updated for hotel ID: {$hotel->id}");
+    
+                // Libérer la mémoire après chaque hôtel
+                unset($data, $jsonData, $response);
+                gc_collect_cycles(); // Nettoyage forcé de la mémoire
+    
+            } catch (\Exception $e) {
+                Log::error("Error processing hotel ID {$hotel->id}: " . $e->getMessage());
+            }
+        }
     }
+    
 
     private function markAsUnmapped($hotel)
     {
