@@ -196,6 +196,11 @@ class FetchHotleViaGiataIdDataJob implements ShouldQueue
                     Log::warning("Hôtel non mappé : " . $hotel->hotel_code);
                 }
             } else {
+                DB::table('hotel_news')
+                ->where('id', $hotel->id)
+                ->update(['etat' => -1, 'updated_at' => now()]);
+
+                Log::warning("Hôtel non mappé : " . $hotel->hotel_code);
                 Log::error("Échec de récupération des données GIATA pour l'hôtel: " . $hotel->hotel_code);
             }
 
