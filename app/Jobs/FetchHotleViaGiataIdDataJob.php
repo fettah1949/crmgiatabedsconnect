@@ -99,6 +99,13 @@ class FetchHotleViaGiataIdDataJob implements ShouldQueue
     $hotels = Hotel_new::where('etat', 0)->where('with_giata', 1)->get();
 
     foreach ($hotels as $hotel) {
+
+        if ($hotel->giataId === null) {
+            Log::warning("giataId est null pour l'hôtel: " . $hotel->hotel_code);
+            // Optionnel : passer à l'hôtel suivant si giataId est null
+            continue;
+        }
+        
         $url = 'https://multicodes.giatamedia.com/webservice/rest/1.latest/properties/'. $hotel->giataId;
         
         try {
