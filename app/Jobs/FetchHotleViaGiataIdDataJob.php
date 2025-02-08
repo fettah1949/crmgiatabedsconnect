@@ -96,7 +96,7 @@ class FetchHotleViaGiataIdDataJob implements ShouldQueue
     public function handle(): void
 {
     ini_set('memory_limit', '2G');
-    $hotels = Hotel_new::where('etat', 0)->where('with_giata', 1)->take(50)->get();
+    $hotels = Hotel_new::where('etat', 0)->where('with_giata', 1)->get();
 
     foreach ($hotels as $hotel) {
         $url = 'https://multicodes.giatamedia.com/webservice/rest/1.latest/properties/'. $hotel->giataId;
