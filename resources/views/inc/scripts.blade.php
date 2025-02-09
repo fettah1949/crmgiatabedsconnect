@@ -561,16 +561,12 @@
                     // Récupérer les valeurs des champs
                     const codeHotel = document.getElementById('code_hotel').value || '';
                     const country = document.getElementById('country').value || '';
-                    // alert(country);
-                    const countrySelect = document.getElementById('country');
-                    const selectedCountries = Array.from(countrySelect.selectedOptions).map(option => option.value);
-                    // alert(selectedCountries.join(', '));  // Affiche toutes les valeurs sélectionnées
                     const providerName = document.getElementById('provider_name').value || '';
                     const providerID = document.getElementById('provider_id').value || '';
                     const bdc_id = document.getElementById('bdc_id').value || '';
                     const Name_hotel = document.getElementById('Name_hotel').value || '';
                     // Construire l'URL avec les paramètres de recherche
-                    const url = `{{ route('hotels.export') }}?codeHotel=${encodeURIComponent(codeHotel)}&country=${encodeURIComponent(selectedCountries.join(', '))}&providerName=${encodeURIComponent(providerName)}&providerID=${encodeURIComponent(providerID)}&bdc_id=${encodeURIComponent(bdc_id)}&Name_hotel=${encodeURIComponent(Name_hotel)}`;
+                    const url = `{{ route('hotels.export') }}?codeHotel=${encodeURIComponent(codeHotel)}&country=${encodeURIComponent(country)}&providerName=${encodeURIComponent(providerName)}&providerID=${encodeURIComponent(providerID)}&bdc_id=${encodeURIComponent(bdc_id)}&Name_hotel=${encodeURIComponent(Name_hotel)}`;
 
                     // Effectuer la requête AJAX avec fetch
                     fetch(url, {
@@ -599,7 +595,7 @@
                                             window.location.href = appUrl + "/public" + status.url;
                                             loader.style.display = 'none';  // Cacher le loader
                                             loadingMessage.style.display = 'none';  // Afficher le message
-                                                                            // Après téléchargement, appeler la route pour supprimer le fichier
+                                            // Après téléchargement, appeler la route pour supprimer le fichier
                                             fetch(`{{ route('hotels.deleteFile', '') }}/${data.file}`)
                                             .then(response => response.json())
                                             .then(result => {
@@ -628,7 +624,70 @@
                         alert("Erreur lors de l'exportation des données.");
                         loader.style.display = 'none';  // Cacher le loader en cas d'erreur
                     });
-    }   
+        }   
+
+        // function exportHotels() {
+        //     const loader = document.getElementById('loader');
+        //     const loadingMessage = document.getElementById('loadingMessage');
+        //     const downloadButton = document.getElementById('downloadButton');
+
+        //     loader.style.display = 'flex';
+        //     loadingMessage.style.display = 'block';
+        //     downloadButton.style.display = 'none';
+
+        //     const formData = new FormData();
+        //     formData.append('codeHotel', document.getElementById('code_hotel').value || '');
+        //     formData.append('country', document.getElementById('country').value || '');
+        //     formData.append('providerName', document.getElementById('provider_name').value || '');
+        //     formData.append('providerID', document.getElementById('provider_id').value || '');
+        //     formData.append('bdc_id', document.getElementById('bdc_id').value || '');
+        //     formData.append('Name_hotel', document.getElementById('Name_hotel').value || '');
+
+        //     fetch("{{ route('hotels.export') }}", {
+        //         method: 'POST',
+        //         body: formData
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         if (data.message) {
+        //             const checkStatusInterval = setInterval(() => {
+        //                 fetch(`{{ route('hotels.checkExportStatus', '') }}/${data.file}`)
+        //                     .then(response => response.json())
+        //                     .then(status => {
+        //                         if (status.ready) {
+        //                             clearInterval(checkStatusInterval);
+        //                             loader.style.display = 'none';
+        //                             loadingMessage.style.display = 'none';
+
+        //                             downloadButton.style.display = 'block';
+        //                             downloadButton.onclick = function() {
+        //                                 window.location.href = status.url;
+
+        //                                 fetch(`{{ route('hotels.deleteFile', '') }}/${data.file}`)
+        //                                 .then(response => response.json())
+        //                                 .then(result => console.log(result.message))
+        //                                 .catch(error => console.error('Erreur suppression fichier:', error));
+        //                             };
+        //                         }
+        //                     })
+        //                     .catch(error => {
+        //                         console.error('Erreur statut:', error);
+        //                         clearInterval(checkStatusInterval);
+        //                         loader.style.display = 'none';
+        //                     });
+        //             }, 3000);
+        //         } else {
+        //             alert("Erreur exportation.");
+        //             loader.style.display = 'none';
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error("Erreur exportation:", error);
+        //         alert("Erreur exportation.");
+        //         loader.style.display = 'none';
+        //     });
+        // }
+
 
                 </script>
         <!-- END PAGE LEVEL CUSTOM SCRIPTS -->

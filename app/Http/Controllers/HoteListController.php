@@ -518,8 +518,7 @@ class HoteListController extends Controller
             $fileName = 'hotels_export_' . time() . '.xlsx';
 
             $codeHotel = $request->input('codeHotel');
-            // $country = $request->input('country');
-            $country = $request->input('country', []);
+            $country = $request->input('country');
             $providerName = $request->input('providerName');
             $providerID = $request->input('providerID');
             $bdc_id = $request->input('bdc_id');
