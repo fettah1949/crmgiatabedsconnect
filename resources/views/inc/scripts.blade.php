@@ -561,12 +561,16 @@
                     // Récupérer les valeurs des champs
                     const codeHotel = document.getElementById('code_hotel').value || '';
                     const country = document.getElementById('country').value || '';
+                    // alert(country);
+                    const countrySelect = document.getElementById('country');
+                    const selectedCountries = Array.from(countrySelect.selectedOptions).map(option => option.value);
+                    // alert(selectedCountries.join(', '));  // Affiche toutes les valeurs sélectionnées
                     const providerName = document.getElementById('provider_name').value || '';
                     const providerID = document.getElementById('provider_id').value || '';
                     const bdc_id = document.getElementById('bdc_id').value || '';
                     const Name_hotel = document.getElementById('Name_hotel').value || '';
                     // Construire l'URL avec les paramètres de recherche
-                    const url = `{{ route('hotels.export') }}?codeHotel=${encodeURIComponent(codeHotel)}&country=${encodeURIComponent(country)}&providerName=${encodeURIComponent(providerName)}&providerID=${encodeURIComponent(providerID)}&bdc_id=${encodeURIComponent(bdc_id)}&Name_hotel=${encodeURIComponent(Name_hotel)}`;
+                    const url = `{{ route('hotels.export') }}?codeHotel=${encodeURIComponent(codeHotel)}&country=${encodeURIComponent(selectedCountries.join(', '))}&providerName=${encodeURIComponent(providerName)}&providerID=${encodeURIComponent(providerID)}&bdc_id=${encodeURIComponent(bdc_id)}&Name_hotel=${encodeURIComponent(Name_hotel)}`;
 
                     // Effectuer la requête AJAX avec fetch
                     fetch(url, {
