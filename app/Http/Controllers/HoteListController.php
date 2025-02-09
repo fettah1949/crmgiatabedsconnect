@@ -515,7 +515,7 @@ class HoteListController extends Controller
         {
             ini_set('memory_limit', '4096M'); // 4 Go
 
-            $fileName = 'hotels_export' .'.xlsx';
+            $fileName = 'hotels_export_' . time() . '.xlsx';
 
             $codeHotel = $request->input('codeHotel');
             $country = $request->input('country');
