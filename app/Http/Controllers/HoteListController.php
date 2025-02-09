@@ -518,7 +518,8 @@ class HoteListController extends Controller
             $fileName = 'hotels_export_' . time() . '.xlsx';
 
             $codeHotel = $request->input('codeHotel');
-            $country = $request->input('country');
+            // $country = $request->input('country');
+            $country = $request->input('country', []);
             $providerName = $request->input('providerName');
             $providerID = $request->input('providerID');
             $bdc_id = $request->input('bdc_id');
@@ -922,7 +923,10 @@ class HoteListController extends Controller
     {
 
         $code_hotel = $request->input('code_hotel');
-        $countries = $request->input('country');  // Récupère les pays sous forme de tableau
+        // $countries = $request->input('country');  // Récupère les pays sous forme de tableau
+    
+        $countries = $request->input('country', []);   
+        //  return $countries;
         $provider_name = $request->input('provider_name');
         $provider_id = $request->input('provider_id');
         $bdc_id = $request->input('bdc_id');
@@ -938,9 +942,14 @@ class HoteListController extends Controller
             $query->where('hotel_code', $code_hotel);
         }
     
-        if(!empty($countries)){  // Vérifie si des pays ont été sélectionnés
-            $query->whereIn('country_code', $countries);
-        }
+        // if(!empty($countries)){  // Vérifie si des pays ont été sélectionnés
+        //     $query->whereIn('country_code', $countries);
+        // }
+
+            // ✅ Recherche multi-pays
+            if (!empty($countries)) {
+                $query->whereIn('country_code', $countries);
+            }
     
         if($provider_name != ""){
             $query->where('provider', $provider_name);

@@ -56,7 +56,7 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
             $query->where('hotel_code',  $this->codeHotel );
         }
         if ($this->country) {
-            $query->whereIn('country_code', 'like', '%' . $this->country . '%');
+            $query->whereIn('country_code',  $this->country );
         }
         if ($this->providerName) {
             $query->where('provider', $this->providerName );
