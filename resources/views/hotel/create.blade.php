@@ -82,6 +82,7 @@
                 <option   value="Roibos"> Roibos</option>
                 <option   value="Smyrooms_RET"> Smyrooms_RET</option>
                 <option   value="CGE-Bedsconnect"> CGE-Bedsconnect</option>
+                <option   value="Illusions Online - ils"> Illusions Online - ils</option>
                                         
                 
             </select>
@@ -95,10 +96,11 @@
                 <option  value="">Select Provider ID</option>
                 
                 <option  value="roibos">roibos </option>       
-                <option  value="Illusion_iol">Illusion_iol</option>
+                <option  value="iol_iwtx">iol_iwtx</option>
                 <option  value="didatravel"> didatravel</option>
                 <option  value="logitravel_dr"> logitravel_dr</option>
                 <option  value="bedsconnect"> bedsconnect</option>
+                <option  value="iol_x3"> iol_x3</option>
             
                 
                 

@@ -50,6 +50,7 @@ aria-hidden="true">
                             <option   @if($provider=="Roibos") selected @endif value="Roibos"> Roibos</option>
                             <option  @if($provider=="Smyrooms_RET") selected @endif value="Smyrooms_RET"> Smyrooms_RET</option>
                             <option  @if($provider=="CGE-Bedsconnect") selected @endif value="CGE-Bedsconnect"> CGE-Bedsconnect</option>
+                            <option  @if($provider=="Illusions Online - ils") selected @endif value="Illusions Online - ils"> Illusions Online - ils</option>
                                         
                             
                         </select>
@@ -64,10 +65,11 @@ aria-hidden="true">
                             <option  value="">Select Provider ID</option>
                             
                             <option  @if($provider_id=="roibos") selected @endif value="roibos">roibos </option>       
-                            <option  @if($provider_id=="Illusion_iol") selected @endif value="Illusion_iol">Illusion_iol</option>
+                            <option  @if($provider_id=="iol_iwtx") selected @endif value="iol_iwtx">iol_iwtx</option>
                             <option  @if($provider_id=="didatravel") selected @endif value="didatravel"> didatravel</option>
                             <option  @if($provider_id=="logitravel_dr") selected @endif value="logitravel_dr"> logitravel_dr</option>
                             <option  @if($provider_id=="bedsconnect") selected @endif value="bedsconnect"> bedsconnect</option>
+                            <option  @if($provider_id=="iol_x3") selected @endif value="iol_x3"> iol_x3</option>
                         
                             
                             

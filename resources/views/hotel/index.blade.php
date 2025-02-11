@@ -217,6 +217,7 @@
                                         <option  @if($filter['provider_name']=="Roibos") selected @endif value="Roibos"> Roibos</option>
                                         <option  @if($filter['provider_name']=="Smyrooms_RET") selected @endif value="Smyrooms_RET"> Smyrooms_RET</option>
                                         <option  @if($filter['provider_name']=="CGE-Bedsconnect") selected @endif value="CGE-Bedsconnect"> CGE-Bedsconnect</option>
+                                        <option  @if($filter['provider_name']=="Illusions Online - ils") selected @endif value="Illusions Online - ils"> Illusions Online - ils</option>
                                         
                                     </select>
                                 @error('Code') <p class="text-danger">{{ $message }}</p> @enderror
@@ -237,10 +238,11 @@
                                         <option  value="">Select Provider ID</option>
                                         
                                         <option  @if($filter['provider_id']=="roibos") selected @endif value="roibos">roibos </option>       
-                                        <option  @if($filter['provider_id']=="Illusion_iol") selected @endif value="Illusion_iol">Illusion_iol</option>
+                                        <option  @if($filter['provider_id']=="iol_iwtx") selected @endif value="iol_iwtx">iol_iwtx</option>
                                         <option  @if($filter['provider_id']=="didatravel") selected @endif value="didatravel"> didatravel</option>
                                         <option  @if($filter['provider_id']=="logitravel_dr") selected @endif value="logitravel_dr"> logitravel_dr</option>
                                         <option  @if($filter['provider_id']=="bedsconnect") selected @endif value="bedsconnect"> bedsconnect</option>                                  
+                                        <option  @if($filter['provider_id']=="iol_x3") selected @endif value="iol_x3"> iol_x3</option>                                  
                                     
                                         
                                         
