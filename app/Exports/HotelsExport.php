@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Hotel;
 use App\Models\Hotel_new;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -29,6 +30,7 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
     {
         $this->codeHotel = $codeHotel;
         $this->country = $country;
+         Log::info("Valeur du tableau country dans export 3  : ", ['country' => $this->country]);
         $this->providerName = $providerName;
         $this->providerID = $providerID;
         $this->bdc_id = $bdc_id;
@@ -44,6 +46,7 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
     public function query()
     {
         ini_set('memory_limit', '4096M'); // 4 Go
+        Log::info("Valeur du tableau country dans export 4 : ", ['country' => $this->country]);
 
         // $query = Hotel::query();
         $query = Hotel_new::select( 'hotel_name', 'hotel_code', 'bdc_id', 'giataid', 'provider', 'provider_id', 
@@ -55,9 +58,10 @@ class HotelsExport implements FromQuery, WithHeadings, WithChunkReading
          
             $query->where('hotel_code',  $this->codeHotel );
         }
-        if ($this->country) {
-            $query->whereIn('country_code', 'like', '%' . $this->country . '%');
-        }
+        if (!empty($this->country)) {
+            $cleanCountries = array_map('trim', $this->country);
+            $query->whereIn('country_code', $cleanCountries);
+        }     
         if ($this->providerName) {
             $query->where('provider', $this->providerName );
         }

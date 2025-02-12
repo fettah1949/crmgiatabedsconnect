@@ -518,11 +518,16 @@ class HoteListController extends Controller
             $fileName = 'hotels_export_' . time() . '.xlsx';
 
             $codeHotel = $request->input('codeHotel');
-            $country = $request->input('country');
+            $country = $request->input('country', []); 
+            if (!is_array($country)) {
+                $country = explode(',', $country); // Convertit une chaîne en tableau si nécessaire
+            }  
             $providerName = $request->input('providerName');
             $providerID = $request->input('providerID');
             $bdc_id = $request->input('bdc_id');
             $Name_hotel = $request->input('Name_hotel');
+            Log::info("Valeur du paramètre country après traitement :", ['country' => $country]);
+
 
             ExportHotelsJob::dispatch($fileName, $codeHotel, $country, $providerName, $providerID, $bdc_id, $Name_hotel);
 
