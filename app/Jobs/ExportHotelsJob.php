@@ -29,7 +29,7 @@ class ExportHotelsJob implements ShouldQueue
         $this->codeHotel = $codeHotel;
         // $this->country = array_map('strval', $this->country);
         $this->country = $country; // Correction ici
-        Log::info("Valeur du tableau country dans export 2  : ", ['country' => $this->country]);
+        // Log::info("Valeur du tableau country dans export 2  : ", ['country' => $this->country]);
         $this->providerName = $providerName;
         $this->providerID = $providerID;
         $this->bdc_id = $bdc_id;
