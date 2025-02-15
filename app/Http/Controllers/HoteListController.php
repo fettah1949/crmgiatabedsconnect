@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
-use NunoMaduro\Collision\Provider;
+use App\Models\Provider;
 use SimpleXMLElement;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -34,6 +34,8 @@ class HoteListController extends Controller
     // $hotels = Hotellist::All();
     $hotels = Hotel_new::limit(100)->get();
     $hotels_count = Hotel_new::count();
+    $provider_list = Provider::get();
+    
 
     $code_hotel = "";
     $country = "";
@@ -66,6 +68,7 @@ class HoteListController extends Controller
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
             'hotels'=>$hotels,
+            'provider_lists'=>$provider_list,
             'filter' => $filter,
             'hotels_count' => $hotels_count,
 
@@ -939,6 +942,7 @@ class HoteListController extends Controller
         $etat = $request->input('etat');
     
         $hotels_count = Hotel_new::count();
+        $provider_list = Provider::get();
 
         $query = Hotel_new::query();
     
@@ -1004,6 +1008,7 @@ class HoteListController extends Controller
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
             'hotels'=>$hotels,
+            'provider_lists'=>$provider_list,
             'filter' => $filter,
             'hotels_count' => $hotels_count,
 
@@ -1021,6 +1026,14 @@ class HoteListController extends Controller
         return "Le job d'unification des bdc_id a été lancé avec succès.";
     }
     
-
+    public function destroy(Request $request)
+    {
+        $data = $request->all();
+        // return $data;
+        $provider=Hotel_new::where('id',$data['id'])->delete();
+       
+ 
+         return redirect()->back()->with('status','Hotel est supprimé avec success ');
+    }
 
 }

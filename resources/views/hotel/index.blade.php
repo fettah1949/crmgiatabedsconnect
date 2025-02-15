@@ -206,9 +206,14 @@
                             <label for="service_category" class="control-label col-sm-auto">Provider Name: </label>
                                 <div class="col-sm-auto">
                                     <select  class="form-control basic" id="provider_name" name="provider_name"  >
+
                                         <option  value="">Select Provider Name</option>
+                                        @foreach ($provider_lists as $provider_list)
+                                        <option  @if($filter['provider_name']==$provider_list->provider_name) selected @endif  value="{{$provider_list->provider_name}}">{{ $provider_list->provider_name }} </option>       
+
+                                        @endforeach
                                         
-                                        <option  @if($filter['provider_name']=="Dida Travel") selected @endif  value="Dida Travel">Dida Travel </option>       
+                                        {{-- <option  @if($filter['provider_name']=="Dida Travel") selected @endif  value="Dida Travel">Dida Travel </option>       
                                         <option  @if($filter['provider_name']=="Smyrooms") selected @endif  value="Smyrooms">Smyrooms</option>
                                         <option  @if($filter['provider_name']=="HotelRunner CM") selected @endif value="HotelRunner CM"> HotelRunner CM</option>
                                         <option  @if($filter['provider_name']=="Bedsconnect-Direct") selected @endif value="Bedsconnect-Direct"> Bedsconnect-Direct</option>
@@ -217,7 +222,7 @@
                                         <option  @if($filter['provider_name']=="Roibos") selected @endif value="Roibos"> Roibos</option>
                                         <option  @if($filter['provider_name']=="Smyrooms_RET") selected @endif value="Smyrooms_RET"> Smyrooms_RET</option>
                                         <option  @if($filter['provider_name']=="CGE-Bedsconnect") selected @endif value="CGE-Bedsconnect"> CGE-Bedsconnect</option>
-                                        <option  @if($filter['provider_name']=="Illusions Online - ils") selected @endif value="Illusions Online - ils"> Illusions Online - ils</option>
+                                        <option  @if($filter['provider_name']=="Illusions Online - ils") selected @endif value="Illusions Online - ils"> Illusions Online - ils</option> --}}
                                         
                                     </select>
                                 @error('Code') <p class="text-danger">{{ $message }}</p> @enderror
@@ -237,15 +242,18 @@
                                     <select  class="form-control basic" id="provider_id" name="provider_id"  >
                                         <option  value="">Select Provider ID</option>
                                         
-                                        <option  @if($filter['provider_id']=="roibos") selected @endif value="roibos">roibos </option>       
+                                        {{-- <option  @if($filter['provider_id']=="roibos") selected @endif value="roibos">roibos </option>       
                                         <option  @if($filter['provider_id']=="iol_iwtx") selected @endif value="iol_iwtx">iol_iwtx</option>
                                         <option  @if($filter['provider_id']=="didatravel") selected @endif value="didatravel"> didatravel</option>
                                         <option  @if($filter['provider_id']=="logitravel_dr") selected @endif value="logitravel_dr"> logitravel_dr</option>
                                         <option  @if($filter['provider_id']=="bedsconnect") selected @endif value="bedsconnect"> bedsconnect</option>                                  
                                         <option  @if($filter['provider_id']=="iol_x3") selected @endif value="iol_x3"> iol_x3</option>                                  
-                                    
+                                     --}}
                                         
-                                        
+                                        @foreach ($provider_lists as $provider_list)
+                                        <option  @if($filter['provider_id']==$provider_list->provider_code) selected @endif  value="{{$provider_list->provider_code}}">{{ $provider_list->provider_code }} </option>       
+
+                                        @endforeach
                                     </select>
                                 @error('Type_code') <p class="text-danger">{{ $message }}</p> @enderror
 
@@ -420,16 +428,12 @@
                                         <td>
                                                 <div class="btn-group">
                                                     <button type="button" data-toggle="modal" data-target="#edit_hotel-{{$value->id}}" target="_blank" class="btn btn-dark btn-sm">Update</button>
-                                                    <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+                                                    {{-- <button type="button" class="btn btn-dark btn-sm dropdown-toggle dropdown-toggle-split" id="dropdownMenuReference1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                                    </button>
-                                                    {{-- <div class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                        <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item" href="#">Separated link</a>
-                                                    </div> --}}
+                                                    </button> --}}
+                                                    <a class="btn btn-outline-primary mb-2" data-toggle="modal" data-target="#deleteModalCenter_provider{{$value->id}}" target="_blank">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash p-1 br-6 mb-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                                    </a> 
                                                     </div>
                                         </td>
                                      
@@ -437,6 +441,7 @@
                                     </tr>
 
 
+                                    @include('hotel.pop_up.pop_up_delete_hotel',['id'=>$value->id,'hotel_name'=>$value->hotel_name])
 
                                     @include('hotel.pop_up.pop_up_edit_hotel',[
                                                                                         'id'=>$value->id,

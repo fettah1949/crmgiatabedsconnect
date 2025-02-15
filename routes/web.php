@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashbordController;
 use App\Http\Controllers\GeographyController;
 use App\Http\Controllers\HoteListController;
+use App\Http\Controllers\ProviderController;
 use Illuminate\Support\Facades\Storage;
 
 /*
@@ -35,7 +36,9 @@ Route::get('hotelListe',[HoteListController::class,'index']);
 Route::get('hotelListe/search',[HoteListController::class,'search'])->name('hotelListe.search');
 Route::get('CountryListe',[GeographyController::class,'index']);
 Route::get('AirportListe',[AirportController::class,'index']);
+Route::get('ProviderListe',[ProviderController::class,'index']);
 
+Route::resource('/ProviderList', ProviderController::class);
 Route::resource('/hotellist', HoteListController::class);
 Route::post('/import', [HoteListController::class,'import'])->name('import');
 Route::get('/export', [HoteListController::class,'export'])->name('export');
@@ -78,5 +81,7 @@ Route::get('/hotels/delete-file/{filename}', [HoteListController::class, 'delete
 
 
 Route::post('/hotel/update', [HoteListController::class, 'update'])->name('hotel.update');
+Route::post('/provider/update', [ProviderController::class, 'update'])->name('provider.update');
+Route::post('/hotel/destroy', [HoteListController::class, 'destroy'])->name('hotel.destroy');
 // Route::resource('HoteList', HoteListController::class);
 // Route::resource('hotelListe', HoteListController::class);
