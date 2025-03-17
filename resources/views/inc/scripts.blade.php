@@ -122,6 +122,102 @@
                                 }
                             });
                         });
+                        $('#fetchDataButton_provider_code').on('click', function () {
+                            let button = $(this);
+                            let loadingSpinner = $('#loadingSpinner');
+                            let dataContainer = $('#dataContainer');
+                            $('#loadingSpinner').show();
+                             $('#statusMessage').text('').css('color', 'black'); // Réinitialiser le message
+                             
+
+
+                            // Désactiver le bouton et afficher le spinner
+                            button.prop('disabled', true);
+                            
+                            dataContainer.html(''); // Vider le conteneur avant la requête
+
+                            $.ajax({
+                                url: "{{ route('giata.Apiprovider_hotel') }}",
+                                type: 'GET',
+                                success: function (response) {
+                                    loadingSpinner.hide();
+                                    button.prop('disabled', false);
+                                    $('#loadingSpinner').hide();
+                                     $('#statusMessage').text('Le job Démarre avec succès ✅').css('color', 'green');
+                                    
+                                    // Afficher un message de succès
+                                    // dataContainer.html('<p class="text-success">Le job Démarre avec succès !</p>');
+                                },
+                                error: function (xhr, status, error) {
+                                    loadingSpinner.hide();
+                                    button.prop('disabled', false);
+                                    
+                                    // Afficher un message d'erreur avec détails
+                                    dataContainer.html('<p class="text-danger">Erreur : ' + error + '</p>');
+                                    $('#loadingSpinner').hide();
+                                     $('#statusMessage').text('Erreur lors de la mise à jour ❌').css('color', 'red');
+                                }
+                            });
+                        });
+
+                        $('#checkJobStatusButton').on('click', function() {
+                            $('#jobStatusMessage').text('Vérification en cours...').css('color', 'black');
+
+                            $.ajax({
+                                url: "{{ route('check.job.status') }}",
+                                type: 'GET',
+                                success: function(response) {
+                                    if (response.pending) {
+                                        $('#jobStatusMessage').text('Le job est toujours en cours ⏳').css('color', 'orange');
+                                    } else {
+                                        $('#jobStatusMessage').text('Le job est terminé ✅').css('color', 'green');
+                                    }
+                                },
+                                error: function() {
+                                    $('#jobStatusMessage').text('Erreur lors de la vérification ❌').css('color', 'red');
+                                }
+                            });
+                        });
+
+                       
+
+
+                        // ------------------
+                        $('#startExportButton').on('click', function() {
+                        $('#exportMessage').text('Export en cours... ⏳').css('color', 'orange');
+
+                        $.ajax({
+                            url: "{{ route('start.export') }}",
+                            type: 'GET',
+                            success: function(response) {
+                                $('#exportMessage').text(response.message).css('color', 'blue');
+                            },
+                            error: function() {
+                                $('#exportMessage').text('Erreur lors du lancement de l’export ❌').css('color', 'red');
+                            }
+                        });
+                    });
+
+                    $('#checkExportButton').on('click', function() {
+                        $.ajax({
+                            url: "{{ route('check.export.status') }}",
+                            type: 'GET',
+                            success: function(response) {
+                                if (response.status === 'done') {
+                                    $('#exportMessage').text('Export terminé ✅').css('color', 'green');
+                                    $('#downloadLink').attr('href', response.file).text('Télécharger le fichier').show();
+                                } else {
+                                    $('#exportMessage').text('Export toujours en cours... ⏳').css('color', 'orange');
+                                }
+                            },
+                            error: function() {
+                                $('#exportMessage').text('Erreur lors de la vérification ❌').css('color', 'red');
+                            }
+                        });
+                    });
+
+
+
 
                         $('#giata_idDataButton').on('click', function() {
                    

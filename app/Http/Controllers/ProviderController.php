@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\FetchGiataHotelsJob;
+use App\Models\Hotel_new;
+use App\Models\Hotel_provider;
 use App\Models\Provider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use SimpleXMLElement;
 
 class ProviderController extends Controller
 {
@@ -24,6 +31,29 @@ class ProviderController extends Controller
 
         ];
         return view('Provider.index')->with($data);
+    }
+
+    public function indexproviderhotel()
+    {
+        $Provider = Hotel_provider::limit(100)->get();
+
+        // print_r($this->getProperty()) ;die;
+        $data = [
+            'category_name' => 'liste',
+            'page_name' => 'liste',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+            'Provider'=>$Provider
+
+        ];
+        return view('Provider_hotel.index')->with($data);
+    }
+
+    public function Apiprovider_hotel()
+    {
+        FetchGiataHotelsJob::dispatch();
+        return response()->json(['message' => 'Le job a été lancé avec succès !']);
+
     }
 
     /**

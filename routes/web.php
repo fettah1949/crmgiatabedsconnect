@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\HotelProvidersExport;
 use App\Http\Controllers\AirportController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,7 +9,11 @@ use App\Http\Controllers\DashbordController;
 use App\Http\Controllers\GeographyController;
 use App\Http\Controllers\HoteListController;
 use App\Http\Controllers\ProviderController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Queue;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Jobs\ExportHotelProvidersJob;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +42,7 @@ Route::get('hotelListe/search',[HoteListController::class,'search'])->name('hote
 Route::get('CountryListe',[GeographyController::class,'index']);
 Route::get('AirportListe',[AirportController::class,'index']);
 Route::get('ProviderListe',[ProviderController::class,'index']);
+Route::get('indexproviderhotel',[ProviderController::class,'indexproviderhotel']);
 
 Route::resource('/ProviderList', ProviderController::class);
 Route::resource('/hotellist', HoteListController::class);
@@ -47,6 +53,34 @@ Route::get('/export', [HoteListController::class,'export'])->name('export');
 Route::get('/giata/property', [HoteListController::class, 'getProperty'])->name('giata.property');
 Route::get('/giata/getProperty_giata_id', [HoteListController::class, 'getProperty_giata_id'])->name('giata.getProperty_giata_id');
 Route::get('/giata/unifier_bdc', [HoteListController::class, 'unifier_bdc'])->name('giata.unifier_bdc');
+
+Route::get('/giata/Apiprovider_hotel', [ProviderController::class, 'Apiprovider_hotel'])->name('giata.Apiprovider_hotel');
+
+Route::get('/job-status', function () {
+    $jobName = 'App\Jobs\FetchGiataHotelsJob'; // Remplace par le nom de ton job exact
+
+    // Vérifier si le job est toujours en cours dans la table `jobs`
+    $isJobPending = DB::table('jobs')->where('queue', $jobName)->exists();
+
+    return response()->json(['pending' => $isJobPending]);
+})->name('check.job.status');
+
+
+
+
+
+Route::get('/start-export', function () {
+    ExportHotelProvidersJob::dispatch();
+    return response()->json(['message' => 'Export lancé, veuillez patienter...']);
+})->name('start.export');
+
+Route::get('/check-export-status', function () {
+    if (Storage::disk('public')->exists('latest_export.txt')) {
+        $filePath = Storage::disk('public')->get('latest_export.txt');
+        return response()->json(['status' => 'done', 'file' => asset('storage/' . $filePath)]);
+    }
+    return response()->json(['status' => 'pending']);
+})->name('check.export.status');
 
 
 Route::get('/geo/property', [GeographyController::class, 'getProperty'])->name('geo.property');
