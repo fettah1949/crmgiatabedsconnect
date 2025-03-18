@@ -36,6 +36,7 @@ class ProviderController extends Controller
     public function indexproviderhotel()
     {
         $Provider = Hotel_provider::limit(100)->get();
+        $provider_list = Provider::get();
 
         // print_r($this->getProperty()) ;die;
         $data = [
@@ -43,6 +44,7 @@ class ProviderController extends Controller
             'page_name' => 'liste',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
+            'provider_lists'=>$provider_list,
             'Provider'=>$Provider
 
         ];

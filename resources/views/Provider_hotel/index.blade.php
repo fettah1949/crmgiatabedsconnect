@@ -33,24 +33,73 @@
                         <h3>Hotel Provider LIST</h3>
                     </div>
                 </div>
-                <button id="fetchDataButton_provider_code" class="btn btn-success" >Récupérer les données Provider Code</button>
-                <span id="statusMessage" style="margin-left: 10px; font-weight: bold;"></span>
 
+                <div class="row"  style="margin-bottom: 3%;">
+                    <div class="col-md-2">
+                        <button id="fetchDataButton_provider_code" class="btn btn-success" >Récupérer les données Provider Code</button>
+                        <span id="statusMessage" style="margin-left: 10px; font-weight: bold;"></span>
+                    
 
-                <div id="loadingSpinner" class="spinner-border ms-2" role="status" style="width: 24px; height: 24px; display: none;">
-                    <span class="visually-hidden">Chargement...</span>
+                        <div id="loadingSpinner" class="spinner-border ms-2" role="status" style="width: 24px; height: 24px; display: none;">
+                            <span class="visually-hidden">Chargement...</span>
+                        </div>
+                    </div>
+
+                  
+                  
+                    <div class="col-md-2">
+
+                        <button id="checkJobStatusButton" class="btn btn-success" style="margin-left: 15px;">Vérifier le statut</button>
+                        <span id="jobStatusMessage" style="margin-left: 10px; font-weight: bold;"></span>
+                    </div>
                 </div>
 
-                <button id="checkJobStatusButton" class="btn btn-success" style="margin-left: 15px;">Vérifier le statut</button>
-                <span id="jobStatusMessage" style="margin-left: 10px; font-weight: bold;"></span>
+                <div class="row" style="margin-bottom: 3%;">
+                    <div class="col-md-3">
 
-                <button id="startExportButton" class="btn btn-success">Lancer l'exportation</button>
-                <span id="exportMessage" style="margin-left: 10px; font-weight: bold;"></span>
+                            <input type="text"  class="form-control basic" id="giataIdInput" placeholder="Filtrer par Giata ID">
 
-                <button id="checkExportButton" class="btn btn-success" style="margin-left: 15px;">Vérifier l'export</button>
-                <a id="downloadLink" style="display: none; margin-left: 10px;" download>Télécharger le fichier</a>
+                    </div>
+                    <div class="col-md-3">
 
+                        <select  class="form-control basic" id="providerNameInput" name="providerNameInput"  >
 
+                            <option  value="">Select Provider Name</option>
+                            @foreach ($provider_lists as $provider_list)
+                            <option value="{{$provider_list->provider_name}}">{{ $provider_list->provider_name }} </option>       
+
+                            @endforeach
+                            
+                        
+                        </select>
+                    
+                    </div>
+                    <div class="col-md-2">
+
+                        <button id="startExportButton" class="btn btn-success">Lancer l'exportation</button>
+                        <span id="exportMessage" style="margin-left: 10px; font-weight: bold;"></span>
+        
+                        
+        
+                    </div>
+                    <div class="col-md-3">
+
+                      
+                        <button id="checkExportButton" class="btn btn-success" style="margin-left: 15px;">Vérifier l'export</button>
+                        <a id="downloadLink" style="display: none; margin-left: 10px;" download>Télécharger le fichier</a>
+        
+        
+                    </div>
+                    
+
+                </div>
+
+                      
+                           
+
+                     
+
+              
 
                 @if (session()->has('success'))
                 <div style="    background: transparent;" class="alert alert-light-success border-0 mb-4" role="alert"> 

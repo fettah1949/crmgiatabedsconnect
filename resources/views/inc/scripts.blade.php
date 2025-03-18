@@ -185,10 +185,16 @@
                         // ------------------
                         $('#startExportButton').on('click', function() {
                         $('#exportMessage').text('Export en cours... ⏳').css('color', 'orange');
+                        let giataId = $('#giataIdInput').val();
+                        let providerName = $('#providerNameInput').val();
 
                         $.ajax({
                             url: "{{ route('start.export') }}",
                             type: 'GET',
+                            data: {
+                                    giataId: giataId,
+                                    provider_name: providerName
+                                },
                             success: function(response) {
                                 $('#exportMessage').text(response.message).css('color', 'blue');
                             },

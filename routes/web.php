@@ -69,10 +69,21 @@ Route::get('/job-status', function () {
 
 
 
-Route::get('/start-export', function () {
-    ExportHotelProvidersJob::dispatch();
-    return response()->json(['message' => 'Export lancé, veuillez patienter...']);
+// Route::get('/start-export', function () {
+//     ExportHotelProvidersJob::dispatch();
+//     return response()->json(['message' => 'Export lancé, veuillez patienter...']);
+// })->name('start.export');
+
+Route::get('/start-export', function (Illuminate\Http\Request $request) {
+    $giataId = $request->query('giataId');
+    $providerName = $request->query('provider_name');
+    // return $providerName;
+
+    ExportHotelProvidersJob::dispatch($giataId, $providerName);
+
+    return response()->json(['message' => 'Export lancé avec filtres, veuillez patienter...']);
 })->name('start.export');
+
 
 Route::get('/check-export-status', function () {
     if (Storage::disk('public')->exists('latest_export.txt')) {

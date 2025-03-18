@@ -15,13 +15,24 @@ class ExportHotelProvidersJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $giataId;
+    protected $providerName;
+
+    public function __construct($giataId = null, $providerName = null)
+    {
+        $this->giataId = $giataId;
+        $this->providerName = $providerName;
+    }
+
     public function handle()
     {
         // Générer un nom de fichier unique
         $fileName = 'exports_v2/hotel_providers_' . now()->format('Ymd_His') . '.xlsx';
 
         // Exporter et stocker le fichier
-        Excel::store(new HotelProvidersExport, $fileName, 'public');
+        // Excel::store(new HotelProvidersExport, $fileName, 'public');
+        Excel::store(new HotelProvidersExport($this->giataId, $this->providerName), $fileName, 'public');
+
 
         // Enregistrer le chemin du fichier pour qu'on puisse le récupérer plus tard
         Storage::disk('public')->put('latest_export.txt', $fileName);
