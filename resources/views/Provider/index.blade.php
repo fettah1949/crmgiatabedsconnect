@@ -37,7 +37,7 @@
 
                 <div class="page-header">
                     <div class="page-title">
-                        <h3>Airport LIST</h3>
+                        <h3>Provider LIST</h3>
                     </div>
                 </div>
                 @if (session()->has('success'))

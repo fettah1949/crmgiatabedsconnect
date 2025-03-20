@@ -30,7 +30,7 @@
 
                 <div class="page-header">
                     <div class="page-title">
-                        <h3>Hotel Provider LIST</h3>
+                        <h3>Hotel Provider LIST : {{$Provider_counts}}</h3>
                     </div>
                 </div>
 
