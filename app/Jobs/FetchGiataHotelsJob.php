@@ -23,7 +23,17 @@ class FetchGiataHotelsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $hotels = Hotel_new::where('etat', 0)->where('with_giata', 1)->get();
+        // $hotels = Hotel_new::where('etat', 0)->where('with_giata', 1)->distinct('giataid')->get();
+        $hotels = DB::table('hotel_news as h1')
+        ->join(
+            DB::table('hotel_news')
+                ->selectRaw('giataId, MIN(id) as min_id')
+                ->groupBy('giataId'),
+            'h1.id', '=', 'min_id'
+        )
+        ->where('h1.with_giata', 1)
+        ->get();
+
 
         foreach ($hotels as $hotel) {
             if ($hotel->giataId === null) {
