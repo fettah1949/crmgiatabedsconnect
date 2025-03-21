@@ -24,15 +24,17 @@ class FetchGiataHotelsJob implements ShouldQueue
     public function handle(): void
     {
         // $hotels = Hotel_new::where('etat', 0)->where('with_giata', 1)->distinct('giataid')->get();
+        $subQuery = DB::table('hotel_news')
+        ->selectRaw('giataId, MIN(id) as min_id')
+        ->groupBy('giataId');
+    
         $hotels = DB::table('hotel_news as h1')
-        ->join(
-            DB::table('hotel_news')
-                ->selectRaw('giataId, MIN(id) as min_id')
-                ->groupBy('giataId'),
-            'h1.id', '=', 'min_id'
-        )
+            ->joinSub($subQuery, 'h2', function ($join) {
+                $join->on('h1.id', '=', 'h2.min_id');
+            })
         ->where('h1.with_giata', 1)
         ->get();
+    
 
 
         foreach ($hotels as $hotel) {
